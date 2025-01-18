@@ -1,0 +1,14 @@
+Summary of Loss Functions
+Loss Function###########Purpose################################ Use Case
+    
+L1 Loss	-> Less sensitive to outliers, sharper output ->	General fine-tuning
+
+Spectral Loss -->	Matches frequency domain features -->	Audio tasks, vocal isolation
+
+Perceptual Loss -->	High-level perceptual similarity -->	Human-like audio quality
+
+Multi-Scale Loss -->	Multi-resolution accuracy -->	Captures fine details
+
+STFT Loss -->	Preserves time-frequency alignment -->	Audio reconstruction tasks
+
+Hybrid Loss -->	Combines multiple losses -->	Best for balancing multiple aspects
