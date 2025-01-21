@@ -1,5 +1,9 @@
 # train.py
 
+from torch.utils.tensorboard import SummaryWriter
+import matplotlib.pyplot as plt
+import numpy as np
+import librosa.display
 import torch
 import torch.optim as optim
 import torch.nn as nn
@@ -20,8 +24,6 @@ from Training.Loss_Diagram_Values import (
     plot_loss_curves_Training_script_Batches,
 )
 from Model_Architecture.model import UNet
-from torch.utils.tensorboard import SummaryWriter
-
 
 
 
@@ -56,6 +58,22 @@ loss_history_Batches = {
     "hybrid_loss": [],   # Hybrid loss per batch
     "combined": [],      # Combined loss per batch
 }
+
+
+#EXTERNAL FUNCTION FOR APPENDING LOSS VALUES.
+def Append_loss_values_for_batch(mask_loss, hybrid_loss, combined_loss):
+    loss_history_Batches["mask_loss"].append(mask_loss.item())
+    loss_history_Batches["hybrid_loss"].append(hybrid_loss.item())
+    loss_history_Batches["combined"].append(combined_loss.item())
+
+def Append_loss_values_for_epoches(mask_loss_avg,hybrid_loss_avg,combined_loss_avg,avg_epoch_loss):
+    loss_history_Epoches["mask_loss"].append(mask_loss_avg)
+    loss_history_Epoches["hybrid_loss"].append(hybrid_loss_avg)
+    loss_history_Epoches["combined"].append(combined_loss_avg)
+    loss_history_Epoches["Total_loss_per_epoch"].append(avg_epoch_loss)
+
+
+#Creates LOSS Diagrams
 def create_loss_diagrams(loss_history_Batches, loss_history_Epoches):
     train_logger.info("Creating Diagrams now")
     batches_figpath = os.path.join(diagramdirectory, "loss_curves_training_batches.png")
@@ -63,6 +81,18 @@ def create_loss_diagrams(loss_history_Batches, loss_history_Epoches):
     plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path=batches_figpath)
     plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path=epoch_figpath)
 
+
+#Logs spectrograms too tensorboard for visualisation
+def log_spectrograms_to_tensorboard(audio, sr, tag, writer, global_step):
+    #Creates spektrogram
+    stft = librosa.stft(audio)
+    stft_db = librosa.amplitude_to_db(np.abs(stft),ref=np.max())
+
+    fig, ax = plt.subplots(figsize=(10,4))
+    librosa.display.specshow(stft_db,sr=sr, x_axis='time', y_axis='log',ax=ax)
+    ax.set_title(tag)
+    fig.colorbar(ax.images[0],ax=ax)
+    plt.close(fig)
 
 
 
@@ -137,20 +167,6 @@ def Model_Structure_Information(model):
     train_logger.info(f"Trainable parameters: {trainable_params}") 
     train_logger.info(f"Model architecture:\n{model}")
 
-
-
-
-#EXTERNAL FUNCTION FOR APPENDING LOSS VALUES.
-def Append_loss_values_for_batch(mask_loss, hybrid_loss, combined_loss):
-    loss_history_Batches["mask_loss"].append(mask_loss.item())
-    loss_history_Batches["hybrid_loss"].append(hybrid_loss.item())
-    loss_history_Batches["combined"].append(combined_loss.item())
-
-def Append_loss_values_for_epoches(mask_loss_avg,hybrid_loss_avg,combined_loss_avg,avg_epoch_loss):
-    loss_history_Epoches["mask_loss"].append(mask_loss_avg)
-    loss_history_Epoches["hybrid_loss"].append(hybrid_loss_avg)
-    loss_history_Epoches["combined"].append(combined_loss_avg)
-    loss_history_Epoches["Total_loss_per_epoch"].append(avg_epoch_loss)
 
 
 
@@ -332,11 +348,12 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
     desired_effective_batch_size = 128
     accumulation_steps = desired_effective_batch_size // batch_size
     learning_rate = 1e-6
-    gradient_clip_value = 0.5 
     epochs = 5
     patience = 2
     best_loss = float('inf')
+    best_val_loss = float('inf')
     trigger_times = 0
+    gradient_clip_value = 0.5 
     prev_epoch_loss = None
     best_model_path = None 
 
@@ -348,32 +365,35 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
     model = UNet(in_channels=1, out_channels=1).to(device)
 
 
-    #FULL LOSS 
-    criterion = Combinedloss()
 
-    #OPTMIZER
-    optimizer = optim.Adam(
-        model.parameters(),
-        lr=learning_rate, 
-        weight_decay=1e-5, 
-        betas=(0.9, 0.999),
-        eps=1e-6
-        )
+# OPTIMIZER: Adam optimizer with customized settings
+optimizer = optim.Adam(
+    model.parameters(),  # Parameters of the model to optimize
+    lr=1e-3,             # Learning rate: controls the step size for weight updates
+    weight_decay=1e-4,   # L2 regularization: penalizes large weights to reduce overfitting
+    betas=(0.8, 0.9),    # Exponential decay rates for moving averages of gradients (momentum) and squared gradients
+    eps=1e-6             # Small value added to denominator for numerical stability (useful for mixed precision)
+)
 
-    #SHEDULER
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-          optimizer, 
-          mode='min',  # Reduce LR when a monitored metric (validation loss) stops decreasing
-          factor=0.5,  # Reduce LR by this factor
-          patience=3,  # Number of epochs to wait before reducing LR
-          threshold=1e-5,  # Minimum change to qualify as an improvement
-          verbose=True
-          )
+# SCHEDULER: ReduceLROnPlateau to dynamically adjust learning rate
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer,           # Optimizer instance to apply the scheduler to
+    mode='min',          # Mode: 'min' indicates learning rate reduces when the metric stops decreasing
+    factor=0.5,          # Multiplicative factor: reduces the learning rate by 50% when triggered
+    patience=3,          # Number of epochs to wait for improvement before reducing LR
+    threshold=1e-3,      # Minimum change in monitored metric to qualify as an improvement
+    verbose=True,        # If True, logs messages about LR reductions
+    cooldown=1,          # Number of epochs to wait after reducing LR before monitoring improvement again
+    min_lr=1e-5          # Lower bound for the learning rate to prevent it from going too low
+)
 
 
     #SCALER
     scaler = GradScaler()
 
+
+    #FULL LOSS 
+    criterion = Combinedloss()
 
 
     Effective_batch_size = batch_size * accumulation_steps
@@ -396,51 +416,43 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
 
 
     if start_training:
+        train_logger.info(f"Training started with configuration: Batch size={batch_size}, Effective batch size: {Effective_batch_size} Learning rate={learning_rate}, Epochs={epochs}")
         try:
-            train_logger.info(f"Training started with configuration: Batch size={batch_size}, Effective batch size: {Effective_batch_size} Learning rate={learning_rate}, Epochs={epochs}")
-            
             for epoch in range(epochs):
                 model.train()
                 running_loss = 0.0
+                representative_batch = None  
                 train_logger.info(f"[Train] Epoch {epoch + 1}/{epochs} started.")
-
 
                 #Resets gradients.
                 optimizer.zero_grad()
                 for batch_idx, (inputs, targets) in enumerate(combined_train_loader, start=1):
-
 
                     #Logs for the first 2 batches in each epoch.
                     if batch_idx < 2:    
                         train_logger.info(f"Batch {batch_idx}: Mixture shape={inputs.shape}, Target shape={targets.shape}")
                         train_logger.info(f"Mixture min={inputs.min().item():.4f}, max={inputs.max().item():.4f}")
                         train_logger.info(f"Target min={targets.min().item():.4f}, max={targets.max().item():.4f}")
-                       
-
-
-                   
-                
-
-
-
+                    
                     #Data check & logging.
                     check_inputs_targets_dataset(inputs, targets, batch_idx)
                     print_inputs_targets_shape(inputs, targets, batch_idx)
 
-
-
                     #Moves the data to device.
                     inputs, targets = inputs.to(device, non_blocking=True), targets.to(device, non_blocking=True)
 
+                   ###AUTOCAST###
                     with autocast(device_type='cuda', enabled=(device.type == 'cuda')):
-
                         predicted_mask, outputs = model(inputs)
+                        predicted_vocals = predicted_mask * inputs
 
+                        if batch_idx == 1:
+                           representative_batch = (inputs.detach().cpu(), predicted_vocals.detach().cpu(), targets.detach().cpu())
                         if batch_idx < 2:
                             train_logger.info(f"Batch {batch_idx}: Mask range: min={outputs.min().item():.4f}, max={outputs.max().item():.4f}")
                             train_logger.debug(f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}, Predicted Mask shape={predicted_mask.shape}, Outputs shape={outputs.shape}")
                         
-                        
+                        train_logger.debug(f"Mask min={predicted_mask.min().item()}, max={predicted_mask.max().item()}")
                         combined_loss, mask_loss, hybrid_loss = criterion(predicted_mask, inputs, targets)
 
                         #TENSORBOARD 
@@ -487,28 +499,51 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
 
                     #Updates the model's weight with optimizer after accumulation steps.
                     if batch_idx % accumulation_steps == 0 or batch_idx == len(combined_train_loader):
-                       if gradient_clip_value is not None:
-                          scaler.unscale_(optimizer)   #Unscaling gradient before clipping.
-                          total_norm = nn_utils.clip_grad_norm_(model.parameters(),gradient_clip_value)
-                          train_logger.info(f"Epoch [{epoch + 1}/{epochs}], Batch [{batch_idx}/{len(combined_train_loader)}], Gradient Norm: {total_norm:.4f}")
-                       else: 
-                            total_norm = nn_utils.clip_grad_norm_(model.parameters(), float('inf'))  # Compute norm without clipping
-                            train_logger.info(f"Epoch [{epoch + 1}/{epochs}], Batch [{batch_idx}/{len(combined_train_loader)}], Gradient Norm: {total_norm:.4f}")
+                        # Unscale gradients for dynamic clipping
+                        scaler.unscale_(optimizer)
+                        
+                        # Calculate the total gradient norm
+                        total_norm = nn_utils.clip_grad_norm_(model.parameters(), float('inf'))
+                        
+                        # Dynamic strategy: Adjust gradient_clip_value based on total_norm
+                        dynamic_clip_value = min(max(0.1 * total_norm, 0.1), gradient_clip_value)
+                        
+                        # Apply gradient clipping using dynamic_clip_value
+                        clipped_norm = nn_utils.clip_grad_norm_(model.parameters(), dynamic_clip_value)
+                        
+                        # Log the dynamic adjustment
+                        train_logger.info(
+                            f"Epoch [{epoch + 1}/{epochs}], Batch [{batch_idx}/{len(combined_train_loader)}], "
+                            f"Gradient Norm: {total_norm:.4f}, Clipped Norm: {clipped_norm:.4f}, "
+                            f"Dynamic Clip Value: {dynamic_clip_value:.4f}"
+                        )
+                        
+                        # Apply gradients
+                        scaler.step(optimizer)
+                        
+                        # Update the scaler
+                        scaler.update()
 
 
-                       #Applying gradients.
-                       scaler.step(optimizer) 
-
-                       #Updates the scaler.
-                       scaler.update() 
 
 
-            
-                    
 
 
-                    running_loss += combined_loss.item()
+                    running_loss += combined_loss.item() * accumulation_steps
+
         
+                #LOGGING TO TENSORBOARD
+                if representative_batch is not None:
+                    mixture, predicted_vocals, target = representative_batch
+                    log_spectrograms_to_tensorboard(
+                        mixture[0].numpy(), sr=44100, tag=f"Epoch {epoch + 1} - Mixture Spectrogram", writer=writer, global_step=epoch
+                    )
+                    log_spectrograms_to_tensorboard(
+                        predicted_vocals[0].numpy(), sr=44100, tag=f"Epoch {epoch + 1} - Estimated Vocal Spectrogram", writer=writer, global_step=epoch
+                    )
+                    log_spectrograms_to_tensorboard(
+                        target[0].numpy(), sr=44100, tag=f"Epoch {epoch + 1} - Target Vocal Spectrogram", writer=writer, global_step=epoch
+                    )
 
     
                 current_lr = optimizer.param_groups[0]['lr']
@@ -534,8 +569,7 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
                 writer.add_scalar('Loss/Epoch_Hybrid', hybridloss_avg, epoch)
 
 
-
-              
+    
 
 
 
@@ -549,20 +583,33 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
 
 
                 if len(combined_val_loader) > 0:
-                    avg_combined_loss,avg_mask_loss,avg_hybrid_loss  = Validate_epoch(model,combined_val_loader,criterion,device)
+                    avg_combined_loss, avg_mask_loss, avg_hybrid_loss = Validate_epoch(
+                        model, combined_val_loader, criterion, device
+                    )
+                    if avg_combined_loss < best_val_loss:
+                        best_val_loss = avg_combined_loss
+                        val_checkpoint_path = os.path.join(Model_CheckPoint, f"best_val_model_epoch_{epoch + 1}.pth")
+                        torch.save(model.state_dict(), val_checkpoint_path)
+                        train_logger.info(f"Saved best validation model at epoch {epoch + 1} with loss {best_val_loss:.6f}")
+
                     train_logger.info(
-                    f"[Validation] Epoch {epoch + 1}/{epochs}: "
-                    f"Combined Loss={avg_combined_loss:.6f}, "
-                    f"Mask Loss={avg_mask_loss:.6f}, "
-                    f"Hybrid Loss={avg_hybrid_loss:.6f}"
-                   )
-                    #Step the scheduler based on validation loss
+                        f"[Validation] Epoch {epoch + 1}/{epochs}: "
+                        f"Combined Loss={avg_combined_loss:.6f}, "
+                        f"Mask Loss={avg_mask_loss:.6f}, "
+                        f"Hybrid Loss={avg_hybrid_loss:.6f}"
+                    )
                     scheduler.step(avg_combined_loss)
                     writer.add_scalar('loss/avg-Combinedloss [Evaluation]', avg_combined_loss, epoch)
                     writer.add_scalar('loss/Mask_loss [Evaluation]', avg_mask_loss, epoch)
                     writer.add_scalar('loss/HybridLosss [Evaluation]', avg_hybrid_loss, epoch)
+
+                    # Save regular checkpoint
+                    epoch_checkpoint_path = os.path.join(Model_CheckPoint, f"epoch_{epoch + 1}_checkpoint.pth")
+                    torch.save(model.state_dict(), epoch_checkpoint_path)
+                    train_logger.info(f"Saved regular checkpoint for epoch {epoch + 1} at {epoch_checkpoint_path}")
                 else:
                     train_logger.info("[Validation] Skipping validation: No validation dataset provided.")
+
                     
 
 
@@ -630,10 +677,7 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
         if fine_tuning_flag:
             fine_tuned_model_path = os.path.join(fine_tuned_model_base_path, "fine_tuned_model.pth")
             pretrained_model_path = os.path.join(Final_model_path,"final_model.pth")
-            fine_tune_model(
-                pretrained_model_path=pretrained_model_path,
-                fine_tuned_model_path=fine_tuned_model_path,
-            )
+            fine_tune_model(pretrained_model_path=pretrained_model_path,fine_tuned_model_path=fine_tuned_model_path, )
             train_logger.info("Fine_tuning Completed.")
     except Exception as e:
             train_logger.error(f"Error during fine-tuning: {str(e)}")
