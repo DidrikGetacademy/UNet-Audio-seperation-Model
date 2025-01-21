@@ -9,8 +9,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch import autocast, GradScaler
-from torch.utils.data import DataLoader
-import logging
 import traceback
 import matplotlib.pyplot as plt
 import librosa.display
@@ -60,7 +58,7 @@ def Append_loss_values(loss_history, total_loss, l1_val, multi_scale_val, percep
         f"Multi-Scale Loss={multi_scale_val.item():.6f}, Combined Loss={total_loss.item():.6f}"
     )
     Fine_tune_logger.info(log_message)
-    print(log_message)  
+
 
 
 
@@ -74,16 +72,12 @@ class CombinedLoss(nn.Module):
         self.l1_loss = nn.L1Loss()
         self.mse_loss = nn.MSELoss()
         Fine_tune_logger.info("Loading VGGish model for perceptual loss...")
-        print("Loading VGGish model for perceptual loss...")
         self.audio_model = torch.hub.load('harritaylor/torchvggish', 'vggish', trust_repo=True).to(device)
         self.audio_model.eval()
         Fine_tune_logger.info("VGGish model loaded and set to evaluation mode.")
-        print("VGGish model loaded and set to evaluation mode.")
 
     def spectrogram_to_waveform(self, spectrogram, n_fft=2048, hop_length=512):
-
         Fine_tune_logger.debug("Converting spectrogram to waveform using Griffin-Lim.")
-        print("Converting spectrogram to waveform using Griffin-Lim.")
         spectrogram_np = spectrogram.detach().cpu().numpy()
         waveforms = []
         for i in range(spectrogram_np.shape[0]):
@@ -92,40 +86,28 @@ class CombinedLoss(nn.Module):
             waveforms.append(waveform)
             print(f"Sample {i+1}: Waveform length after Griffin-Lim: {len(waveform)}")
         Fine_tune_logger.debug("Spectrogram to waveform conversion completed.")
-        print("Spectrogram to waveform conversion completed.")
         return waveforms
 
     def mask_loss(self, predicted_mask, mixture, target):
-
         Fine_tune_logger.debug("Calculating mask loss.")
-        print("Calculating mask loss.")
-        assert predicted_mask.size() == mixture.size(), (
-            f"Shape mismatch: predicted_mask {predicted_mask.size()} and mixture {mixture.size()}!"
-        )
+        assert predicted_mask.size() == mixture.size(), ( f"Shape mismatch: predicted_mask {predicted_mask.size()} and mixture {mixture.size()}!")
         Fine_tune_logger.debug("Shape of predicted_mask matches mixture.")
-        print("Shape of predicted_mask matches mixture.")
 
         predicted_vocals = predicted_mask * mixture
         Fine_tune_logger.debug(f"Predicted vocals shape: {predicted_vocals.size()}")
-        print(f"Predicted vocals shape: {predicted_vocals.size()}")
 
-        assert predicted_vocals.size() == target.size(), (
-            f"Shape mismatch: predicted_vocals {predicted_vocals.size()} and target {target.size()}!"
-        )
+
+        assert predicted_vocals.size() == target.size(), ( f"Shape mismatch: predicted_vocals {predicted_vocals.size()} and target {target.size()}!")
         Fine_tune_logger.debug("Shape of predicted_vocals matches target.")
-        print("Shape of predicted_vocals matches target.")
-
+ 
         l1 = self.l1_loss(predicted_vocals, target)
         Fine_tune_logger.debug(f"L1 loss calculated: {l1.item():.6f}")
-        print(f"L1 loss calculated: {l1.item():.6f}")
 
         stft = self.mse_loss(torch.log1p(predicted_vocals), torch.log1p(target))
         Fine_tune_logger.debug(f"STFT (MSE) loss calculated: {stft.item():.6f}")
-        print(f"STFT (MSE) loss calculated: {stft.item():.6f}")
 
         total_mask_loss = 0.5 * l1 + 0.5 * stft
         Fine_tune_logger.debug(f"Total mask loss: {total_mask_loss.item():.6f}")
-        print(f"Total mask loss: {total_mask_loss.item():.6f}")
 
         return total_mask_loss
 
@@ -135,13 +117,11 @@ class CombinedLoss(nn.Module):
 
     def perceptual_loss(self, output, target):
         Fine_tune_logger.debug("Calculating perceptual loss.")
-        print("Calculating perceptual loss.")
         output_waveforms = self.spectrogram_to_waveform(output)
         target_waveforms = self.spectrogram_to_waveform(target)
 
         batch_size = len(output_waveforms)
         Fine_tune_logger.debug(f"Batch size for perceptual loss: {batch_size}")
-        print(f"Batch size for perceptual loss: {batch_size}")
 
         orig_sr, new_sr = 44100, 16000
         max_length = 176400 
@@ -158,20 +138,19 @@ class CombinedLoss(nn.Module):
             if len(out_16k) < max_length:
                 out_16k = np.pad(out_16k, (0, max_length - len(out_16k)))
                 Fine_tune_logger.debug(f"Output waveform padded to {max_length} samples.")
-                print(f"Sample {i+1}: Output waveform padded to {max_length} samples.")
             else:
                 out_16k = out_16k[:max_length]
                 Fine_tune_logger.debug(f"Output waveform truncated to {max_length} samples.")
-                print(f"Sample {i+1}: Output waveform truncated to {max_length} samples.")
+                
 
             if len(tgt_16k) < max_length:
                 tgt_16k = np.pad(tgt_16k, (0, max_length - len(tgt_16k)))
                 Fine_tune_logger.debug(f"Target waveform padded to {max_length} samples.")
-                print(f"Sample {i+1}: Target waveform padded to {max_length} samples.")
+         
             else:
                 tgt_16k = tgt_16k[:max_length]
                 Fine_tune_logger.debug(f"Target waveform truncated to {max_length} samples.")
-                print(f"Sample {i+1}: Target waveform truncated to {max_length} samples.")
+             
 
             output_audio_list.append(out_16k)
             target_audio_list.append(tgt_16k)
@@ -179,7 +158,7 @@ class CombinedLoss(nn.Module):
         output_audio_np = np.stack(output_audio_list, axis=0)
         target_audio_np = np.stack(target_audio_list, axis=0)
         Fine_tune_logger.debug("Waveforms stacked into numpy arrays for VGGish processing.")
-        print("Waveforms stacked into numpy arrays for VGGish processing.")
+      
 
         output_features_list, target_features_list = [], []
         with torch.no_grad():
@@ -190,23 +169,19 @@ class CombinedLoss(nn.Module):
                     output_features_list.append(out_feat)
                     target_features_list.append(tgt_feat)
                     Fine_tune_logger.debug(f"VGGish features extracted for sample {i+1}.")
-                    print(f"VGGish features extracted for sample {i+1}.")
                 except Exception as e:
                     Fine_tune_logger.error(f"Error extracting VGGish features for sample {i+1}: {e}")
-                    print(f"Error extracting VGGish features for sample {i+1}: {e}")
                     continue
 
         if not output_features_list or not target_features_list:
             Fine_tune_logger.warning("No features extracted for perceptual loss. Returning zero loss.")
-            print("No features extracted for perceptual loss. Returning zero loss.")
             return torch.tensor(0.0, device=self.device)
 
         output_features = torch.cat(output_features_list, dim=0)
         target_features = torch.cat(target_features_list, dim=0)
         loss_value = self.mse_loss(output_features, target_features)
         Fine_tune_logger.debug(f"Perceptual Loss value: {loss_value.item():.6f}")
-        print(f"Perceptual Loss value: {loss_value.item():.6f}")
-
+       
         return loss_value
 
 
@@ -219,16 +194,13 @@ class CombinedLoss(nn.Module):
             normalized = waveform / max_val
             if torch.isnan(normalized).any() or torch.isinf(normalized).any():
                 Fine_tune_logger.warning("NaN or Inf detected after normalization.")
-                print("NaN or Inf detected after normalization. Setting waveform to zeros.")
                 normalized = torch.zeros_like(waveform)  # Fallback to silence
                 Fine_tune_logger.debug("Waveform set to zeros due to invalid values after normalization.")
             else:
                 Fine_tune_logger.debug("Waveform successfully normalized.")
-                print("Waveform successfully normalized.")
             return normalized
         else:
             Fine_tune_logger.debug("Silent input detected during normalization. Returning zeros.")
-            print("Silent input detected during normalization. Returning zeros.")
             return torch.zeros_like(waveform) 
 
 
@@ -237,15 +209,13 @@ class CombinedLoss(nn.Module):
 
     def spectral_loss(self, output, target, n_fft=2048, hop_length=512):
         Fine_tune_logger.debug("Calculating spectral loss.")
-        print("Calculating spectral loss.")
-        # Ensure input is normalized
+
         output = self.normalize_waveform(output)
         target = self.normalize_waveform(target)
 
         Fine_tune_logger.debug(f"Output shape after normalization: {output.shape}")
         Fine_tune_logger.debug(f"Target shape after normalization: {target.shape}")
-        print(f"Output shape after normalization: {output.shape}")
-        print(f"Target shape after normalization: {target.shape}")
+
 
    
         if output.ndim == 4: 
@@ -284,35 +254,29 @@ class CombinedLoss(nn.Module):
 
     def multi_scale_loss(self, output, target, scales=[1, 2, 4]):
         Fine_tune_logger.debug("Calculating multi-scale loss.")
-        print("Calculating multi-scale loss.")
         total_loss = 0.0
         for scale in scales:
             Fine_tune_logger.debug(f"Applying scale factor: {scale}")
-            print(f"Applying scale factor: {scale}")
             scaled_output = F.avg_pool2d(output, kernel_size=scale)
             scaled_target = F.avg_pool2d(target, kernel_size=scale)
             loss = self.mse_loss(scaled_output, scaled_target)
             Fine_tune_logger.debug(f"Scale {scale}: MSE loss={loss.item():.6f}")
-            print(f"Scale {scale}: MSE loss={loss.item():.6f}")
             total_loss += loss
         Fine_tune_logger.debug(f"Total multi-scale loss: {total_loss.item():.6f}")
-        print(f"Total multi-scale loss: {total_loss.item():.6f}")
         return total_loss
 
 
 
 
     def forward(self, predicted_mask, mixture, target, outputs):
-
         Fine_tune_logger.debug("Forward pass for combined loss calculation.")
-        print("Forward pass for combined loss calculation.")
         mask_loss = self.mask_loss(predicted_mask, mixture, target)
         l1 = self.l1_loss(outputs, target)
         Fine_tune_logger.debug(f"L1 loss: {l1.item():.6f}")
-        print(f"L1 loss: {l1.item():.6f}")
+
         mse = self.mse_loss(outputs, target)
         Fine_tune_logger.debug(f"MSE loss: {mse.item():.6f}")
-        print(f"MSE loss: {mse.item():.6f}")
+
         spectral = self.spectral_loss(outputs, target)
         perceptual = self.perceptual_loss(outputs, target)
         multi_scale = self.multi_scale_loss(outputs, target)
@@ -325,12 +289,9 @@ class CombinedLoss(nn.Module):
             0.1 * multi_scale
         )
         Fine_tune_logger.debug(f"Total loss (weighted sum): {total_loss.item():.6f}")
-        print(f"Total loss (weighted sum): {total_loss.item():.6f}")
 
         combined_loss = 0.5 * mask_loss + 0.5 * total_loss
         Fine_tune_logger.debug(f"Combined loss (mask + total): {combined_loss.item():.6f}")
-        print(f"Combined loss (mask + total): {combined_loss.item():.6f}")
-
         return combined_loss, mask_loss, total_loss
 
 
@@ -364,14 +325,11 @@ def visualize_and_save_waveforms(gt_waveform, pred_waveform, sample_idx, epoch, 
     plt.close()
 
     Fine_tune_logger.info(f"Saved waveform visualization at {save_path}")
-    print(f"Saved waveform visualization at {save_path}")
+
 
 def freeze_encoder(model):
-
     Fine_tune_logger.debug("Freezing encoder layers.")
-    print("Freezing encoder layers.")
     try:
-  
         if isinstance(model, nn.DataParallel):
             encoder_layers = model.module.encoder
         else:
@@ -383,10 +341,10 @@ def freeze_encoder(model):
         encoder_layers.eval()  
 
         Fine_tune_logger.info("Encoder layers frozen for fine-tuning.")
-        print("Encoder layers frozen for fine-tuning.")
+
     except AttributeError as e:
         Fine_tune_logger.error(f"Error freezing encoder layers: {e}")
-        print(f"Error freezing encoder layers: {e}")
+
         raise AttributeError("Model does not have an 'encoder' attribute.") from e
 
 
@@ -395,20 +353,16 @@ def freeze_encoder(model):
 
 def resample_audio(waveform, orig_sr, target_sr=16000):
     Fine_tune_logger.debug("Resampling audio waveform.")
-    print("Resampling audio waveform.")
     if np.allclose(waveform, 0):  
         Fine_tune_logger.warning("Silent audio detected during resampling.")
-        print("Silent audio detected during resampling. Returning zeros.")
         return np.zeros(target_sr, dtype=np.float32) 
     resampled = librosa.resample(waveform, orig_sr=orig_sr, target_sr=target_sr)
     max_val = np.max(np.abs(resampled))
     if max_val > 0:
         resampled = resampled / max_val 
         Fine_tune_logger.debug("Resampled waveform normalized.")
-        print("Resampled waveform normalized.")
     else:
         Fine_tune_logger.warning("Max value after resampling is zero. Returning zeros.")
-        print("Max value after resampling is zero. Returning zeros.")
         resampled = np.zeros_like(resampled)
     return resampled
 
@@ -417,13 +371,8 @@ def resample_audio(waveform, orig_sr, target_sr=16000):
 
 def evaluate_metrics_from_spectrograms(ground_truth, predicted, loss_function, n_fft=2048, hop_length=512):
     Fine_tune_logger.debug("Evaluating metrics from spectrograms.")
-    print("Evaluating metrics from spectrograms.")
-  
     if predicted.size(1) != ground_truth.size(1): 
-        Fine_tune_logger.warning(
-            f"Channel mismatch: predicted {predicted.size(1)}, ground truth {ground_truth.size(1)}. Adjusting predicted channels."
-        )
-        print(f"Channel mismatch: predicted {predicted.size(1)}, ground truth {ground_truth.size(1)}. Adjusting predicted channels.")
+        Fine_tune_logger.warning( f"Channel mismatch: predicted {predicted.size(1)}, ground truth {ground_truth.size(1)}. Adjusting predicted channels." )
         predicted = predicted[:, :ground_truth.size(1), :, :] 
 
 
@@ -432,7 +381,6 @@ def evaluate_metrics_from_spectrograms(ground_truth, predicted, loss_function, n
             f"Shape mismatch in evaluation! Predicted: {predicted.size()}, Ground Truth: {ground_truth.size()}"
         )
         Fine_tune_logger.error(error_msg)
-        print(error_msg)
         raise ValueError("Shape mismatch between predicted and ground truth spectrograms.")
 
     gt_waveforms = loss_function.spectrogram_to_waveform(ground_truth, n_fft, hop_length)
@@ -449,21 +397,17 @@ def evaluate_metrics_from_spectrograms(ground_truth, predicted, loss_function, n
         gt = gt[:min_len]
         pred = pred[:min_len]
         Fine_tune_logger.debug(f"Evaluating metrics for sample {idx+1} with waveform length: {min_len}")
-        print(f"Evaluating metrics for sample {idx+1} with waveform length: {min_len}")
         try:
             sdr, sir, sar, _ = bss_eval_sources(gt[np.newaxis, :], pred[np.newaxis, :])  
             sdr_list.append(sdr[0])
             sir_list.append(sir[0])
             sar_list.append(sar[0])
             Fine_tune_logger.debug(f"Metrics for sample {idx+1} - SDR: {sdr[0]:.4f}, SIR: {sir[0]:.4f}, SAR: {sar[0]:.4f}")
-            print(f"Metrics for sample {idx+1} - SDR: {sdr[0]:.4f}, SIR: {sir[0]:.4f}, SAR: {sar[0]:.4f}")
         except Exception as e:
             Fine_tune_logger.error(f"Error evaluating metrics for sample {idx+1}: {e}")
-            print(f"Error evaluating metrics for sample {idx+1}: {e}")
             continue
 
     Fine_tune_logger.debug("Metrics evaluation completed.")
-    print("Metrics evaluation completed.")
     return sdr_list, sir_list, sar_list
 
 
@@ -473,18 +417,15 @@ def evaluate_metrics_from_spectrograms(ground_truth, predicted, loss_function, n
 def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_training_loader, Finetuned_validation_loader, learning_rate=1e-3, fine_tune_epochs=6):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     Fine_tune_logger.info(f"Fine-tuning --> Using device: {device}")
-    print(f"Fine-tuning --> Using device: {device}")
-
+ 
     Fine_tune_logger.info("Initializing model...")
-    print("Initializing model...")
+  
     model = UNet(in_channels=1, out_channels=1).to(device)
     Fine_tune_logger.debug(f"Model initialized and moved to device: {device}")
-    print(f"Model initialized and moved to device: {device}")
-
+    
     
     if torch.cuda.device_count() > 1:
         Fine_tune_logger.info(f"Multiple GPUs detected: {torch.cuda.device_count()}. Using DataParallel.")
-        print(f"Multiple GPUs detected: {torch.cuda.device_count()}. Using DataParallel.")
         model = nn.DataParallel(model)
     else:
         Fine_tune_logger.info("Single GPU detected or using CPU.")
@@ -492,10 +433,10 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
 
     if pretrained_model_path is None:
         Fine_tune_logger.error("Pretrained model path must be provided for fine-tuning.")
-        print("Pretrained model path must be provided for fine-tuning.")
+
         raise ValueError("Pretrained model path is None.")
 
-    # Load pretrained model weights
+ 
     try:
         state_dict = torch.load(pretrained_model_path, map_location=device,weights_only=True)
 
@@ -503,36 +444,30 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
             state_dict = state_dict['weights_only']
         model.load_state_dict(state_dict)
         Fine_tune_logger.info(f"Fine-tuning --> Pretrained model loaded from: {pretrained_model_path}")
-        print(f"Fine-tuning --> Pretrained model loaded from: {pretrained_model_path}")
     except Exception as e:
         Fine_tune_logger.error(f"Error loading pretrained model: {e}")
-        print(f"Error loading pretrained model: {e}")
         Fine_tune_logger.debug(traceback.format_exc())
         raise e
 
     freeze_encoder(model)
     Fine_tune_logger.info("Fine-tuning --> Encoder layers frozen.")
-    print("Fine-tuning --> Encoder layers frozen.")
-
 
     loss_function = CombinedLoss(device)
     scaler = GradScaler()
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=learning_rate)
     Fine_tune_logger.debug("Optimizer initialized with parameters requiring gradients.")
-    print("Optimizer initialized with parameters requiring gradients.")
-
+  
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', patience=2, factor=0.5)
     Fine_tune_logger.debug("Learning rate scheduler initialized.")
-    print("Learning rate scheduler initialized.")
 
     Fine_tune_logger.info(f"Fine-tuning --> Starting fine-tuning: Epochs={fine_tune_epochs}, LR={learning_rate}")
-    print(f"Fine-tuning --> Starting fine-tuning: Epochs={fine_tune_epochs}, LR={learning_rate}")
+ 
 
 
     visualization_dir = os.path.join(os.path.dirname(fine_tuned_model_path), "visualizations")
     os.makedirs(visualization_dir, exist_ok=True)
     Fine_tune_logger.info(f"Visualization directory set to: {visualization_dir}")
-    print(f"Visualization directory set to: {visualization_dir}")
+  
 
     try:
         for epoch in range(fine_tune_epochs):
@@ -544,13 +479,9 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
             for batch_idx, (inputs, targets) in enumerate(Fine_tuned_training_loader, start=1):
                 if inputs is None or targets is None:
                     Fine_tune_logger.warning(f"Skipping training batch {batch_idx} due to None data.")
-                    print(f"Skipping training batch {batch_idx} due to None data.")
                     continue
-                Fine_tune_logger.debug(
-                    f"Training Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}"
-                )
-                print(f"Training Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}")
-
+                Fine_tune_logger.debug( f"Training Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}")
+                
                 inputs, targets = inputs.to(device), targets.to(device)
                 optimizer.zero_grad()
 
@@ -559,11 +490,8 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
 
                     predicted_mask = predicted_mask[:, :1, :, :]
                     outputs = outputs[:, :1, :, :]
-                    Fine_tune_logger.debug(
-                        f"Predicted mask shape after slicing: {predicted_mask.shape}, "
-                        f"Outputs shape after slicing: {outputs.shape}"
-                    )
-                    print(f"Predicted mask shape after slicing: {predicted_mask.shape}, Outputs shape after slicing: {outputs.shape}")
+                    Fine_tune_logger.debug(f"Predicted mask shape after slicing: {predicted_mask.shape}, "f"Outputs shape after slicing: {outputs.shape}")
+                    
 
             
                     combined_loss, mask_loss, total_loss = loss_function(predicted_mask, inputs, targets, outputs)
@@ -579,20 +507,16 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
                     f"Combined Loss: {combined_loss.item():.6f}, Mask Loss: {mask_loss.item():.6f}, "
                     f"Total Loss: {total_loss.item():.6f}"
                 )
-                print(
-                    f"Epoch [{epoch+1}], Batch [{batch_idx}] -> "
-                    f"Combined Loss: {combined_loss.item():.6f}, Mask Loss: {mask_loss.item():.6f}, "
-                    f"Total Loss: {total_loss.item():.6f}"
-                )
+       
 
                 for name, param in model.named_parameters():
                    if param.requires_grad and param.grad is not None:
-                    print(f"Gradient norm for {name}: {param.grad.norm().item()}")
-
+                       param.requires_grad(True)
+                    
            
             avg_train_loss = running_loss / len(Fine_tuned_training_loader)
             Fine_tune_logger.info(f"Fine-Tuning --> Epoch [{epoch+1}/{fine_tune_epochs}] Average Training Loss: {avg_train_loss:.6f}")
-            print(f"Fine-Tuning --> Epoch [{epoch+1}/{fine_tune_epochs}] Average Training Loss: {avg_train_loss:.6f}")
+            
 
             model.eval()
             running_val_loss = 0.0
@@ -617,8 +541,7 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
                         f"Validation Batch {val_batch_idx}: Predicted mask shape={predicted_mask.shape}, "
                         f"Outputs shape={outputs.shape}"
                     )
-                    print(f"Validation Batch {val_batch_idx}: Predicted mask shape={predicted_mask.shape}, Outputs shape={outputs.shape}")
-
+                 
               
                     combined_loss, _, _ = loss_function(predicted_mask, inputs, targets, outputs)
                     running_val_loss += combined_loss.item()
@@ -635,7 +558,6 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
                             target_np = targets[sample_idx].detach().cpu().numpy().flatten()
                             if np.allclose(target_np, 0):
                                 Fine_tune_logger.info(f"Skipping visualization for silent target in sample {sample_idx+1} of batch {val_batch_idx}.")
-                                print(f"Skipping visualization for silent target in sample {sample_idx+1} of batch {val_batch_idx}.")
                                 continue
 
                             gt_waveform = loss_function.spectrogram_to_waveform(targets[sample_idx].unsqueeze(0), n_fft=2048, hop_length=512)[0]
@@ -659,10 +581,8 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
             avg_sar = sum(sar_list) / len(sar_list) if sar_list else 0.0
 
             Fine_tune_logger.info(f"Validation Metrics - SDR: {avg_sdr:.4f}, SIR: {avg_sir:.4f}, SAR: {avg_sar:.4f}")
-            print(f"Validation Metrics - SDR: {avg_sdr:.4f}, SIR: {avg_sir:.4f}, SAR: {avg_sar:.4f}")
             Fine_tune_logger.info(f"Fine-Tuning --> Epoch [{epoch+1}/{fine_tune_epochs}] Average Validation Loss: {avg_val_loss:.6f}")
-            print(f"Fine-Tuning --> Epoch [{epoch+1}/{fine_tune_epochs}] Average Validation Loss: {avg_val_loss:.6f}")
-
+           
          
             Append_loss_values(loss_history_finetuning_epoches, total_loss, avg_sdr, avg_sir, avg_sar, epoch)
 
@@ -674,15 +594,14 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
   
         plot_loss_curves_FineTuning_script_(loss_history_finetuning_epoches, 'loss_curves_finetuning_epoches.png')
         Fine_tune_logger.info("Loss curves plotted.")
-        print("Loss curves plotted.")
+
 
         torch.save(model.state_dict(), fine_tuned_model_path)
         Fine_tune_logger.info(f"Fine-tuned model saved at {fine_tuned_model_path}")
-        print(f"Fine-tuned model saved at {fine_tuned_model_path}")
-        print(f"Fine-tuning completed. Model saved to {fine_tuned_model_path}.")
+       
     except Exception as e:
         Fine_tune_logger.error(f"Fine-tuning failed: {e}")
-        print(f"Fine-tuning failed: {e}")
+      
         Fine_tune_logger.debug(traceback.format_exc())
         sys.exit(1)
 
@@ -703,10 +622,8 @@ if __name__ == "__main__":
             max_files_val=None,
         )
         Fine_tune_logger.info("Data loaders created successfully.")
-        print("Data loaders created successfully.")
     except Exception as e:
         Fine_tune_logger.error(f"Error creating data loaders: {e}")
-        print(f"Error creating data loaders: {e}")
         Fine_tune_logger.debug(traceback.format_exc())
         sys.exit(1)
     
@@ -721,6 +638,5 @@ if __name__ == "__main__":
         )
     except Exception as e:
         Fine_tune_logger.error(f"Fine-tuning failed: {e}")
-        print(f"Fine-tuning failed: {e}")
         Fine_tune_logger.debug(traceback.format_exc())
         sys.exit(1)
