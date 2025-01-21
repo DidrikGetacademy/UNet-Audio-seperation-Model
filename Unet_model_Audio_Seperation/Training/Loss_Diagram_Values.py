@@ -4,7 +4,7 @@ import os
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
-train_logger = setup_logger('train', r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_performance_logg\log\Model_Training_logg.txt')
+train_logger = setup_logger('train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 
 
 
@@ -32,24 +32,24 @@ def plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path="los
 
     # Dynamisk skalering for y-aksen
     y_min = min(
-        min(loss_history_Epoches["l1"], default=0),
-        min(loss_history_Epoches["spectral"], default=0),
+        min(loss_history_Epoches["mask_loss"], default=0),
+        min(loss_history_Epoches["hybrid_loss"], default=0),
         min(loss_history_Epoches["combined"], default=0),
         min(loss_history_Epoches["Total_loss_per_epoch"], default=0),
     )
     y_max = max(
-        max(loss_history_Epoches["l1"], default=1),
-        max(loss_history_Epoches["spectral"], default=1),
+        max(loss_history_Epoches["mask_loss"], default=1),
+        max(loss_history_Epoches["hybrid_loss"], default=1),
         max(loss_history_Epoches["combined"], default=1),
         max(loss_history_Epoches["Total_loss_per_epoch"], default=1),
     )
     plt.ylim([y_min * 0.9, y_max * 1.1])  # Juster y-aksen for bedre synlighet
 
-    if len(loss_history_Epoches["l1"]) > 0:
-        plt.plot(epochs, loss_history_Epoches["l1"], label="L1-loss", color="blue", linewidth=2)
+    if len(loss_history_Epoches["mask_loss"]) > 0:
+        plt.plot(epochs, loss_history_Epoches["mask_loss"], label="mask_loss", color="blue", linewidth=2)
 
-    if len(loss_history_Epoches["spectral"]) > 0:
-        plt.plot(epochs, loss_history_Epoches["spectral"], label="Spectral-loss", color="green", linewidth=2)
+    if len(loss_history_Epoches["hybrid_loss"]) > 0:
+        plt.plot(epochs, loss_history_Epoches["hybrid_loss"], label="hybrid_loss", color="green", linewidth=2)
 
     if len(loss_history_Epoches["combined"]) > 0:
         plt.plot(epochs, loss_history_Epoches["combined"], label="Combined-loss", color="yellow", linewidth=2)
@@ -111,12 +111,12 @@ def plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path="los
     plt.figure(figsize=(14, 7))  # Larger figure for better readability
 
     # Plot L1-loss
-    if len(loss_history_Batches["l1"]) > 0:
-        plt.plot(batch_range, loss_history_Batches["l1"], label="L1-loss", color="blue", linewidth=1.5, alpha=0.8)
+    if len(loss_history_Batches["mask_loss"]) > 0:
+        plt.plot(batch_range, loss_history_Batches["mask_loss"], label="mask_loss", color="blue", linewidth=1.5, alpha=0.8)
 
     # Plot Spectral/MSE-loss
-    if len(loss_history_Batches["spectral/mse"]) > 0:
-        plt.plot(batch_range, loss_history_Batches["spectral/mse"], label="Spectral/MSE-loss", color="green", linewidth=1.5, alpha=0.8)
+    if len(loss_history_Batches["hybrid_loss"]) > 0:
+        plt.plot(batch_range, loss_history_Batches["hybrid_loss"], label="hybrid_loss", color="green", linewidth=1.5, alpha=0.8)
 
     # Plot Combined-loss
     plt.plot(batch_range, loss_history_Batches["combined"], label="Combined-loss", color="purple", linewidth=2, alpha=0.9)
@@ -182,7 +182,7 @@ def plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path="los
 
 
 ####FINE-TUNING#####
-def plot_loss_curves_FineTuning_script_(loss_history_finetuning_epoches, out_path=r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_performance_logg\Diagrams\loss_curves_finetuning_epoches.png"):
+def plot_loss_curves_FineTuning_script_(loss_history_finetuning_epoches, out_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\Diagrams\loss_curves_finetuning_epoches.png"):
     epochs_count = len(loss_history_finetuning_epoches["combined"])
     epochs = range(1, epochs_count + 1)
     plt.figure(figsize=(10,6))

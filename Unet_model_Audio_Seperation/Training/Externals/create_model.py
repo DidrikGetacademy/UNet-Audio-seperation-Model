@@ -7,7 +7,7 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)  
 from Training.Externals.Logger import setup_logger
-Model_creation_logger = setup_logger('train', r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_performance_logg\log\Model_Training_logg.txt')
+Model_creation_logger = setup_logger('train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperationx\log\Model_Training_logg.txt')
 from Model_Architecture.model import UNet
 
 def create_and_save_model(input_shape, in_channels=1, out_channels=1, save_path="unet_vocal_isolation.pth"):

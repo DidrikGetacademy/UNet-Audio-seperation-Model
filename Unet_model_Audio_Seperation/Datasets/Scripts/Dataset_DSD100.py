@@ -8,11 +8,11 @@ from Training.Externals.Logger import setup_logger
 
 dataset_logger = setup_logger(
     'dataset_Musdb18',
-    r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_performance_logg\log\Model_Training_logg.txt'
+    r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt'
 )
 
 class DSD100(Dataset):
-    def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=2048, hop_length=512, max_length_seconds=10, max_files=None):
+    def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=2048, hop_length=512, max_length_seconds=5, max_files=None):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length

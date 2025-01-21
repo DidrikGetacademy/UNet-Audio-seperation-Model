@@ -9,7 +9,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
 
-Memory_logger = setup_logger('Memory', r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_performance_logg\log\Model_Training_logg.txt')
+Memory_logger = setup_logger('Memory', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 
 def log_memory_usage(tag=""):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

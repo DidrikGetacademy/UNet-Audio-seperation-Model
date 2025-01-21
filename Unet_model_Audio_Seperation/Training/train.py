@@ -19,7 +19,6 @@ from Training.Loss_Diagram_Values import (
     plot_loss_curves_Training_script_epoches,
     plot_loss_curves_Training_script_Batches,
 )
-
 from Model_Architecture.model import UNet
 
 
@@ -27,11 +26,11 @@ from Model_Architecture.model import UNet
 
 
 
-train_logger = setup_logger( 'train', r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_performance_logg\log\Model_Training_logg.txt')
-Final_model_path = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_weights\CheckPoints"
-diagramdirectory = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_performance_logg\Diagrams"
-fine_tuned_model_base_path = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_weights\Fine_tuned"
-Model_CheckPoint = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_weights\CheckPoints"
+train_logger = setup_logger( 'train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
+Final_model_path = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_weights\CheckPoints"
+diagramdirectory = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\Diagrams"
+fine_tuned_model_base_path = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_weights\Fine_tuned"
+Model_CheckPoint = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints"
 
 # Create necessary directories
 os.makedirs(diagramdirectory, exist_ok=True)
@@ -43,27 +42,23 @@ os.makedirs(Final_model_path, exist_ok=True)
 
 # Initialize global variables for loss tracking
 loss_history_Epoches = {
-    "l1": [],            # L1 loss per epoch
-    "spectral": [],      # Spectral loss (STFT MSE) per epoch
-    "combined": [],      # Combined loss (weighted sum of L1 and spectral) per epoch
+    "mask_loss": [],        # Mask loss per epoch
+    "hybrid_loss": [],      # Hybrid loss per epoch
+    "combined": [],      # Combined loss (weighted sum of mask loss and hybridloss) per epoch
     "Total_loss_per_epoch": [],  # Total loss per epoch
 }
 
 loss_history_Batches = {
-    "l1": [],            # L1 loss per batch
-    "spectral/mse": [],  # Spectral loss or MSE per batch
+    "mask_loss": [],     # Mask loss per batch
+    "hybrid_loss": [],   # Hybrid loss per batch
     "combined": [],      # Combined loss per batch
 }
-
-
-
 def create_loss_diagrams(loss_history_Batches, loss_history_Epoches):
     train_logger.info("Creating Diagrams now")
     batches_figpath = os.path.join(diagramdirectory, "loss_curves_training_batches.png")
     epoch_figpath = os.path.join(diagramdirectory, "loss_curves_training_epoches.png")
     plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path=batches_figpath)
     plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path=epoch_figpath)
-
 
 
 
@@ -77,12 +72,10 @@ def clear_memory_before_training():
 
 
 
-
 def training_completed():
     train_logger.info("[Train] Training completed. Clearing memory cache now...")
     torch.cuda.empty_cache()
     gc.collect()
-
 
 
 
@@ -134,7 +127,6 @@ def save_model_checkpoint(avg_epoch_loss, epoch, model, best_loss,  trigger_time
 
 
 
-
 def Model_Structure_Information(model):
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -146,20 +138,19 @@ def Model_Structure_Information(model):
 
 
 
-def Append_loss_values_for_batch(l1_val, stft_val, combined_loss):
-    loss_history_Batches["l1"].append(l1_val.item())
-    loss_history_Batches["spectral/mse"].append(stft_val.item())
+def Append_loss_values_for_batch(mask_loss, hybrid_loss, combined_loss):
+    loss_history_Batches["mask_loss"].append(mask_loss.item())
+    loss_history_Batches["hybrid_loss"].append(hybrid_loss.item())
     loss_history_Batches["combined"].append(combined_loss.item())
 
 
 
 
-def Append_loss_values_for_epoches(l1_val_avg,stft_val_avg,combined_loss_avg,avg_epoch_loss):
-    loss_history_Epoches["l1"].append(l1_val_avg)
-    loss_history_Epoches["spectral"].append(stft_val_avg)
+def Append_loss_values_for_epoches(mask_loss_avg,hybrid_loss_avg,combined_loss_avg,avg_epoch_loss):
+    loss_history_Epoches["mask_loss"].append(mask_loss_avg)
+    loss_history_Epoches["hybrid_loss"].append(hybrid_loss_avg)
     loss_history_Epoches["combined"].append(combined_loss_avg)
     loss_history_Epoches["Total_loss_per_epoch"].append(avg_epoch_loss)
-
 
 
 
@@ -184,13 +175,12 @@ def dataset_sample_information(musdb18_Train_Dataloader, musdb18_Evaluation_Data
 
 
 
-
 def Get_calculated_average_loss_from_batches():
-    l1_val_avg = sum(loss_history_Batches["l1"]) / len(loss_history_Batches["l1"]) if loss_history_Batches["l1"] else 0
-    stft_val_avg = sum(loss_history_Batches["spectral/mse"]) / len(loss_history_Batches["spectral/mse"]) if loss_history_Batches["spectral/mse"] else 0
-    combined_loss_avg = sum(loss_history_Batches["combined"]) / len(loss_history_Batches["combined"]) if loss_history_Batches["combined"] else 0
-    return l1_val_avg, stft_val_avg, combined_loss_avg
-
+    mask_loss_avg = sum(loss_history_Batches["mask_loss"]) / len(loss_history_Batches["mask_loss"])
+    hybrid_loss_avg = sum(loss_history_Batches["hybrid_loss"]) / len(loss_history_Batches["hybrid_loss"])
+    combined_loss_avg = sum(loss_history_Batches["combined"]) / len(loss_history_Batches["combined"])
+    
+    return mask_loss_avg, hybrid_loss_avg, combined_loss_avg
 
 
 
@@ -205,29 +195,61 @@ def check_inputs_targets_dataset(inputs, targets, batch_idx):
 
 
 
-
 def print_inputs_targets_shape(inputs, targets, batch_idx):
     if batch_idx <= 2:
        train_logger.debug(f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}") 
        train_logger.debug(f"Inputs min={inputs.min().item():.4f}, max={inputs.max().item():.4f}")
        train_logger.debug(f"Targets min={targets.min().item():.4f}, max={targets.max().item():.4f}")
 
-
-
-
 def Validate_epoch(model, val_loader, criterion, device):
     model.eval()
-    val_loss = 0
+    val_combined_loss = 0
+    val_mask_loss = 0
+    val_hybrid_loss = 0
     with torch.no_grad():
-        for val_batch_idx, (inputs,targets) in enumerate(val_loader):
-           inputs, targets = inputs.to(device), targets.to(device)
-           outputs = model(inputs)
-           combined_loss, l1_loss, stft_loss = criterion(outputs,targets)
-           val_loss += combined_loss.item()
+        for val_batch_idx, (inputs, targets) in enumerate(val_loader):
+            inputs, targets = inputs.to(device), targets.to(device)
+            
+            # Forward pass
+            predicted_mask, outputs = model(inputs)
 
-    avg_val_loss = val_loss / len(val_loader)
-    return avg_val_loss
+            # Ensure shape compatibility
+            if predicted_mask.size() != targets.size():
+                raise ValueError(f"Validation shape mismatch: predicted_mask={predicted_mask.size()}, targets={targets.size()}")
 
+            # Loss calculation
+            combined_loss, mask_loss, hybrid_loss = criterion(predicted_mask, inputs, targets)
+
+            val_combined_loss += combined_loss.item()
+            val_mask_loss += mask_loss.item()
+            val_hybrid_loss += hybrid_loss.item()
+
+    avg_combined_loss = val_combined_loss / len(val_loader)
+    avg_mask_loss = val_mask_loss / len(val_loader)
+    avg_hybrid_loss = val_hybrid_loss / len(val_loader)
+
+    return avg_combined_loss, avg_mask_loss, avg_hybrid_loss
+
+
+
+class MaskEstimationLoss(nn.Module):
+    def __init__(self):
+        super(MaskEstimationLoss,self).__init__()
+        self.l1_loss = nn.L1Loss()
+        self.mse_loss = nn.MSELoss()
+
+    def forward(self, predicted_mask, mixture, target):
+
+            #Estimated vocal spectrum from mask
+            predicted_vocals = predicted_mask * mixture
+
+            #l1 loss
+            l1 = self.l1_loss(predicted_vocals, target)
+
+
+            stft = self.mse_loss(torch.log1p(predicted_vocals), torch.log1p(target))
+
+            return 0.5 * l1 + 0.5 * stft
 
 
 class HybridLoss(nn.Module):
@@ -264,53 +286,63 @@ class HybridLoss(nn.Module):
         return combined_loss, l1, stft_loss
 
 
-def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_weights\Pre_trained\best_model_epoch-19.pth',start_training=True):
+
+class Combinedloss(nn.Module):
+    def __init__(self):
+        super(Combinedloss, self).__init__()
+        self.mask_loss = MaskEstimationLoss()
+        self.hybrid_loss = HybridLoss()
+
+    def forward(self, predicted_mask, mixture, target):
+        # Calculate the mask loss
+        mask_loss = self.mask_loss(predicted_mask, mixture, target)
+
+        # Estimated vocals (applying mask to mixture)
+        predicted_vocals = predicted_mask * mixture
+
+        # Calculate the hybrid loss on the predicted vocals
+        hybrid_loss, l1_loss, stft_loss = self.hybrid_loss(predicted_vocals, target)
+
+        # Combine the losses
+        combined_loss = 0.5 * mask_loss + 0.5 * hybrid_loss
+
+        return combined_loss, mask_loss, hybrid_loss
+
+        
+        
+
+
+
+def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints\best_model_epoch-3.pth",start_training=True):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_logger.info(f"[Train] Using device: {device}")
 
    #Training config
-    batch_size = 6
+    batch_size = 8
     desired_effective_batch_size = 128
     accumulation_steps = desired_effective_batch_size // batch_size
-    learning_rate = 1e-7
+    learning_rate = 1e-4
     gradient_clip_value = 1  
-    epochs = 40
-    num_workers = 0
-    patience = 7
+    epochs = 25
+    patience = 5
     best_loss = float('inf')
     trigger_times = 0
     prev_epoch_loss = None
     best_model_path = None 
-    sampling_rate = 44100
-    max_length_seconds = 10
+
  
-
-   #Dataloader/Dataset
-    MUSDB18_dir = r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Datasets\Dataset_Audio_Folders\musdb18'
-    DSD100_dataset_dir =r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Datasets\Dataset_Audio_Folders\DSD100'
-
-    combined_train_loader, combined_val_loader = create_dataloaders(
-        musdb18_dir=MUSDB18_dir,
-        dsd100_dir=DSD100_dataset_dir,
-        batch_size=batch_size,
-        num_workers=num_workers,
-        sampling_rate=sampling_rate,
-        max_length_seconds=max_length_seconds,
-        max_files_train=None,
-        max_files_val=None
-    )
 
 
 
     #UNet - Model initialization, Optimizer Config, Custom Hybridloss function, Gradscaler.
     model = UNet(in_channels=1, out_channels=1).to(device)
-    criterion = HybridLoss()
+    criterion = Combinedloss(device)
     optimizer = optim.Adam(
         model.parameters(),
         lr=learning_rate, 
-        weight_decay=1e-4, 
+        weight_decay=1e-5, 
         betas=(0.9, 0.999),
-        eps=1e-7
+        eps=1e-6
         )
 
   
@@ -328,15 +360,6 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
 
     Effective_batch_size = batch_size * accumulation_steps
 
-
-    if len(combined_val_loader) > 0:
-        print(f"Combined_val_loader: {len(combined_val_loader)}")
-    else: 
-        print("Combined_val_loader is 0")
-    if len(combined_train_loader) > 0:
-        print(f"combined_train_loader: {len(combined_train_loader)}")
-    else: 
-        print("Combined_train_loader is 0")
 
 
     #Prininting Model Structure/Information
@@ -367,11 +390,19 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
                 running_loss = 0.0
                 train_logger.info(f"[Train] Epoch {epoch + 1}/{epochs} started.")
 
-    
+                #Resets gradients.
+                optimizer.zero_grad()
                 for batch_idx, (inputs, targets) in enumerate(combined_train_loader, start=1):
-       
-                    #Resets gradients. 
-                    optimizer.zero_grad()
+
+
+                    if batch_idx < 5:    
+                        train_logger.info(f"Batch {batch_idx}: Mixture shape={inputs.shape}, Target shape={targets.shape}")
+                        train_logger.info(f"Mixture min={inputs.min().item():.4f}, max={inputs.max().item():.4f}")
+                        train_logger.info(f"Target min={targets.min().item():.4f}, max={targets.max().item():.4f}")
+                       
+
+
+                   
                 
 
 
@@ -386,17 +417,26 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
                     inputs, targets = inputs.to(device, non_blocking=True), targets.to(device, non_blocking=True)
                     with autocast(device_type='cuda', enabled=(device.type == 'cuda')):
 
-                        print(f"Batch {batch_idx} -> Inputs shape: {inputs.shape}, Targets shape: {targets.shape}")
+                        predicted_mask, outputs = model(inputs)
+                        if batch_idx < 5:
+                            train_logger.info(f"Batch {batch_idx}: Mask range: min={outputs.min().item():.4f}, max={outputs.max().item():.4f}")
+              
 
-                        outputs = model(inputs)
-
-
-                        print(f"Batch {batch_idx} -> Outputs shape: {outputs.shape}")
+                        train_logger.debug(f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}, Predicted Mask shape={predicted_mask.shape}, Outputs shape={outputs.shape}")
+                        print(f"Batch {batch_idx} -> Outputs shape: {outputs.shape}, inputs shape: {inputs.shape}, targets shape: {targets.shape}")
                         
-                        combined_loss, l1_val, stft_val = criterion(outputs, targets)
+                        
+                        combined_loss, mask_loss, hybrid_loss = criterion(predicted_mask, inputs, targets)
 
                     #Normalizing the loss.
                     combined_loss = combined_loss / accumulation_steps
+
+
+                    #Loss logging
+                    train_logger.info(
+                    f"[Batch] Epoch: {epoch + 1}/{epochs}, Batch: {batch_idx}/{len(combined_train_loader)}, "
+                    f"Combined Loss: {combined_loss.item():.6f}, Mask Loss: {mask_loss.item():.6f}, Hybrid Loss: {hybrid_loss.item():.6f}"
+                    )
 
 
                     # Check for NaN/Inf in loss before backward
@@ -405,17 +445,8 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
                        continue
 
 
-                    #Backward pass with the scaled loss.
-                    scaler.scale(combined_loss).backward()
 
 
-
-                    train_logger.info(
-                    f"[Batch] Epoch: {epoch + 1}/{epochs}, Batch: {batch_idx}/{len(combined_train_loader)}, "
-                    f"Combined Loss: {combined_loss.item():.6f} (Summen av L1 og STFT), "
-                    f"L1 Loss: {l1_val.item():.6f} (Amplitudetap), "
-                    f"STFT Loss: {stft_val.item():.6f} (Spektraltap)"
-                    )
     
 
 
@@ -426,16 +457,17 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
 
 
                     # Appending loss values for each Batch 
-                    Append_loss_values_for_batch(l1_val, stft_val, combined_loss)
+                    Append_loss_values_for_batch(mask_loss, hybrid_loss, combined_loss)
 
 
 
+                    #Backward pass with the scaled loss.
+                    scaler.scale(combined_loss).backward()
 
                     #Updates the model's weight with optimizer after accumulation steps.
                     if batch_idx % accumulation_steps == 0 or batch_idx == len(combined_train_loader):
                        if gradient_clip_value is not None:
-                          #Unscaling gradient before clipping.
-                          scaler.unscale_(optimizer) 
+                          scaler.unscale_(optimizer)   #Unscaling gradient before clipping.
                           total_norm = nn_utils.clip_grad_norm_(model.parameters(),gradient_clip_value)
                           train_logger.info(f"Epoch [{epoch + 1}/{epochs}], Batch [{batch_idx}/{len(combined_train_loader)}], Gradient Norm: {total_norm:.4f}")
                        else: 
@@ -443,11 +475,13 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
                             train_logger.info(f"Epoch [{epoch + 1}/{epochs}], Batch [{batch_idx}/{len(combined_train_loader)}], Gradient Norm: {total_norm:.4f}")
 
 
-                    #Applying gradients.
-                    scaler.step(optimizer) 
+                       #Applying gradients.
+                       scaler.step(optimizer) 
 
-                    #Updates the scaler.
-                    scaler.update() 
+                       #Updates the scaler.
+                       scaler.update() 
+
+
             
                     
 
@@ -481,18 +515,23 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
 
                 #Fallback/best loss.. Checkpoint
                 best_loss, trigger_times = save_model_checkpoint(avg_epoch_loss, epoch, model, best_loss, trigger_times)
+
+
                 if trigger_times >= patience:
                    train_logger.info("Early stopping triggered.")
                    break
 
 
                 if len(combined_val_loader) > 0:
-                    avg_val_loss = Validate_epoch(model,combined_val_loader,criterion,device)
+                    avg_combined_loss,avg_mask_loss,avg_hybrid_loss  = Validate_epoch(model,combined_val_loader,criterion,device)
                     train_logger.info(
-                    f"[Validation] Epoch {epoch + 1}/{epochs}, "
-                    f"[Validation] Avg Validation Loss:  {avg_val_loss:.6f}")
+                    f"[Validation] Epoch {epoch + 1}/{epochs}: "
+                    f"Combined Loss={avg_combined_loss:.6f}, "
+                    f"Mask Loss={avg_mask_loss:.6f}, "
+                    f"Hybrid Loss={avg_hybrid_loss:.6f}"
+                   )
                     #Step the scheduler based on validation loss
-                    scheduler.step(avg_val_loss)
+                    scheduler.step(avg_combined_loss)
                 else:
                     train_logger.info("[Validation] Skipping validation: No validation dataset provided.")
                     
@@ -506,18 +545,18 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
 
 
                 #Get calculated avg loss from batches.
-                l1_val_avg, stft_val_avg, combined_loss_avg = Get_calculated_average_loss_from_batches()
+                maskloss_avg, hybridloss_avg, combined_loss_avg = Get_calculated_average_loss_from_batches()
             
 
                 train_logger.info(
                 f"[Epoch Summary] Epoch: {epoch + 1}/{epochs}, "
-                f"Avg Combined Loss: {avg_epoch_loss:.6f}, Avg L1 Loss: {l1_val_avg:.6f}, "
-                f"Avg STFT Loss: {stft_val_avg:.6f}"
+                f"Avg Combined Loss: {avg_epoch_loss:.6f}, MaskLoss: {maskloss_avg:.6f}, "
+                f"Hybridloss: {hybridloss_avg:.6f}"
                 )
 
 
                 # Appending avg loss each epoch
-                Append_loss_values_for_epoches(l1_val_avg, stft_val_avg, combined_loss_avg, avg_epoch_loss)
+                Append_loss_values_for_epoches(maskloss_avg, hybridloss_avg, combined_loss_avg, avg_epoch_loss)
 
                 prev_epoch_loss = avg_epoch_loss
                 
@@ -558,7 +597,7 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
 
     #Fine_Tuning Config.
     try:
-        fine_tuning_flag = True  
+        fine_tuning_flag = False  
         if fine_tuning_flag:
             fine_tuned_model_path = os.path.join(fine_tuned_model_base_path, "fine_tuned_model.pth")
             pretrained_model_path = os.path.join(Final_model_path,"final_model.pth")
@@ -572,4 +611,27 @@ def train(load_model_path=r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolat
 
 
 if __name__ == "__main__":
-    train(load_model_path=r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_weights\Pre_trained\best_model_epoch-19.pth")
+   #Dataloader/Dataset
+    MUSDB18_dir = r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18'
+    DSD100_dataset_dir =r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\DSD100'
+    num_workers = 8
+    batch_size = 8
+    sampling_rate = 44100
+    max_length_seconds = 5
+    train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints\best_model_epoch-3.pth")
+    
+    
+
+    if 'combined_train_loader' not in globals():
+        combined_train_loader, combined_val_loader = create_dataloaders(
+           musdb18_dir=MUSDB18_dir,
+           dsd100_dir=DSD100_dataset_dir,
+           batch_size=batch_size,
+           num_workers=num_workers,
+           sampling_rate=sampling_rate,
+           max_length_seconds=max_length_seconds,
+           max_files_train=None,
+           max_files_val=None
+    )
+
+

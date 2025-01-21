@@ -10,11 +10,7 @@ from Training.Externals.Logger import setup_logger
 
 
 
-
-data_loader = setup_logger(
-    'dataloader', 
-    r'C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_performance_logg\log\Model_Training_logg.txt'
-)
+data_loader = setup_logger('dataloader',  r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 
 def custom_collate_fn(batch):
     # Filter out None items
@@ -38,17 +34,18 @@ def custom_collate_fn(batch):
     return inputs_tensor, targets_tensor
 
 
-# Dataloader Creation
 def create_dataloaders(
     musdb18_dir,
     dsd100_dir,
-    batch_size=8,
-    num_workers=8,
+    batch_size=6,
+    num_workers=6,
     sampling_rate=44100,
-    max_length_seconds=10,
+    max_length_seconds=5,
     max_files_train=None,
     max_files_val=None
 ):
+
+
     musdb18_train_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
         subset='train',
@@ -102,7 +99,6 @@ def create_dataloaders(
         pin_memory=True,
         drop_last=True,
         collate_fn=custom_collate_fn
-
     )
 
     val_loader = DataLoader(
@@ -113,10 +109,10 @@ def create_dataloaders(
         pin_memory=True,
         drop_last=True,
         collate_fn=custom_collate_fn
-
     )
 
     data_loader.info(f"Training dataset size: {len(combined_train_dataset)}")
     data_loader.info(f"Validation dataset size: {len(combined_val_dataset)}")
-
+    print(f"Training dataset size: {len(combined_train_dataset)} samples")
+    print(f"Validation dataset size: {len(combined_val_dataset)} samples")
     return train_loader, val_loader

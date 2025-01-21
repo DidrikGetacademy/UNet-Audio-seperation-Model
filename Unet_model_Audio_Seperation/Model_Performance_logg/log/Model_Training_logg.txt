@@ -1,4 +1,5 @@
-\
+
+###TRAINING#####
 2025-01-18 05:38:34,590 - INFO - [Train] Model path C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_weights\Pre_trained\best_model_epoch-19.pth does not exist. Starting from scratch.
 2025-01-18 05:38:34,590 - INFO - [Memory Clearing memory before training] Timestamp: 2025-01-18 05:38:34
 2025-01-18 05:38:34,590 - INFO - [Memory Clearing memory before training] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.11 GB, Cached=0.12 GB
@@ -1293,3 +1294,622 @@
 2025-01-18 23:22:42,693 - INFO - [Validation] Epoch 36/40, [Validation] Avg Validation Loss:  1.078816
 2025-01-18 23:22:42,693 - INFO - [Epoch Summary] Epoch: 36/40, Avg Combined Loss: 0.084258, Avg L1 Loss: 0.980602, Avg STFT Loss: 2.108447
 2025-01-18 23:22:42,693 - INFO - Previous epoch loss: 0.08425763055682182
+
+
+
+#FINE TUNING####
+2025-01-21 01:10:35,176 - INFO - Found 100 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\train' (subset='train')
+2025-01-21 01:10:35,176 - INFO - Dataset initialized with 100 valid files.
+2025-01-21 01:10:35,176 - INFO - Found 50 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\test' (subset='test')
+2025-01-21 01:10:35,177 - INFO - Dataset initialized with 50 valid files.
+2025-01-21 01:10:35,180 - INFO - Training dataset size: 150
+2025-01-21 01:10:35,180 - INFO - Validation dataset size: 100
+2025-01-21 01:10:35,181 - INFO - Data loaders created successfully.
+2025-01-21 01:10:35,181 - ERROR - Fine-tuning failed: name 'pretrained_model_path' is not defined
+2025-01-21 01:11:43,949 - INFO - Found 100 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\train' (subset='train')
+2025-01-21 01:11:43,949 - INFO - Dataset initialized with 100 valid files.
+2025-01-21 01:11:43,949 - INFO - Found 50 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\test' (subset='test')
+2025-01-21 01:11:43,950 - INFO - Dataset initialized with 50 valid files.
+2025-01-21 01:11:43,954 - INFO - Training dataset size: 150
+2025-01-21 01:11:43,954 - INFO - Validation dataset size: 100
+2025-01-21 01:11:43,955 - INFO - Data loaders created successfully.
+2025-01-21 01:11:43,955 - ERROR - Fine-tuning failed: name 'pretrained_model_path' is not defined
+2025-01-21 01:11:47,032 - INFO - Found 100 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\train' (subset='train')
+2025-01-21 01:11:47,032 - INFO - Dataset initialized with 100 valid files.
+2025-01-21 01:11:47,032 - INFO - Found 50 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\test' (subset='test')
+2025-01-21 01:11:47,032 - INFO - Dataset initialized with 50 valid files.
+2025-01-21 01:11:47,047 - INFO - Training dataset size: 150
+2025-01-21 01:11:47,047 - INFO - Validation dataset size: 100
+2025-01-21 01:11:47,047 - INFO - Data loaders created successfully.
+2025-01-21 01:11:47,047 - ERROR - Fine-tuning failed: name 'pretrained_model_path' is not defined
+2025-01-21 01:11:50,055 - INFO - Found 100 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\train' (subset='train')
+2025-01-21 01:11:50,055 - INFO - Dataset initialized with 100 valid files.
+2025-01-21 01:11:50,055 - INFO - Found 50 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\test' (subset='test')
+2025-01-21 01:11:50,055 - INFO - Dataset initialized with 50 valid files.
+2025-01-21 01:11:50,058 - INFO - Training dataset size: 150
+2025-01-21 01:11:50,058 - INFO - Validation dataset size: 100
+2025-01-21 01:11:50,059 - INFO - Data loaders created successfully.
+2025-01-21 01:11:50,059 - ERROR - Fine-tuning failed: name 'pretrained_model_path' is not defined
+2025-01-21 01:12:10,092 - INFO - Found 100 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\train' (subset='train')
+2025-01-21 01:12:10,092 - INFO - Dataset initialized with 100 valid files.
+2025-01-21 01:12:10,092 - INFO - Found 50 files in 'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18\test' (subset='test')
+2025-01-21 01:12:10,092 - INFO - Dataset initialized with 50 valid files.
+2025-01-21 01:12:10,092 - INFO - Training dataset size: 150
+2025-01-21 01:12:10,092 - INFO - Validation dataset size: 100
+2025-01-21 01:12:10,098 - INFO - Data loaders created successfully.
+2025-01-21 01:12:10,117 - INFO - Fine-tuning --> Using device: cuda
+2025-01-21 01:12:10,117 - INFO - Initializing model...
+2025-01-21 01:12:10,346 - INFO - Single GPU detected or using CPU.
+2025-01-21 01:12:10,474 - INFO - Fine-tuning --> Pretrained model loaded from: C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints\best_model_epoch-18.pth
+2025-01-21 01:12:10,474 - INFO - Encoder layers frozen for fine-tuning.
+2025-01-21 01:12:10,474 - INFO - Fine-tuning --> Encoder layers frozen.
+2025-01-21 01:12:10,474 - INFO - Loading VGGish model for perceptual loss...
+2025-01-21 01:12:11,601 - INFO - VGGish model loaded and set to evaluation mode.
+2025-01-21 01:12:12,816 - INFO - Fine-tuning --> Starting fine-tuning: Epochs=6, LR=0.001
+2025-01-21 01:12:12,816 - INFO - Visualization directory set to: C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations
+2025-01-21 01:12:12,816 - INFO - Starting Epoch 1/6
+2025-01-21 01:13:38,809 - INFO - Epoch [1], Batch [1] -> Combined Loss: 448.644470, Mask Loss: 0.170667, Total Loss: 897.118286
+2025-01-21 01:14:02,047 - INFO - Epoch [1], Batch [2] -> Combined Loss: 454.875977, Mask Loss: 0.803548, Total Loss: 908.948425
+2025-01-21 01:14:25,142 - INFO - Epoch [1], Batch [3] -> Combined Loss: 505.031616, Mask Loss: 0.850596, Total Loss: 1009.212646
+2025-01-21 01:14:48,937 - INFO - Epoch [1], Batch [4] -> Combined Loss: 606.763489, Mask Loss: 1.422818, Total Loss: 1212.104126
+2025-01-21 01:15:11,635 - INFO - Epoch [1], Batch [5] -> Combined Loss: 493.491852, Mask Loss: 0.538161, Total Loss: 986.445557
+2025-01-21 01:15:33,536 - INFO - Epoch [1], Batch [6] -> Combined Loss: 520.665710, Mask Loss: 1.247418, Total Loss: 1040.083984
+2025-01-21 01:15:56,696 - INFO - Epoch [1], Batch [7] -> Combined Loss: 617.164673, Mask Loss: 0.559067, Total Loss: 1233.770264
+2025-01-21 01:16:18,911 - INFO - Epoch [1], Batch [8] -> Combined Loss: 561.888611, Mask Loss: 0.723102, Total Loss: 1123.054077
+2025-01-21 01:16:41,828 - INFO - Epoch [1], Batch [9] -> Combined Loss: 517.351196, Mask Loss: 0.251998, Total Loss: 1034.450439
+2025-01-21 01:17:04,081 - INFO - Epoch [1], Batch [10] -> Combined Loss: 558.521179, Mask Loss: 0.584475, Total Loss: 1116.457886
+2025-01-21 01:17:26,650 - INFO - Epoch [1], Batch [11] -> Combined Loss: 471.115814, Mask Loss: 0.150079, Total Loss: 942.081543
+2025-01-21 01:17:50,524 - INFO - Epoch [1], Batch [12] -> Combined Loss: 649.159851, Mask Loss: 1.303226, Total Loss: 1297.016479
+2025-01-21 01:18:11,949 - INFO - Epoch [1], Batch [13] -> Combined Loss: 709.083069, Mask Loss: 1.302532, Total Loss: 1416.863647
+2025-01-21 01:18:37,674 - INFO - Epoch [1], Batch [14] -> Combined Loss: 544.765137, Mask Loss: 0.871829, Total Loss: 1088.658447
+2025-01-21 01:19:00,716 - INFO - Epoch [1], Batch [15] -> Combined Loss: 584.300964, Mask Loss: 0.854271, Total Loss: 1167.747681
+2025-01-21 01:19:22,965 - INFO - Epoch [1], Batch [16] -> Combined Loss: 605.979919, Mask Loss: 0.785486, Total Loss: 1211.174316
+2025-01-21 01:19:44,893 - INFO - Epoch [1], Batch [17] -> Combined Loss: 618.980164, Mask Loss: 1.497242, Total Loss: 1236.463135
+2025-01-21 01:20:05,598 - INFO - Epoch [1], Batch [18] -> Combined Loss: 613.968018, Mask Loss: 1.194067, Total Loss: 1226.741943
+2025-01-21 01:20:27,590 - INFO - Epoch [1], Batch [19] -> Combined Loss: 664.912292, Mask Loss: 1.252285, Total Loss: 1328.572266
+2025-01-21 01:20:50,178 - INFO - Epoch [1], Batch [20] -> Combined Loss: 487.136475, Mask Loss: 0.161706, Total Loss: 974.111267
+2025-01-21 01:21:12,414 - INFO - Epoch [1], Batch [21] -> Combined Loss: 491.917969, Mask Loss: 0.166412, Total Loss: 983.669556
+2025-01-21 01:21:33,138 - INFO - Epoch [1], Batch [22] -> Combined Loss: 540.998901, Mask Loss: 0.683075, Total Loss: 1081.314697
+2025-01-21 01:21:53,992 - INFO - Epoch [1], Batch [23] -> Combined Loss: 538.291992, Mask Loss: 0.796808, Total Loss: 1075.787231
+2025-01-21 01:22:16,045 - INFO - Epoch [1], Batch [24] -> Combined Loss: 534.083923, Mask Loss: 0.200260, Total Loss: 1067.967529
+2025-01-21 01:22:38,644 - INFO - Epoch [1], Batch [25] -> Combined Loss: 484.264832, Mask Loss: 0.461904, Total Loss: 968.067749
+2025-01-21 01:23:00,582 - INFO - Epoch [1], Batch [26] -> Combined Loss: 487.084381, Mask Loss: 0.202458, Total Loss: 973.966309
+2025-01-21 01:23:22,205 - INFO - Epoch [1], Batch [27] -> Combined Loss: 546.689453, Mask Loss: 0.687225, Total Loss: 1092.691650
+2025-01-21 01:23:42,343 - INFO - Epoch [1], Batch [28] -> Combined Loss: 548.118164, Mask Loss: 0.720616, Total Loss: 1095.515747
+2025-01-21 01:24:02,902 - INFO - Epoch [1], Batch [29] -> Combined Loss: 506.521759, Mask Loss: 0.174840, Total Loss: 1012.868652
+2025-01-21 01:24:25,330 - INFO - Epoch [1], Batch [30] -> Combined Loss: 566.146423, Mask Loss: 1.223318, Total Loss: 1131.069580
+2025-01-21 01:24:26,268 - INFO - Fine-Tuning --> Epoch [1/6] Average Training Loss: 549.263942
+2025-01-21 01:25:50,137 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:25:53,773 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_1_sample_2.png
+2025-01-21 01:25:56,931 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_1_sample_3.png
+2025-01-21 01:26:00,081 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_1_sample_4.png
+2025-01-21 01:26:34,603 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:26:34,603 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:26:34,603 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:27:07,959 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:27:07,959 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:27:07,959 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:27:07,974 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:27:07,976 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:27:41,264 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:27:41,280 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:27:41,618 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:28:15,922 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:28:16,135 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:28:16,135 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:28:16,135 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:29:23,837 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:29:24,061 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:29:24,061 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:30:33,281 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:30:33,281 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:30:33,281 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:31:06,599 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:31:06,599 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:31:06,599 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:31:06,599 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:31:43,808 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:32:17,886 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:32:17,886 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:32:18,099 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:32:53,983 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:32:53,983 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:32:53,987 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:32:54,195 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:33:28,323 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:33:28,323 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:33:28,323 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:33:28,543 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:34:04,095 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:34:04,095 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:34:04,095 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:34:04,095 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:34:38,094 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:34:38,094 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:34:38,094 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:34:38,313 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:35:13,755 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:35:13,770 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:35:13,968 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:35:48,979 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:35:48,979 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:36:24,716 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:36:25,184 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:36:59,678 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:36:59,678 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:36:59,678 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:36:59,678 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:37:00,615 - INFO - Validation Metrics - SDR: -28.5055, SIR: inf, SAR: -28.5055
+2025-01-21 01:37:00,615 - INFO - Fine-Tuning --> Epoch [1/6] Average Validation Loss: 418.544826
+2025-01-21 01:37:00,615 - INFO - Starting Epoch 2/6
+2025-01-21 01:38:20,883 - INFO - Epoch [2], Batch [1] -> Combined Loss: 549.368164, Mask Loss: 1.342518, Total Loss: 1097.393799
+2025-01-21 01:38:45,701 - INFO - Epoch [2], Batch [2] -> Combined Loss: 561.698486, Mask Loss: 0.809430, Total Loss: 1122.587524
+2025-01-21 01:39:09,193 - INFO - Epoch [2], Batch [3] -> Combined Loss: 537.731018, Mask Loss: 0.712167, Total Loss: 1074.749878
+2025-01-21 01:39:31,791 - INFO - Epoch [2], Batch [4] -> Combined Loss: 507.526550, Mask Loss: 0.424014, Total Loss: 1014.629089
+2025-01-21 01:39:53,812 - INFO - Epoch [2], Batch [5] -> Combined Loss: 529.023193, Mask Loss: 0.652311, Total Loss: 1057.394043
+2025-01-21 01:40:16,646 - INFO - Epoch [2], Batch [6] -> Combined Loss: 566.586670, Mask Loss: 1.115233, Total Loss: 1132.058105
+2025-01-21 01:40:38,295 - INFO - Epoch [2], Batch [7] -> Combined Loss: 534.275757, Mask Loss: 0.214704, Total Loss: 1068.336792
+2025-01-21 01:41:00,586 - INFO - Epoch [2], Batch [8] -> Combined Loss: 616.671204, Mask Loss: 0.289313, Total Loss: 1233.053101
+2025-01-21 01:41:22,094 - INFO - Epoch [2], Batch [9] -> Combined Loss: 590.163513, Mask Loss: 1.313873, Total Loss: 1179.013184
+2025-01-21 01:41:45,194 - INFO - Epoch [2], Batch [10] -> Combined Loss: 618.820984, Mask Loss: 1.071632, Total Loss: 1236.570312
+2025-01-21 01:42:06,696 - INFO - Epoch [2], Batch [11] -> Combined Loss: 494.612061, Mask Loss: 0.762233, Total Loss: 988.461914
+2025-01-21 01:42:29,128 - INFO - Epoch [2], Batch [12] -> Combined Loss: 589.183228, Mask Loss: 1.175455, Total Loss: 1177.191040
+2025-01-21 01:42:50,778 - INFO - Epoch [2], Batch [13] -> Combined Loss: 599.727173, Mask Loss: 0.789946, Total Loss: 1198.664429
+2025-01-21 01:43:13,534 - INFO - Epoch [2], Batch [14] -> Combined Loss: 427.160736, Mask Loss: 0.071349, Total Loss: 854.250122
+2025-01-21 01:43:33,885 - INFO - Epoch [2], Batch [15] -> Combined Loss: 573.754761, Mask Loss: 0.387296, Total Loss: 1147.122192
+2025-01-21 01:43:54,664 - INFO - Epoch [2], Batch [16] -> Combined Loss: 563.687622, Mask Loss: 0.616816, Total Loss: 1126.758423
+2025-01-21 01:44:18,778 - INFO - Epoch [2], Batch [17] -> Combined Loss: 400.979401, Mask Loss: 0.100655, Total Loss: 801.858154
+2025-01-21 01:44:40,693 - INFO - Epoch [2], Batch [18] -> Combined Loss: 470.041809, Mask Loss: 0.115350, Total Loss: 939.968262
+2025-01-21 01:45:00,917 - INFO - Epoch [2], Batch [19] -> Combined Loss: 638.840637, Mask Loss: 0.274640, Total Loss: 1277.406616
+2025-01-21 01:45:21,660 - INFO - Epoch [2], Batch [20] -> Combined Loss: 655.989502, Mask Loss: 1.043451, Total Loss: 1310.935547
+2025-01-21 01:45:45,595 - INFO - Epoch [2], Batch [21] -> Combined Loss: 623.051025, Mask Loss: 1.293650, Total Loss: 1244.808350
+2025-01-21 01:46:07,478 - INFO - Epoch [2], Batch [22] -> Combined Loss: 562.169861, Mask Loss: 1.228734, Total Loss: 1123.110962
+2025-01-21 01:46:28,178 - INFO - Epoch [2], Batch [23] -> Combined Loss: 547.244995, Mask Loss: 0.913866, Total Loss: 1093.576172
+2025-01-21 01:46:49,656 - INFO - Epoch [2], Batch [24] -> Combined Loss: 717.436768, Mask Loss: 0.479879, Total Loss: 1434.393677
+2025-01-21 01:47:09,955 - INFO - Epoch [2], Batch [25] -> Combined Loss: 667.254089, Mask Loss: 1.331633, Total Loss: 1333.176514
+2025-01-21 01:47:30,773 - INFO - Epoch [2], Batch [26] -> Combined Loss: 565.467468, Mask Loss: 0.864697, Total Loss: 1130.070190
+2025-01-21 01:47:54,738 - INFO - Epoch [2], Batch [27] -> Combined Loss: 435.745667, Mask Loss: 0.201944, Total Loss: 871.289368
+2025-01-21 01:48:16,642 - INFO - Epoch [2], Batch [28] -> Combined Loss: 446.030457, Mask Loss: 0.451961, Total Loss: 891.608948
+2025-01-21 01:48:37,273 - INFO - Epoch [2], Batch [29] -> Combined Loss: 495.132050, Mask Loss: 0.677194, Total Loss: 989.586914
+2025-01-21 01:48:58,781 - INFO - Epoch [2], Batch [30] -> Combined Loss: 555.330688, Mask Loss: 1.032778, Total Loss: 1109.628540
+2025-01-21 01:48:59,762 - INFO - Fine-Tuning --> Epoch [2/6] Average Training Loss: 554.690185
+2025-01-21 01:50:22,296 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:50:25,391 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_2_sample_2.png
+2025-01-21 01:50:28,606 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_2_sample_3.png
+2025-01-21 01:50:31,771 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_2_sample_4.png
+2025-01-21 01:51:05,494 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:51:05,494 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:51:05,494 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:51:39,966 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:51:39,966 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:51:39,966 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:51:39,966 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:51:39,982 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:52:13,636 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:52:13,636 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:52:13,868 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:52:47,817 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:52:48,030 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:52:48,030 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:52:48,030 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:53:56,968 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:53:57,176 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:53:57,176 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:55:06,793 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:55:06,793 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:55:06,793 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:55:40,764 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:55:40,764 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:55:40,764 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:55:40,764 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:56:18,731 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:56:53,073 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:56:53,073 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:56:53,286 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:57:29,084 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:57:29,084 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:57:29,084 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:57:29,293 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:58:03,440 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:58:03,440 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:58:03,440 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:58:03,785 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:58:39,494 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:58:39,494 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:58:39,494 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 01:58:39,494 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:59:13,767 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:59:13,767 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:59:13,767 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 01:59:14,020 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 01:59:49,745 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 01:59:49,760 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 01:59:49,983 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:00:24,946 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:00:24,946 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:01:00,689 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:01:01,098 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:01:35,860 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:01:35,860 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:01:35,860 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:01:35,860 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:01:36,807 - INFO - Validation Metrics - SDR: -28.6340, SIR: inf, SAR: -28.6340
+2025-01-21 02:01:36,807 - INFO - Fine-Tuning --> Epoch [2/6] Average Validation Loss: 423.597919
+2025-01-21 02:01:36,807 - INFO - Starting Epoch 3/6
+2025-01-21 02:03:07,245 - INFO - Epoch [3], Batch [1] -> Combined Loss: 365.568176, Mask Loss: 0.080577, Total Loss: 731.055786
+2025-01-21 02:03:30,968 - INFO - Epoch [3], Batch [2] -> Combined Loss: 532.369751, Mask Loss: 0.809617, Total Loss: 1063.929932
+2025-01-21 02:03:54,560 - INFO - Epoch [3], Batch [3] -> Combined Loss: 498.645264, Mask Loss: 0.582466, Total Loss: 996.708069
+2025-01-21 02:04:15,779 - INFO - Epoch [3], Batch [4] -> Combined Loss: 637.966492, Mask Loss: 0.904144, Total Loss: 1275.028809
+2025-01-21 02:04:38,765 - INFO - Epoch [3], Batch [5] -> Combined Loss: 655.189392, Mask Loss: 2.219375, Total Loss: 1308.159424
+2025-01-21 02:05:02,254 - INFO - Epoch [3], Batch [6] -> Combined Loss: 597.902222, Mask Loss: 0.787027, Total Loss: 1195.017456
+2025-01-21 02:05:26,561 - INFO - Epoch [3], Batch [7] -> Combined Loss: 502.602631, Mask Loss: 0.232411, Total Loss: 1004.972839
+2025-01-21 02:05:49,387 - INFO - Epoch [3], Batch [8] -> Combined Loss: 479.788544, Mask Loss: 0.816623, Total Loss: 958.760437
+2025-01-21 02:06:11,080 - INFO - Epoch [3], Batch [9] -> Combined Loss: 614.545898, Mask Loss: 0.302018, Total Loss: 1228.789795
+2025-01-21 02:06:33,650 - INFO - Epoch [3], Batch [10] -> Combined Loss: 668.297424, Mask Loss: 0.890779, Total Loss: 1335.704102
+2025-01-21 02:06:55,586 - INFO - Epoch [3], Batch [11] -> Combined Loss: 619.162415, Mask Loss: 1.163919, Total Loss: 1237.160889
+2025-01-21 02:07:17,931 - INFO - Epoch [3], Batch [12] -> Combined Loss: 570.017883, Mask Loss: 0.816959, Total Loss: 1139.218750
+2025-01-21 02:07:39,750 - INFO - Epoch [3], Batch [13] -> Combined Loss: 426.790222, Mask Loss: 0.084136, Total Loss: 853.496338
+2025-01-21 02:08:02,282 - INFO - Epoch [3], Batch [14] -> Combined Loss: 545.497864, Mask Loss: 0.182892, Total Loss: 1090.812866
+2025-01-21 02:08:22,970 - INFO - Epoch [3], Batch [15] -> Combined Loss: 649.866455, Mask Loss: 1.383556, Total Loss: 1298.349365
+2025-01-21 02:08:44,292 - INFO - Epoch [3], Batch [16] -> Combined Loss: 472.440613, Mask Loss: 0.266510, Total Loss: 944.614746
+2025-01-21 02:09:04,956 - INFO - Epoch [3], Batch [17] -> Combined Loss: 607.380249, Mask Loss: 0.738430, Total Loss: 1214.022095
+2025-01-21 02:09:26,313 - INFO - Epoch [3], Batch [18] -> Combined Loss: 469.503448, Mask Loss: 0.102063, Total Loss: 938.904846
+2025-01-21 02:09:46,607 - INFO - Epoch [3], Batch [19] -> Combined Loss: 547.584229, Mask Loss: 0.310132, Total Loss: 1094.858276
+2025-01-21 02:10:07,308 - INFO - Epoch [3], Batch [20] -> Combined Loss: 467.098145, Mask Loss: 0.345250, Total Loss: 933.851013
+2025-01-21 02:10:31,207 - INFO - Epoch [3], Batch [21] -> Combined Loss: 495.940857, Mask Loss: 0.552430, Total Loss: 991.329285
+2025-01-21 02:10:53,090 - INFO - Epoch [3], Batch [22] -> Combined Loss: 525.205872, Mask Loss: 0.408799, Total Loss: 1050.002930
+2025-01-21 02:11:13,738 - INFO - Epoch [3], Batch [23] -> Combined Loss: 483.092560, Mask Loss: 0.094957, Total Loss: 966.090149
+2025-01-21 02:11:35,132 - INFO - Epoch [3], Batch [24] -> Combined Loss: 597.366150, Mask Loss: 0.377580, Total Loss: 1194.354736
+2025-01-21 02:11:55,707 - INFO - Epoch [3], Batch [25] -> Combined Loss: 520.067261, Mask Loss: 0.692438, Total Loss: 1039.442139
+2025-01-21 02:12:17,056 - INFO - Epoch [3], Batch [26] -> Combined Loss: 577.450439, Mask Loss: 1.411182, Total Loss: 1153.489746
+2025-01-21 02:12:39,166 - INFO - Epoch [3], Batch [27] -> Combined Loss: 485.357056, Mask Loss: 0.192820, Total Loss: 970.521301
+2025-01-21 02:13:01,730 - INFO - Epoch [3], Batch [28] -> Combined Loss: 716.545288, Mask Loss: 1.954823, Total Loss: 1431.135742
+2025-01-21 02:13:23,807 - INFO - Epoch [3], Batch [29] -> Combined Loss: 657.579407, Mask Loss: 1.169595, Total Loss: 1313.989258
+2025-01-21 02:13:45,985 - INFO - Epoch [3], Batch [30] -> Combined Loss: 622.252319, Mask Loss: 1.850117, Total Loss: 1242.654541
+2025-01-21 02:13:46,965 - INFO - Fine-Tuning --> Epoch [3/6] Average Training Loss: 553.635817
+2025-01-21 02:15:09,914 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:15:13,021 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_3_sample_2.png
+2025-01-21 02:15:16,118 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_3_sample_3.png
+2025-01-21 02:15:19,247 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_3_sample_4.png
+2025-01-21 02:15:52,967 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:15:52,967 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:15:52,967 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:16:27,290 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:16:27,290 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:16:27,290 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:16:27,304 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:16:27,306 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:17:00,851 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:17:00,851 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:17:01,064 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:17:34,533 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:17:34,765 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:17:34,765 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:17:34,765 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:18:43,901 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:18:44,120 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:18:44,120 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:19:53,487 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:19:53,487 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:19:53,487 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:20:27,052 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:20:27,052 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:20:27,052 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:20:27,052 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:21:04,635 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:21:38,651 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:21:38,651 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:21:38,905 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:22:14,667 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:22:14,667 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:22:14,681 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:22:14,912 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:22:49,113 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:22:49,113 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:22:49,113 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:22:49,339 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:23:24,854 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:23:24,854 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:23:24,854 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:23:24,854 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:23:58,890 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:23:58,906 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:23:58,906 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:23:59,127 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:24:34,684 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:24:34,684 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:24:34,900 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:25:09,832 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:25:09,832 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:25:46,104 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:25:46,550 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:26:20,865 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:26:20,865 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:26:20,881 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:26:20,883 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:26:21,807 - INFO - Validation Metrics - SDR: -28.7768, SIR: inf, SAR: -28.7768
+2025-01-21 02:26:21,807 - INFO - Fine-Tuning --> Epoch [3/6] Average Validation Loss: 425.344666
+2025-01-21 02:26:21,807 - INFO - Starting Epoch 4/6
+2025-01-21 02:27:50,707 - INFO - Epoch [4], Batch [1] -> Combined Loss: 679.048462, Mask Loss: 1.340677, Total Loss: 1356.756226
+2025-01-21 02:28:14,206 - INFO - Epoch [4], Batch [2] -> Combined Loss: 486.022125, Mask Loss: 1.350450, Total Loss: 970.693787
+2025-01-21 02:28:38,745 - INFO - Epoch [4], Batch [3] -> Combined Loss: 426.590271, Mask Loss: 0.302313, Total Loss: 852.878235
+2025-01-21 02:29:00,527 - INFO - Epoch [4], Batch [4] -> Combined Loss: 468.006927, Mask Loss: 0.182894, Total Loss: 935.830933
+2025-01-21 02:29:23,361 - INFO - Epoch [4], Batch [5] -> Combined Loss: 539.802307, Mask Loss: 0.733209, Total Loss: 1078.871460
+2025-01-21 02:29:46,670 - INFO - Epoch [4], Batch [6] -> Combined Loss: 582.562134, Mask Loss: 0.919063, Total Loss: 1164.205200
+2025-01-21 02:30:09,587 - INFO - Epoch [4], Batch [7] -> Combined Loss: 534.654968, Mask Loss: 0.266988, Total Loss: 1069.042969
+2025-01-21 02:30:31,346 - INFO - Epoch [4], Batch [8] -> Combined Loss: 513.672302, Mask Loss: 0.241401, Total Loss: 1027.103149
+2025-01-21 02:30:54,292 - INFO - Epoch [4], Batch [9] -> Combined Loss: 596.367126, Mask Loss: 1.200667, Total Loss: 1191.533569
+2025-01-21 02:31:17,048 - INFO - Epoch [4], Batch [10] -> Combined Loss: 574.449463, Mask Loss: 0.947718, Total Loss: 1147.951172
+2025-01-21 02:31:40,230 - INFO - Epoch [4], Batch [11] -> Combined Loss: 679.414917, Mask Loss: 1.414573, Total Loss: 1357.415283
+2025-01-21 02:32:03,380 - INFO - Epoch [4], Batch [12] -> Combined Loss: 594.392395, Mask Loss: 0.725827, Total Loss: 1188.058960
+2025-01-21 02:32:25,907 - INFO - Epoch [4], Batch [13] -> Combined Loss: 582.163940, Mask Loss: 1.311854, Total Loss: 1163.015991
+2025-01-21 02:32:48,808 - INFO - Epoch [4], Batch [14] -> Combined Loss: 574.677429, Mask Loss: 0.830282, Total Loss: 1148.524536
+2025-01-21 02:33:08,997 - INFO - Epoch [4], Batch [15] -> Combined Loss: 540.095642, Mask Loss: 0.135187, Total Loss: 1080.056152
+2025-01-21 02:33:29,619 - INFO - Epoch [4], Batch [16] -> Combined Loss: 580.930969, Mask Loss: 1.129257, Total Loss: 1160.732666
+2025-01-21 02:33:49,609 - INFO - Epoch [4], Batch [17] -> Combined Loss: 688.273376, Mask Loss: 0.816365, Total Loss: 1375.730347
+2025-01-21 02:34:10,171 - INFO - Epoch [4], Batch [18] -> Combined Loss: 527.669312, Mask Loss: 0.179775, Total Loss: 1055.158813
+2025-01-21 02:34:32,660 - INFO - Epoch [4], Batch [19] -> Combined Loss: 539.224304, Mask Loss: 1.087339, Total Loss: 1077.361328
+2025-01-21 02:34:54,054 - INFO - Epoch [4], Batch [20] -> Combined Loss: 526.667786, Mask Loss: 0.249728, Total Loss: 1053.085815
+2025-01-21 02:35:16,072 - INFO - Epoch [4], Batch [21] -> Combined Loss: 472.763733, Mask Loss: 0.158185, Total Loss: 945.369263
+2025-01-21 02:35:37,817 - INFO - Epoch [4], Batch [22] -> Combined Loss: 533.688110, Mask Loss: 0.174849, Total Loss: 1067.201416
+2025-01-21 02:35:58,350 - INFO - Epoch [4], Batch [23] -> Combined Loss: 577.349670, Mask Loss: 0.737344, Total Loss: 1153.962036
+2025-01-21 02:36:19,757 - INFO - Epoch [4], Batch [24] -> Combined Loss: 489.109161, Mask Loss: 0.588978, Total Loss: 977.629333
+2025-01-21 02:36:40,221 - INFO - Epoch [4], Batch [25] -> Combined Loss: 556.512451, Mask Loss: 0.797971, Total Loss: 1112.226929
+2025-01-21 02:37:01,623 - INFO - Epoch [4], Batch [26] -> Combined Loss: 663.594482, Mask Loss: 1.325329, Total Loss: 1325.863647
+2025-01-21 02:37:23,725 - INFO - Epoch [4], Batch [27] -> Combined Loss: 510.319031, Mask Loss: 0.595835, Total Loss: 1020.042236
+2025-01-21 02:37:46,139 - INFO - Epoch [4], Batch [28] -> Combined Loss: 523.751160, Mask Loss: 1.055292, Total Loss: 1046.447021
+2025-01-21 02:38:08,106 - INFO - Epoch [4], Batch [29] -> Combined Loss: 524.819092, Mask Loss: 0.751441, Total Loss: 1048.886719
+2025-01-21 02:38:29,182 - INFO - Epoch [4], Batch [30] -> Combined Loss: 534.775574, Mask Loss: 0.269305, Total Loss: 1069.281860
+2025-01-21 02:38:30,173 - INFO - Fine-Tuning --> Epoch [4/6] Average Training Loss: 554.045621
+2025-01-21 02:39:54,632 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:39:57,748 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_4_sample_2.png
+2025-01-21 02:40:00,846 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_4_sample_3.png
+2025-01-21 02:40:03,922 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_4_sample_4.png
+2025-01-21 02:40:37,585 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:40:37,585 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:40:37,585 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:41:11,318 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:41:11,318 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:41:11,318 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:41:11,318 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:41:11,325 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:41:45,599 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:41:45,599 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:41:45,920 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:42:19,672 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:42:19,963 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:42:19,963 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:42:19,963 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:43:28,752 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:43:29,078 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:43:29,078 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:44:38,070 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:44:38,070 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:44:38,086 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:45:12,704 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:45:12,704 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:45:12,704 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:45:12,704 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:45:50,133 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:46:25,061 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:46:25,076 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:46:25,280 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:46:59,842 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:46:59,842 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:46:59,842 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:47:00,065 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:47:35,629 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:47:35,629 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:47:35,629 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:47:35,854 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:48:10,178 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:48:10,178 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:48:10,178 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:48:10,185 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:48:45,765 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:48:45,765 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:48:45,765 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:48:46,072 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:49:20,146 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:49:20,146 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:49:20,361 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:49:56,758 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:49:56,774 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:50:31,273 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 02:50:31,691 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:51:07,871 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 02:51:07,871 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 02:51:07,871 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 02:51:07,883 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 02:51:08,806 - INFO - Validation Metrics - SDR: -28.9367, SIR: inf, SAR: -28.9367
+2025-01-21 02:51:08,806 - INFO - Fine-Tuning --> Epoch [4/6] Average Validation Loss: 421.550522
+2025-01-21 02:51:08,806 - INFO - Starting Epoch 5/6
+2025-01-21 02:52:31,786 - INFO - Epoch [5], Batch [1] -> Combined Loss: 573.823608, Mask Loss: 1.097930, Total Loss: 1146.549316
+2025-01-21 02:52:57,256 - INFO - Epoch [5], Batch [2] -> Combined Loss: 683.213623, Mask Loss: 1.146777, Total Loss: 1365.280518
+2025-01-21 02:53:20,419 - INFO - Epoch [5], Batch [3] -> Combined Loss: 438.882996, Mask Loss: 0.120419, Total Loss: 877.645569
+2025-01-21 02:53:41,729 - INFO - Epoch [5], Batch [4] -> Combined Loss: 566.433350, Mask Loss: 0.720949, Total Loss: 1132.145752
+2025-01-21 02:54:04,043 - INFO - Epoch [5], Batch [5] -> Combined Loss: 597.389832, Mask Loss: 1.145914, Total Loss: 1193.633789
+2025-01-21 02:54:26,082 - INFO - Epoch [5], Batch [6] -> Combined Loss: 667.496582, Mask Loss: 0.904800, Total Loss: 1334.088379
+2025-01-21 02:54:48,396 - INFO - Epoch [5], Batch [7] -> Combined Loss: 484.453705, Mask Loss: 0.214831, Total Loss: 968.692566
+2025-01-21 02:55:09,857 - INFO - Epoch [5], Batch [8] -> Combined Loss: 554.457886, Mask Loss: 0.260643, Total Loss: 1108.655151
+2025-01-21 02:55:31,604 - INFO - Epoch [5], Batch [9] -> Combined Loss: 530.853882, Mask Loss: 1.161840, Total Loss: 1060.545898
+2025-01-21 02:55:57,001 - INFO - Epoch [5], Batch [10] -> Combined Loss: 501.695343, Mask Loss: 0.459603, Total Loss: 1002.931091
+2025-01-21 02:56:19,291 - INFO - Epoch [5], Batch [11] -> Combined Loss: 533.260742, Mask Loss: 0.742219, Total Loss: 1065.779297
+2025-01-21 02:56:42,660 - INFO - Epoch [5], Batch [12] -> Combined Loss: 534.800720, Mask Loss: 0.322473, Total Loss: 1069.278931
+2025-01-21 02:57:06,336 - INFO - Epoch [5], Batch [13] -> Combined Loss: 679.226318, Mask Loss: 1.383119, Total Loss: 1357.069458
+2025-01-21 02:57:29,463 - INFO - Epoch [5], Batch [14] -> Combined Loss: 399.758514, Mask Loss: 0.429449, Total Loss: 799.087585
+2025-01-21 02:57:51,415 - INFO - Epoch [5], Batch [15] -> Combined Loss: 601.576965, Mask Loss: 1.461718, Total Loss: 1201.692261
+2025-01-21 02:58:12,096 - INFO - Epoch [5], Batch [16] -> Combined Loss: 479.650360, Mask Loss: 0.195651, Total Loss: 959.105042
+2025-01-21 02:58:33,577 - INFO - Epoch [5], Batch [17] -> Combined Loss: 571.016968, Mask Loss: 0.369392, Total Loss: 1141.664551
+2025-01-21 02:58:55,769 - INFO - Epoch [5], Batch [18] -> Combined Loss: 713.325562, Mask Loss: 1.389274, Total Loss: 1425.261841
+2025-01-21 02:59:17,731 - INFO - Epoch [5], Batch [19] -> Combined Loss: 536.708252, Mask Loss: 0.726761, Total Loss: 1072.689697
+2025-01-21 02:59:38,332 - INFO - Epoch [5], Batch [20] -> Combined Loss: 589.621460, Mask Loss: 0.625045, Total Loss: 1178.617920
+2025-01-21 02:59:59,745 - INFO - Epoch [5], Batch [21] -> Combined Loss: 506.697723, Mask Loss: 0.219711, Total Loss: 1013.175720
+2025-01-21 03:00:20,453 - INFO - Epoch [5], Batch [22] -> Combined Loss: 630.291382, Mask Loss: 1.481544, Total Loss: 1259.101196
+2025-01-21 03:00:41,896 - INFO - Epoch [5], Batch [23] -> Combined Loss: 577.675232, Mask Loss: 0.751377, Total Loss: 1154.599121
+2025-01-21 03:01:02,668 - INFO - Epoch [5], Batch [24] -> Combined Loss: 505.623932, Mask Loss: 0.618113, Total Loss: 1010.629761
+2025-01-21 03:01:24,130 - INFO - Epoch [5], Batch [25] -> Combined Loss: 449.662109, Mask Loss: 0.392570, Total Loss: 898.931641
+2025-01-21 03:01:44,788 - INFO - Epoch [5], Batch [26] -> Combined Loss: 752.164062, Mask Loss: 1.929350, Total Loss: 1502.398804
+2025-01-21 03:02:06,294 - INFO - Epoch [5], Batch [27] -> Combined Loss: 461.281525, Mask Loss: 0.120600, Total Loss: 922.442444
+2025-01-21 03:02:28,537 - INFO - Epoch [5], Batch [28] -> Combined Loss: 493.882965, Mask Loss: 1.233606, Total Loss: 986.532349
+2025-01-21 03:02:51,100 - INFO - Epoch [5], Batch [29] -> Combined Loss: 536.177856, Mask Loss: 0.197036, Total Loss: 1072.158691
+2025-01-21 03:03:13,195 - INFO - Epoch [5], Batch [30] -> Combined Loss: 467.507782, Mask Loss: 0.091358, Total Loss: 934.924194
+2025-01-21 03:03:14,213 - INFO - Fine-Tuning --> Epoch [5/6] Average Training Loss: 553.953708
+2025-01-21 03:04:37,868 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:04:40,957 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_5_sample_2.png
+2025-01-21 03:04:44,081 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_5_sample_3.png
+2025-01-21 03:04:47,158 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_5_sample_4.png
+2025-01-21 03:05:25,258 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:05:25,258 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:05:25,258 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:06:00,369 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:06:00,369 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:06:00,369 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:06:00,386 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:06:00,388 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:06:38,491 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:06:38,491 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:06:38,706 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:07:13,998 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:07:14,304 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:07:14,304 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:07:14,304 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:08:28,380 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:08:28,593 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:08:28,593 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:09:42,987 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:09:42,987 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:09:42,987 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:10:21,003 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:10:21,003 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:10:21,003 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:10:21,003 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:10:58,512 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:11:35,831 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:11:35,831 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:11:36,028 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:12:12,593 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:12:12,593 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:12:12,593 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:12:12,801 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:12:50,031 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:12:50,031 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:12:50,048 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:12:50,313 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:13:26,764 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:13:26,780 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:13:26,780 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:13:26,780 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:14:04,164 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:14:04,164 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:14:04,164 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:14:04,372 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:14:40,749 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:14:40,749 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:14:40,967 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:15:18,910 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:15:18,910 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:15:55,543 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:15:55,986 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:16:34,386 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:16:34,386 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:16:34,402 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:16:34,402 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:16:35,314 - INFO - Validation Metrics - SDR: -28.9087, SIR: inf, SAR: -28.9087
+2025-01-21 03:16:35,314 - INFO - Fine-Tuning --> Epoch [5/6] Average Validation Loss: 420.992406
+2025-01-21 03:16:35,314 - INFO - Starting Epoch 6/6
+2025-01-21 03:17:59,548 - INFO - Epoch [6], Batch [1] -> Combined Loss: 453.143341, Mask Loss: 0.194862, Total Loss: 906.091797
+2025-01-21 03:18:24,950 - INFO - Epoch [6], Batch [2] -> Combined Loss: 683.889832, Mask Loss: 1.874472, Total Loss: 1365.905151
+2025-01-21 03:18:47,258 - INFO - Epoch [6], Batch [3] -> Combined Loss: 463.571930, Mask Loss: 1.042266, Total Loss: 926.101624
+2025-01-21 03:19:10,799 - INFO - Epoch [6], Batch [4] -> Combined Loss: 627.772766, Mask Loss: 0.972980, Total Loss: 1254.572510
+2025-01-21 03:19:33,236 - INFO - Epoch [6], Batch [5] -> Combined Loss: 441.979645, Mask Loss: 0.167919, Total Loss: 883.791382
+2025-01-21 03:19:56,363 - INFO - Epoch [6], Batch [6] -> Combined Loss: 590.374573, Mask Loss: 1.228170, Total Loss: 1179.520996
+2025-01-21 03:20:19,481 - INFO - Epoch [6], Batch [7] -> Combined Loss: 585.046753, Mask Loss: 0.659189, Total Loss: 1169.434326
+2025-01-21 03:20:42,788 - INFO - Epoch [6], Batch [8] -> Combined Loss: 686.143494, Mask Loss: 1.210404, Total Loss: 1371.076538
+2025-01-21 03:21:06,199 - INFO - Epoch [6], Batch [9] -> Combined Loss: 610.973328, Mask Loss: 0.800031, Total Loss: 1221.146606
+2025-01-21 03:21:29,292 - INFO - Epoch [6], Batch [10] -> Combined Loss: 608.973022, Mask Loss: 0.831466, Total Loss: 1217.114624
+2025-01-21 03:21:50,635 - INFO - Epoch [6], Batch [11] -> Combined Loss: 566.213989, Mask Loss: 0.696159, Total Loss: 1131.731812
+2025-01-21 03:22:10,865 - INFO - Epoch [6], Batch [12] -> Combined Loss: 486.339813, Mask Loss: 0.136156, Total Loss: 972.543457
+2025-01-21 03:22:31,922 - INFO - Epoch [6], Batch [13] -> Combined Loss: 476.786407, Mask Loss: 0.291618, Total Loss: 953.281189
+2025-01-21 03:22:56,743 - INFO - Epoch [6], Batch [14] -> Combined Loss: 493.058502, Mask Loss: 0.342875, Total Loss: 985.774109
+2025-01-21 03:23:18,065 - INFO - Epoch [6], Batch [15] -> Combined Loss: 451.620880, Mask Loss: 0.143807, Total Loss: 903.097961
+2025-01-21 03:23:38,606 - INFO - Epoch [6], Batch [16] -> Combined Loss: 532.044556, Mask Loss: 0.750195, Total Loss: 1063.338867
+2025-01-21 03:24:00,576 - INFO - Epoch [6], Batch [17] -> Combined Loss: 655.234192, Mask Loss: 0.517912, Total Loss: 1309.950439
+2025-01-21 03:24:22,559 - INFO - Epoch [6], Batch [18] -> Combined Loss: 488.751404, Mask Loss: 0.245606, Total Loss: 977.257202
+2025-01-21 03:24:44,452 - INFO - Epoch [6], Batch [19] -> Combined Loss: 573.437622, Mask Loss: 0.531280, Total Loss: 1146.343994
+2025-01-21 03:25:06,497 - INFO - Epoch [6], Batch [20] -> Combined Loss: 646.025330, Mask Loss: 0.912263, Total Loss: 1291.138428
+2025-01-21 03:25:28,496 - INFO - Epoch [6], Batch [21] -> Combined Loss: 591.155273, Mask Loss: 0.867581, Total Loss: 1181.442993
+2025-01-21 03:25:50,524 - INFO - Epoch [6], Batch [22] -> Combined Loss: 590.448914, Mask Loss: 0.714083, Total Loss: 1180.183716
+2025-01-21 03:26:12,514 - INFO - Epoch [6], Batch [23] -> Combined Loss: 436.927887, Mask Loss: 0.102601, Total Loss: 873.753174
+2025-01-21 03:26:32,702 - INFO - Epoch [6], Batch [24] -> Combined Loss: 599.812439, Mask Loss: 1.465338, Total Loss: 1198.159546
+2025-01-21 03:26:53,391 - INFO - Epoch [6], Batch [25] -> Combined Loss: 610.576477, Mask Loss: 1.472093, Total Loss: 1219.680908
+2025-01-21 03:27:16,044 - INFO - Epoch [6], Batch [26] -> Combined Loss: 551.890808, Mask Loss: 0.228145, Total Loss: 1103.553467
+2025-01-21 03:27:38,128 - INFO - Epoch [6], Batch [27] -> Combined Loss: 537.514893, Mask Loss: 0.121358, Total Loss: 1074.908447
+2025-01-21 03:27:58,664 - INFO - Epoch [6], Batch [28] -> Combined Loss: 451.498505, Mask Loss: 0.497350, Total Loss: 902.499634
+2025-01-21 03:28:20,096 - INFO - Epoch [6], Batch [29] -> Combined Loss: 595.793518, Mask Loss: 1.742562, Total Loss: 1189.844482
+2025-01-21 03:28:42,173 - INFO - Epoch [6], Batch [30] -> Combined Loss: 633.212708, Mask Loss: 1.283034, Total Loss: 1265.142334
+2025-01-21 03:28:43,171 - INFO - Fine-Tuning --> Epoch [6/6] Average Training Loss: 557.340427
+2025-01-21 03:30:08,221 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:30:11,332 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_6_sample_2.png
+2025-01-21 03:30:14,452 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_6_sample_3.png
+2025-01-21 03:30:17,708 - INFO - Saved waveform visualization at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\visualizations\epoch_6_sample_4.png
+2025-01-21 03:30:56,741 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:30:56,741 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:30:56,741 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:31:32,623 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:31:32,623 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:31:32,623 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:31:32,631 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:31:32,634 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:32:11,449 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:32:11,449 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:32:11,658 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:32:47,475 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:32:47,695 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:32:47,695 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:32:47,695 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:34:03,288 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:34:03,527 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:34:03,527 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:35:19,909 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:35:19,909 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:35:19,909 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:35:58,861 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:35:58,861 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:35:58,861 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:35:58,873 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:36:36,183 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:37:13,656 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:37:13,672 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:37:13,896 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:37:50,578 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:37:50,578 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:37:50,578 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:37:50,797 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:38:28,222 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:38:28,222 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:38:28,222 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:38:28,515 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:39:05,182 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:39:05,182 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:39:05,182 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:39:05,182 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:39:42,585 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:39:42,585 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:39:42,585 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:39:42,813 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:40:19,409 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:40:19,409 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:40:19,675 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:40:57,746 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:40:57,762 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:41:34,370 - INFO - Skipping evaluation for a silent reference in sample 1.
+2025-01-21 03:41:34,799 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:42:12,690 - INFO - Skipping evaluation for a silent reference in sample 2.
+2025-01-21 03:42:12,690 - INFO - Skipping evaluation for a silent reference in sample 3.
+2025-01-21 03:42:12,690 - INFO - Skipping evaluation for a silent reference in sample 4.
+2025-01-21 03:42:12,690 - INFO - Skipping evaluation for a silent reference in sample 5.
+2025-01-21 03:42:13,648 - INFO - Validation Metrics - SDR: -29.5282, SIR: inf, SAR: -29.5282
+2025-01-21 03:42:13,648 - INFO - Fine-Tuning --> Epoch [6/6] Average Validation Loss: 416.549532
+2025-01-21 03:42:13,766 - INFO - Loss curves plotted.
+2025-01-21 03:42:13,899 - INFO - Fine-tuned model saved at C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\model.pth
