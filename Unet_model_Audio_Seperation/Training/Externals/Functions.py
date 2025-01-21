@@ -40,27 +40,34 @@ def save_final_model(model, Final_model_path):
 
 #VALIDATION FUNCTION
 def Validate_epoch(model, val_loader, criterion, device):
-    model.eval()
+    model.eval()  # Set the model to evaluation mode
     val_combined_loss = 0
     val_mask_loss = 0
     val_hybrid_loss = 0
+
     with torch.no_grad():
         for val_batch_idx, (inputs, targets) in enumerate(val_loader):
-            inputs, targets = inputs.to(device), targets.to(device)
+      
+            inputs, targets = inputs.to(device, non_blocking=True), targets.to(device, non_blocking=True)
             
-            # Forward pass
-            predicted_mask, outputs = model(inputs)
+          
+            predicted_mask, outputs = model(inputs.to(device, non_blocking=True))
 
-            # Ensure shape compatibility
             if predicted_mask.size() != targets.size():
                 raise ValueError(f"Validation shape mismatch: predicted_mask={predicted_mask.size()}, targets={targets.size()}")
 
-            # Loss calculation
-            combined_loss, mask_loss, hybrid_loss = criterion(predicted_mask, inputs, targets)
+           
+            combined_loss, mask_loss, hybrid_loss = criterion(
+                predicted_mask.to(device), 
+                inputs.to(device), 
+                targets.to(device)
+            )
 
+    
             val_combined_loss += combined_loss.item()
             val_mask_loss += mask_loss.item()
             val_hybrid_loss += hybrid_loss.item()
+
 
     avg_combined_loss = val_combined_loss / len(val_loader)
     avg_mask_loss = val_mask_loss / len(val_loader)

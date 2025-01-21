@@ -13,7 +13,7 @@ from Training.Externals.Logger import setup_logger
 data_loader = setup_logger('dataloader',  r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def custom_collate_fn(batch):
     batch = [item for item in batch if item is not None]
     if not batch:
@@ -27,8 +27,8 @@ def custom_collate_fn(batch):
     padded_targets = [torch.nn.functional.pad(tgt, (0, max_length - tgt.size(-1))) for tgt in targets]
 
 
-    inputs_tensor = torch.stack(padded_inputs)
-    targets_tensor = torch.stack(padded_targets)
+    inputs_tensor = torch.stack(padded_inputs).to(device, non_blocking=True)
+    targets_tensor = torch.stack(padded_targets).to(device, non_blocking=True)
 
     return inputs_tensor, targets_tensor
 
@@ -36,12 +36,14 @@ def custom_collate_fn(batch):
 def create_dataloaders(
     musdb18_dir,
     dsd100_dir,
-    batch_size=4,
-    num_workers=6,
+    batch_size=6,
+    num_workers=8,
     sampling_rate=44100,
     max_length_seconds=10,
     max_files_train=None,
-    max_files_val=None
+    max_files_val=None,
+
+
 ):
 
 
@@ -97,7 +99,8 @@ def create_dataloaders(
         num_workers=num_workers,
         pin_memory=True,
         drop_last=True,
-        collate_fn=custom_collate_fn
+        collate_fn=custom_collate_fn,
+        prefetch_factor=4  
     )
 
     val_loader = DataLoader(
@@ -107,7 +110,8 @@ def create_dataloaders(
         num_workers=num_workers,
         pin_memory=True,
         drop_last=True,
-        collate_fn=custom_collate_fn
+        collate_fn=custom_collate_fn,
+        prefetch_factor=4  
     )
 
     data_loader.info(f"Training dataset size: {len(combined_train_dataset)}")

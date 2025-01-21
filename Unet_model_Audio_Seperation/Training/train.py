@@ -66,8 +66,6 @@ writer = SummaryWriter(log_dir=log_dir)
 
 
 
-
-
 def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\model.pth",start_training=True):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_logger.info(f"[Train] Using device: {device}")
@@ -167,7 +165,7 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
 
                    ###AUTOCAST###
                     with autocast(device_type='cuda', enabled=(device.type == 'cuda')):
-                        predicted_mask, outputs = model(inputs)
+                        predicted_mask, outputs = model(inputs.to(device,non_blocking=True))
                         predicted_vocals = predicted_mask * inputs
 
                         if batch_idx == 1:
@@ -178,7 +176,8 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
                             train_logger.debug(f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}, Predicted Mask shape={predicted_mask.shape}, Outputs shape={outputs.shape}")
                         
                         train_logger.debug(f"Mask min={predicted_mask.min().item()}, max={predicted_mask.max().item()}")
-                        combined_loss, mask_loss, hybrid_loss = criterion(predicted_mask, inputs, targets)
+                        combined_loss, mask_loss, hybrid_loss = criterion(predicted_mask, inputs.to(device, non_blocking=True), targets.to(device, non_blocking=True))
+
 
 
 
