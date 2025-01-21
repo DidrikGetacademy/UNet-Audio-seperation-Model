@@ -44,3 +44,20 @@ def log_memory_usage(tag=""):
     cpu_memory_info = f"[Memory {tag}] CPU Memory Usage: ~{cpu_mem_psutil:.2f} GB"
     Memory_logger.info(cpu_memory_info)
     print(cpu_memory_info)
+
+
+
+
+
+def clear_memory_before_training():
+    log_memory_usage(tag="Clearing memory before training")
+    torch.cuda.empty_cache()
+    gc.collect()
+    log_memory_usage(tag="Memory after clearing it...")
+
+
+
+def log_memory_after_index_epoch(epoch):
+    if epoch == 0 or (epoch + 1) % 5 == 0:  
+                log_memory_usage(tag=f"After Epoch {epoch + 1}")
+

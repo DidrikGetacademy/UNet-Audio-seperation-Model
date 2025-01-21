@@ -12,22 +12,21 @@ from Training.Externals.Logger import setup_logger
 
 data_loader = setup_logger('dataloader',  r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 
+
+
 def custom_collate_fn(batch):
-    # Filter out None items
     batch = [item for item in batch if item is not None]
     if not batch:
         return None, None
 
     inputs, targets = zip(*batch)
-
-    # Find max time dimension
+    
     max_length = max(inp.size(-1) for inp in inputs)
 
-    # Pad inputs and targets to max_length
     padded_inputs = [torch.nn.functional.pad(inp, (0, max_length - inp.size(-1))) for inp in inputs]
     padded_targets = [torch.nn.functional.pad(tgt, (0, max_length - tgt.size(-1))) for tgt in targets]
 
-    # Stack tensors
+
     inputs_tensor = torch.stack(padded_inputs)
     targets_tensor = torch.stack(padded_targets)
 
@@ -37,10 +36,10 @@ def custom_collate_fn(batch):
 def create_dataloaders(
     musdb18_dir,
     dsd100_dir,
-    batch_size=6,
+    batch_size=4,
     num_workers=6,
     sampling_rate=44100,
-    max_length_seconds=5,
+    max_length_seconds=10,
     max_files_train=None,
     max_files_val=None
 ):

@@ -21,7 +21,7 @@ sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
 from Training.Externals.Dataloader import create_dataloaders
 from Model_Architecture.model import UNet
-from Training.Loss_Diagram_Values import plot_loss_curves_FineTuning_script_
+from Training.Externals.Loss_Diagram_Values import plot_loss_curves_FineTuning_script_
 pretrained_model_path = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints\best_model_epoch-18.pth"
 fine_tuned_model_path = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\model.pth"
 
@@ -414,7 +414,7 @@ def evaluate_metrics_from_spectrograms(ground_truth, predicted, loss_function, n
 
 
 
-def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_training_loader, Finetuned_validation_loader, learning_rate=1e-3, fine_tune_epochs=6):
+def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_training_loader, Finetuned_validation_loader, learning_rate=1e-3, fine_tune_epochs=3):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     Fine_tune_logger.info(f"Fine-tuning --> Using device: {device}")
  

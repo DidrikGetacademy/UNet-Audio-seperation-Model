@@ -1,12 +1,16 @@
 import matplotlib.pyplot as plt
 import sys
 import os
+import librosa
+import librosa.display
+import numpy as np
+import matplotlib.pyplot as plt
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
 train_logger = setup_logger('train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
-
-
+diagramdirectory = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\Diagrams"
+os.makedirs(diagramdirectory, exist_ok=True)
 
 
 
@@ -173,7 +177,29 @@ def plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path="los
 
 
 
+def create_loss_diagrams(loss_history_Batches, loss_history_Epoches):
+    train_logger.info("Creating Diagrams now")
+    batches_figpath = os.path.join(diagramdirectory, "loss_curves_training_batches.png")
+    epoch_figpath = os.path.join(diagramdirectory, "loss_curves_training_epoches.png")
+    plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path=batches_figpath)
+    plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path=epoch_figpath)
 
+
+
+
+#Logs spectrograms too tensorboard for visualisation
+def log_spectrograms_to_tensorboard(audio, sr, tag, writer, global_step):
+    stft = librosa.stft(audio)
+    stft_db = librosa.amplitude_to_db(np.abs(stft), ref=np.max())
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    librosa.display.specshow(stft_db, sr=sr, x_axis='time', y_axis='log', ax=ax)
+    ax.set_title(tag)
+    fig.colorbar(ax.images[0], ax=ax)
+    
+    # Add the figure to TensorBoard
+    writer.add_figure(tag, fig, global_step=global_step)
+    plt.close(fig)
 
 
 
