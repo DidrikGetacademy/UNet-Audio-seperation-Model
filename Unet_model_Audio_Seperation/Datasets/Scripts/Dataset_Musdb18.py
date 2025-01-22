@@ -1,30 +1,46 @@
+# dataset2.py
 import os
 import librosa
 import numpy as np
 import torch
-from torch.utils.data import Dataset, DataLoader, ConcatDataset
+from torch.utils.data import Dataset
 import stempeg
 from Training.Externals.Logger import setup_logger
 
-# Setup logger
-data_logger = setup_logger( 'dataloader_logger', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
-
+data_logger = setup_logger(
+    'dataloader_logger',
+    r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt'
+)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class MUSDB18StemDataset(Dataset):
-    def __init__(self, root_dir, subset='train', sr=44100, n_fft=2048, hop_length=512, max_length_seconds=5, max_files=None, validate_files=False):
+    """
+    MUSDB18 dataset returning (mixture_mag, vocals_mag).
+    Each is shape [1, freq, time].
+    """
+    def __init__(
+        self,
+        root_dir,
+        subset='train',
+        sr=44100,
+        n_fft=2048,
+        hop_length=512,
+        max_length_seconds=8,
+        max_files=None,
+        validate_files=False
+    ):
         self.root_dir = os.path.join(root_dir, subset)
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length
         self.max_length_seconds = max_length_seconds
 
-        # Load file paths
+        # Collect mp4 stems
         self.file_paths = [
             os.path.join(self.root_dir, file)
             for file in os.listdir(self.root_dir)
             if file.endswith('.mp4')
         ]
-
         if max_files:
             self.file_paths = self.file_paths[:max_files]
 
@@ -32,6 +48,7 @@ class MUSDB18StemDataset(Dataset):
 
         if validate_files:
             self.file_paths = self._validate_files(self.file_paths)
+
         data_logger.info(f"Dataset initialized with {len(self.file_paths)} valid files.")
 
     def __len__(self):
@@ -40,21 +57,31 @@ class MUSDB18StemDataset(Dataset):
     def __getitem__(self, idx):
         file_path = self.file_paths[idx]
         try:
+            # Load stems: stems shape => [stem_index, samples, channels]
             stems, _ = stempeg.read_stems(file_path, sample_rate=self.sr)
             mixture, vocals = stems[0], stems[4]
 
-            # Process mixture and vocals
-            mixture = self._normalize(self._pad_or_trim(self._to_mono(mixture)))
-            vocals = self._normalize(self._pad_or_trim(self._to_mono(vocals)))
+            # Convert to mono
+            mixture = self._to_mono(mixture)
+            vocals = self._to_mono(vocals)
 
-            # Compute STFTs
-            mixture_stft = librosa.stft(mixture, n_fft=self.n_fft, hop_length=self.hop_length)
-            vocals_stft = librosa.stft(vocals, n_fft=self.n_fft, hop_length=self.hop_length)
+            # Pad/trim
+            mixture = self._normalize(self._pad_or_trim(mixture))
+            vocals = self._normalize(self._pad_or_trim(vocals))
+
+            # STFT
+            mix_stft = librosa.stft(mixture, n_fft=self.n_fft, hop_length=self.hop_length)
+            voc_stft = librosa.stft(vocals, n_fft=self.n_fft, hop_length=self.hop_length)
 
             # Magnitude
-            mixture_mag = self._adjust_length(np.abs(mixture_stft))
-            vocals_mag = self._adjust_length(np.abs(vocals_stft))
+            mixture_mag = np.abs(mix_stft)
+            vocals_mag = np.abs(voc_stft)
 
+            # Adjust time dimension
+            mixture_mag = self._adjust_length(mixture_mag)
+            vocals_mag = self._adjust_length(vocals_mag)
+
+            # Return shape [1, freq, time]
             return (
                 torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0),
                 torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0),
@@ -64,7 +91,10 @@ class MUSDB18StemDataset(Dataset):
             return None
 
     def _to_mono(self, audio):
-        return np.mean(audio, axis=1) if audio.ndim == 2 else audio
+        if audio.ndim == 2:
+            # shape => (samples, channels) => mean over channel axis
+            return np.mean(audio, axis=1)
+        return audio
 
     def _pad_or_trim(self, audio):
         max_length_samples = int(self.sr * self.max_length_seconds)
@@ -79,8 +109,13 @@ class MUSDB18StemDataset(Dataset):
         desired_time_dim = (self.max_length_seconds * self.sr - self.n_fft) // self.hop_length + 1
         time_dim = spectrogram.shape[1]
         if time_dim < desired_time_dim:
-            return np.pad(spectrogram, ((0, 0), (0, desired_time_dim - time_dim)), mode='constant')
-        return spectrogram[:, :desired_time_dim]
+            return np.pad(
+                spectrogram,
+                ((0, 0), (0, desired_time_dim - time_dim)),
+                mode='constant'
+            )
+        else:
+            return spectrogram[:, :desired_time_dim]
 
     def _validate_files(self, file_paths):
         valid_files = []

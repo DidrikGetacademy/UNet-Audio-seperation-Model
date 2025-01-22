@@ -1,37 +1,77 @@
-import torch
-import sys
+# dataloader.py
 import os
+import sys
+import torch
+import torch.nn.functional as F
+from torch.utils.data import DataLoader, ConcatDataset
+
+# Adjust project root if necessary
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
-from torch.utils.data import DataLoader, ConcatDataset
+
 from Datasets.Scripts.Dataset_Musdb18 import MUSDB18StemDataset
 from Datasets.Scripts.Dataset_DSD100 import DSD100
 from Training.Externals.Logger import setup_logger
 
+data_loader = setup_logger(
+    'dataloader',
+    r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt'
+)
 
+def robust_collate_fn(batch):
+    
+    #2D cropping and padding:
+      #- Drops None items
+      #- Finds max freq, max time across the batch
+      #- Crops bigger shapes down, pads smaller shapes up
+      #- Stacks final shape => [B, 1, freq, time]
 
-data_loader = setup_logger('dataloader',  r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
-
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-def custom_collate_fn(batch):
     batch = [item for item in batch if item is not None]
     if not batch:
         return None, None
 
     inputs, targets = zip(*batch)
-    
-    max_length = max(inp.size(-1) for inp in inputs)
 
-    padded_inputs = [torch.nn.functional.pad(inp, (0, max_length - inp.size(-1))) for inp in inputs]
-    padded_targets = [torch.nn.functional.pad(tgt, (0, max_length - tgt.size(-1))) for tgt in targets]
+    # find largest freq, time
+    max_freq = max(x.size(-2) for x in inputs)
+    max_time = max(x.size(-1) for x in inputs)
 
+    padded_inputs = []
+    padded_targets = []
 
-    inputs_tensor = torch.stack(padded_inputs).to(device, non_blocking=True)
-    targets_tensor = torch.stack(padded_targets).to(device, non_blocking=True)
+    for inp, tgt in zip(inputs, targets):
+        freq_in, time_in = inp.size(-2), inp.size(-1)
+        # Crop freq if > max
+        if freq_in > max_freq:
+            inp = inp[..., :max_freq, :]
+        # Crop time if > max
+        if time_in > max_time:
+            inp = inp[..., :max_time]
+
+        freq_in, time_in = inp.size(-2), inp.size(-1)
+        freq_pad = max_freq - freq_in
+        time_pad = max_time - time_in
+        inp_padded = F.pad(inp, (0, time_pad, 0, freq_pad))
+
+        # same for target
+        freq_tgt, time_tgt = tgt.size(-2), tgt.size(-1)
+        if freq_tgt > max_freq:
+            tgt = tgt[..., :max_freq, :]
+        if time_tgt > max_time:
+            tgt = tgt[..., :max_time]
+
+        freq_tgt, time_tgt = tgt.size(-2), tgt.size(-1)
+        freq_pad_t = max_freq - freq_tgt
+        time_pad_t = max_time - time_tgt
+        tgt_padded = F.pad(tgt, (0, time_pad_t, 0, freq_pad_t))
+
+        padded_inputs.append(inp_padded)
+        padded_targets.append(tgt_padded)
+
+    inputs_tensor = torch.stack(padded_inputs, dim=0)
+    targets_tensor = torch.stack(padded_targets, dim=0)
 
     return inputs_tensor, targets_tensor
-
 
 def create_dataloaders(
     musdb18_dir,
@@ -39,14 +79,13 @@ def create_dataloaders(
     batch_size=6,
     num_workers=8,
     sampling_rate=44100,
-    max_length_seconds=10,
+    max_length_seconds=8,
     max_files_train=None,
     max_files_val=None,
-
-
 ):
-
-
+    
+    #Creates train/val DataLoaders from MUSDB18 + DSD100 Will produce spectrograms of shape [1, freq, time].
+    
     musdb18_train_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
         subset='train',
@@ -99,8 +138,8 @@ def create_dataloaders(
         num_workers=num_workers,
         pin_memory=True,
         drop_last=True,
-        collate_fn=custom_collate_fn,
-        prefetch_factor=4  
+        collate_fn=robust_collate_fn,  
+        prefetch_factor=2 
     )
 
     val_loader = DataLoader(
@@ -110,12 +149,13 @@ def create_dataloaders(
         num_workers=num_workers,
         pin_memory=True,
         drop_last=True,
-        collate_fn=custom_collate_fn,
-        prefetch_factor=4  
+        collate_fn=robust_collate_fn, 
+        prefetch_factor=2 
     )
 
     data_loader.info(f"Training dataset size: {len(combined_train_dataset)}")
     data_loader.info(f"Validation dataset size: {len(combined_val_dataset)}")
     print(f"Training dataset size: {len(combined_train_dataset)} samples")
     print(f"Validation dataset size: {len(combined_val_dataset)} samples")
+
     return train_loader, val_loader

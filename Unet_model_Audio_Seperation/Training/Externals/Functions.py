@@ -2,13 +2,15 @@ import torch
 import gc
 import os
 import sys
+import shutil
 from Training.Externals.Memory_debugging import log_memory_usage
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
 train_logger = setup_logger( 'train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 from Training.Externals.Memory_debugging import (  clear_memory_before_training )
-
+from Training.Fine_Tuned_model import fine_tune_model 
+from Training.train import Final_model_path, fine_tuned_model_base_path
 
 Model_CheckPoint = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints"
 os.makedirs(Model_CheckPoint, exist_ok=True)
@@ -51,7 +53,7 @@ def Validate_epoch(model, val_loader, criterion, device):
             inputs, targets = inputs.to(device, non_blocking=True), targets.to(device, non_blocking=True)
             
           
-            predicted_mask, outputs = model(inputs.to(device, non_blocking=True))
+            predicted_mask = model(inputs.to(device, non_blocking=True))
 
             if predicted_mask.size() != targets.size():
                 raise ValueError(f"Validation shape mismatch: predicted_mask={predicted_mask.size()}, targets={targets.size()}")
@@ -84,11 +86,6 @@ def training_completed():
     gc.collect()
 
 
-
-def save_final_model(model, Final_model_path):
-    os.makedirs(os.path.dirname(Final_model_path), exist_ok=True) 
-    torch.save(model.state_dict(), os.path.join(Final_model_path, "final_model.pth"))
-    train_logger.info(f"[Train] Final model saved at {Final_model_path}")
 
 
 def load_model_path_func(load_model_path, model, device):
@@ -151,3 +148,40 @@ def print_inputs_targets_shape(inputs, targets, batch_idx):
 
 
         
+
+
+def Early_break(trigger_times, patience, train_logger):
+    if trigger_times >= patience:
+        train_logger.info("Early stopping triggered.")
+        return True
+    else: 
+        return False
+
+
+def Automatic_Fine_Tune(combined_val_loader,combined_train_loader,fine_tuned_model_base_path,Final_model_path):
+        try:
+            fine_tuned_model_path = os.path.join(fine_tuned_model_base_path, "fine_tuned_model.pth")
+            pretrained_model_path = best_model_path if best_model_path else os.path.join(Final_model_path, "final_model.pth")
+            fine_tune_model(
+                pretrained_model_path=pretrained_model_path,
+                fine_tuned_model_path=fine_tuned_model_path,
+                Fine_tuned_training_loader=combined_train_loader,
+                Finetuned_validation_loader=combined_val_loader,
+                learning_rate=1e-3,
+                fine_tune_epochs=6,
+            )
+            train_logger.info("Fine-tuning completed.")
+        except Exception as e:
+            train_logger.error(f"Error during fine-tuning: {e}")
+
+
+
+def save_best_model(model,best_model_path,Final_model_path,train_logger):
+    if best_model_path is not None and  os.path.exists(best_model_path):
+        os.makedirs(Final_model_path, exist_ok=True)
+        final_pth = os.path.join(Final_model_path, "final_model_best_model.pth")
+        shutil.copyfile(best_model_path,final_pth)
+        train_logger.info(f"[Train] Copied best checkpoint and changed it's name to final_model_best_model.pth{best_model_path} -> {final_pth}")
+    else: 
+        save_final_model(model, Final_model_path)
+        train_logger.info(f"[Train] Copied Last Checkpoint of the epoch loop. {best_model_path} -> {Final_model_path}")

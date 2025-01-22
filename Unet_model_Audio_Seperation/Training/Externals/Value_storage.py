@@ -4,6 +4,11 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 
 
+
+
+writer_loss_batches = {}
+writer_loss_epoch = {}
+
 loss_history_Epoches = {
     "mask_loss": [],        # Mask loss per epoch
     "hybrid_loss": [],      # Hybrid loss per epoch
@@ -16,6 +21,7 @@ loss_history_Batches = {
     "hybrid_loss": [],   # Hybrid loss per batch
     "combined": [],      # Combined loss per batch
 }
+
 
 
 def Append_loss_values_for_batch(mask_loss, hybrid_loss, combined_loss):
