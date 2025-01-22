@@ -67,7 +67,7 @@ class HybridLoss(nn.Module):
         pred = pred.float()
         target = target.float()
         l1 = self.l1_loss(pred, target)
-        n_fft = min(2048, pred.size(-1))
+        n_fft = min(1024, pred.size(-1))
         hop_length = 512
         window = torch.hann_window(n_fft, device=pred.device)
         batch_size = pred.size(0)

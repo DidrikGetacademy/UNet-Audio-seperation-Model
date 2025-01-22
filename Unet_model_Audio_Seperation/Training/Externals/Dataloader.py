@@ -19,7 +19,6 @@ data_loader = setup_logger(
 )
 
 def robust_collate_fn(batch):
-    
     #2D cropping and padding:
       #- Drops None items
       #- Finds max freq, max time across the batch
@@ -76,21 +75,20 @@ def robust_collate_fn(batch):
 def create_dataloaders(
     musdb18_dir,
     dsd100_dir,
-    batch_size=6,
-    num_workers=8,
+    batch_size=2,
+    num_workers=0,
     sampling_rate=44100,
-    max_length_seconds=8,
+    max_length_seconds=5,
     max_files_train=None,
     max_files_val=None,
 ):
     
     #Creates train/val DataLoaders from MUSDB18 + DSD100 Will produce spectrograms of shape [1, freq, time].
-    
     musdb18_train_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
         subset='train',
         sr=sampling_rate,
-        n_fft=2048,
+        n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
         max_files=max_files_train,
@@ -101,7 +99,7 @@ def create_dataloaders(
         root_dir=musdb18_dir,
         subset='test',
         sr=sampling_rate,
-        n_fft=2048,
+        n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
         max_files=max_files_val,
@@ -112,7 +110,7 @@ def create_dataloaders(
         root_dir=dsd100_dir,
         subset='Dev',
         sr=sampling_rate,
-        n_fft=2048,
+        n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
         max_files=max_files_train,
@@ -122,7 +120,7 @@ def create_dataloaders(
         root_dir=dsd100_dir,
         subset='Test',
         sr=sampling_rate,
-        n_fft=2048,
+        n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
         max_files=max_files_val,
@@ -139,7 +137,7 @@ def create_dataloaders(
         pin_memory=True,
         drop_last=True,
         collate_fn=robust_collate_fn,  
-        prefetch_factor=2 
+        #prefetch_factor=2 
     )
 
     val_loader = DataLoader(
@@ -150,7 +148,7 @@ def create_dataloaders(
         pin_memory=True,
         drop_last=True,
         collate_fn=robust_collate_fn, 
-        prefetch_factor=2 
+        #prefetch_factor=2 
     )
 
     data_loader.info(f"Training dataset size: {len(combined_train_dataset)}")

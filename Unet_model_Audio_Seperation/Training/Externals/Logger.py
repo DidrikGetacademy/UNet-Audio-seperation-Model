@@ -7,7 +7,7 @@ from torch.utils.tensorboard import SummaryWriter
 from Training.Externals.Value_storage import writer_loss_batches, writer_loss_epoch
 
 
-writer = SummaryWriter(log_dir="logs")
+writer = SummaryWriter(log_dir=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Performance_logg\TensorBoard")
 
 def log_batch_losses(global_step, combined_loss, mask_loss, hybrid_loss):
     writer_loss_batches[global_step] = {
@@ -60,7 +60,35 @@ def prev_epoch_loss_log(train_logger,prev_epoch_loss,avg_epoch_loss,epoch):
         else:
             train_logger.info(f"[Epoch Improvement] Epoch {epoch + 1}: No comparison (first epoch).")
 
-        
+
+
+def tensorboard_spectrogram_logging(representative_batch, log_spectrograms_to_tensorboard,epoch):
+    if representative_batch is not None:
+        mixture, predicted_vocals, target = representative_batch
+        log_spectrograms_to_tensorboard(
+            mixture[0].numpy(), sr=44100, tag=f"Epoch {epoch + 1} - Mixture Spectrogram", writer=writer, global_step=epoch
+            )
+        log_spectrograms_to_tensorboard(
+            predicted_vocals[0].numpy(), sr=44100, tag=f"Epoch {epoch + 1} - Estimated Vocal Spectrogram", writer=writer, global_step=epoch
+            )
+        log_spectrograms_to_tensorboard(
+            target[0].numpy(), sr=44100, tag=f"Epoch {epoch + 1} - Target Vocal Spectrogram", writer=writer, global_step=epoch
+            )
+
+
+
+def log_first_2_batches_inputs_targets(batch_idx,train_logger,inputs,targets):
+        if batch_idx < 2:    
+            train_logger.info(f"Batch {batch_idx}: Mixture shape={inputs.shape}, Target shape={targets.shape}")
+            train_logger.info(f"Mixture min={inputs.min().item():.4f}, max={inputs.max().item():.4f}")
+            train_logger.info(f"Target min={targets.min().item():.4f}, max={targets.max().item():.4f}")
+
+
+def log_first_2_batches_outputs_inputs_targets_predicted_mask(batch_idx,outputs,inputs,targets,predicted_mask,train_logger):
+         if batch_idx < 2:
+            train_logger.info(f"Batch {batch_idx}: Mask range: min={outputs.min().item():.4f}, max={outputs.max().item():.4f}")
+            train_logger.debug(f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}, Predicted Mask shape={predicted_mask.shape}, Outputs shape={outputs.shape}")
+            train_logger.debug(f"Mask min={predicted_mask.min().item()}, max={predicted_mask.max().item()}")
 
 
 import logging

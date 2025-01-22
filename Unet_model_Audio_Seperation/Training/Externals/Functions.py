@@ -10,7 +10,6 @@ from Training.Externals.Logger import setup_logger
 train_logger = setup_logger( 'train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 from Training.Externals.Memory_debugging import (  clear_memory_before_training )
 from Training.Fine_Tuned_model import fine_tune_model 
-from Training.train import Final_model_path, fine_tuned_model_base_path
 
 Model_CheckPoint = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints"
 os.makedirs(Model_CheckPoint, exist_ok=True)
@@ -185,3 +184,12 @@ def save_best_model(model,best_model_path,Final_model_path,train_logger):
     else: 
         save_final_model(model, Final_model_path)
         train_logger.info(f"[Train] Copied Last Checkpoint of the epoch loop. {best_model_path} -> {Final_model_path}")
+
+
+
+
+                    
+def return_representive_batch(inputs,targets,predicted_vocals,batch_idx):
+      if batch_idx == 1:
+         representative_batch = (inputs.detach().cpu(), predicted_vocals.detach().cpu(), targets.detach().cpu())
+      return representative_batch

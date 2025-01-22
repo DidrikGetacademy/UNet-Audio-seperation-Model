@@ -7,25 +7,20 @@ from torch.utils.data import Dataset
 import stempeg
 from Training.Externals.Logger import setup_logger
 
-data_logger = setup_logger(
-    'dataloader_logger',
-    r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt'
-)
+data_logger = setup_logger( 'dataloader_logger',r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+#MUSDB18 dataset returning (mixture_mag, vocals_mag)
+#Each is shape [1, freq, time].
 class MUSDB18StemDataset(Dataset):
-    """
-    MUSDB18 dataset returning (mixture_mag, vocals_mag).
-    Each is shape [1, freq, time].
-    """
+
     def __init__(
         self,
         root_dir,
         subset='train',
         sr=44100,
-        n_fft=2048,
+        n_fft=1024,
         hop_length=512,
-        max_length_seconds=8,
+        max_length_seconds=5,
         max_files=None,
         validate_files=False
     ):
