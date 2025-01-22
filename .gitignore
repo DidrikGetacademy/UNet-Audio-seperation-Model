@@ -1,8 +1,10 @@
+# === Virtual Environments ===
 # Ignore virtual environments
 venv/
 env/
 *.venv/
 
+# === Python Cache and Build Files ===
 # Ignore Python cache files
 __pycache__/
 *.py[cod]
@@ -11,22 +13,51 @@ __pycache__/
 # Ignore Python path configuration files
 *.pth
 
-# Ignore logs
+# Ignore compiled extensions
+*.so
+*.dylib
+*.dll
+
+# === Logs and Checkpoints ===
+# Ignore log files
 *.log
 
 # Ignore Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
+# Ignore model checkpoints and other large files
+Model_Weights/
+CheckPoints/
+Fine_tuned/
+Pre_trained/
+
+# === Environment Variables ===
 # Ignore environment variables files
 .env
 
+# === IDE and Editor Configurations ===
 # Ignore IDE configuration files
 .vscode/
 .idea/
 
+# === OS-specific Files ===
 # Ignore OS-specific files
 .DS_Store
 Thumbs.db
 
+# === Third-Party Libraries and Dependencies ===
+# If you have any third-party libraries checked into your repo, consider excluding their directories
+# For example:
+# external_libs/
 
+# === DeepSpeed Directory ===
+# Exclude the DeepSpeed repository and its build artifacts
+DeepSpeed/
+.DeepSpeed/  # In case there's a hidden directory
+
+# === Datasets ===
+# If you want to exclude entire datasets from version control
 Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/
+
+# === Miscellaneous ===
+# Add any other directories or files you want to exclude
