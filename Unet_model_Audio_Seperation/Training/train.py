@@ -1,13 +1,13 @@
 import torch
-import torch.optim as optim
-import torch.nn as nn
-import torch.nn.utils as nn_utils
 import os
 import sys
 import deepspeed
-from torch import autocast, GradScaler
+from torch import autocast
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
+print("Current working directory:", os.getcwd())
+print("Current sys.path:", sys.path)
+print(f"project root {project_root}")
 from Training.Externals.Dataloader import create_dataloaders
 from Training.Externals.Value_storage import  Append_loss_values_for_batch, Append_loss_values_for_epoches, Get_calculated_average_loss_from_batches, loss_history_Epoches,loss_history_Batches
 from Training.Externals.Logger import setup_logger,log_batch_losses,log_epoch_losses,logging_avg_loss_epoch,logging_avg_loss_batches,prev_epoch_loss_log,tensorboard_spectrogram_logging,log_first_2_batches_inputs_targets,log_first_2_batches_outputs_inputs_targets_predicted_mask
@@ -15,8 +15,9 @@ from Model_Architecture.model import UNet
 from Training.Externals.Loss_Class_Functions import Combinedloss 
 from Training.Externals.Memory_debugging import log_memory_after_index_epoch
 from Training.Externals.Loss_Diagram_Values import  log_spectrograms_to_tensorboard, create_loss_diagrams
+from Training.Evaluation_Basic import Validate_epoch
+
 from Training.Externals.Functions import (
-    Validate_epoch,
     training_completed,
     save_final_model,
     Model_Structure_Information,
@@ -29,62 +30,62 @@ from Training.Externals.Functions import (
     Automatic_Fine_Tune,
     save_best_model,
     return_representive_batch,
+    Return_root_dir,
 )
-log_dir = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Performance_logg\Tensorboard"  
-train_logger = setup_logger( 'train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
-Final_model_path = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Pre_trained"
-fine_tuned_model_base_path = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_weights\Fine_tuned"
-Model_CheckPoint = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints"
-MUSDB18_dir = r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\musdb18'
-DSD100_dataset_dir =r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Datasets\Dataset_Audio_Folders\DSD100'
+
+#PATHS
+root_dir = Return_root_dir() #Gets the root directory
+TensorBoard_log_dir = os.path.join(root_dir, "Model_Performance_logg/Tensorboard")
+fine_tuned_model_base_path = os.path.join(root_dir, "Model_weights/Fine_tuned")
+Model_CheckPoint = os.path.join(root_dir, "Model_Weights/CheckPoints")
+Final_model_path = os.path.join(root_dir, "Model_Weights/Pre_trained")
+MUSDB18_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/musdb18")
+DSD100_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/DSD100")
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+
+#Checks if dirs exists
 os.makedirs(fine_tuned_model_base_path, exist_ok=True)
 os.makedirs(Model_CheckPoint, exist_ok=True)
 os.makedirs(Final_model_path, exist_ok=True)
-os.makedirs(log_dir, exist_ok=True)
+os.makedirs(TensorBoard_log_dir, exist_ok=True)
+
+
+#Training Logger
+train_logger = setup_logger('train', train_log_path)
 
 
 
+ds_config_path = os.path.join(root_dir, "Training/ds.config.json")
 
-#DEEPSPEED Configuration
-ds_config = {
-    "train_batch_size": 64,
-    "train_micro_batch_size_per_gpu": 8,
-    "gradient_accumulation_steps": 8,
-    "fp16": {"enabled": True},
-    "zero_optimization": {
-        "stage": 2,
-        "contiguous_gradients": True,
-        "overlap_comm": False,
-        "reduce_scatter": False
-    },
-    "optimizer": {
-        "type": "Adam",
-        "params": {
-            "lr": 1e-3,
-            "weight_decay": 1e-4,
-            "betas": [0.8, 0.9],
-            "eps": 1e-6
-        }
-    },
-    "scheduler": {
-        "type": "ReduceLROnPlateau",
-        "params": {
-            "mode": "min",
-            "factor": 0.5,
-            "patience": 3,
-            "threshold": 1e-3,
-            "verbose": True,
-            "cooldown": 1,
-            "min_lr": 1e-5
-        }
-    },
-    "steps_per_print": 50
-}
+# Load DeepSpeed config (You can load and modify it dynamically here)
+import json
+with open(ds_config_path, 'r') as f:
+    ds_config = json.load(f)
+
+# Get world size dynamically (number of available GPUs)
+world_size = torch.cuda.device_count()  # or set it manually if needed
+train_batch_size = ds_config["train_batch_size"]
+
+# Dynamically calculate micro_batch_size and gradient_accumulation_steps
+train_micro_batch_size_per_gpu = train_batch_size // world_size
+gradient_accumulation_steps = train_batch_size // (train_micro_batch_size_per_gpu * world_size)
+
+# Ensure this dynamic calculation makes sense and aligns
+assert train_micro_batch_size_per_gpu * gradient_accumulation_steps * world_size == train_batch_size, \
+    f"Inconsistent batch sizes: {train_micro_batch_size_per_gpu} * {gradient_accumulation_steps} * {world_size} != {train_batch_size}"
+
+# Update DeepSpeed config dynamically
+ds_config["train_micro_batch_size_per_gpu"] = train_micro_batch_size_per_gpu
+ds_config["gradient_accumulation_steps"] = gradient_accumulation_steps
+ds_config["world_size"] = world_size  # or set manually if needed
+
+
 
 
 #Training config
-epochs = 2
-patience = 2
+load_model_path=None
+epochs = 10
+patience = 3
 best_loss = float('inf')
 best_val_loss = float('inf')
 trigger_times = 0
@@ -94,8 +95,8 @@ best_model_path = None
 maskloss_avg, hybridloss_avg, combined_loss_avg = 0.0, 0.0, 0.0 
 num_workers = 0
 sampling_rate = 44100
-max_length_seconds = 5
-fine_tuning_flag = True
+max_length_seconds = 15
+fine_tuning_flag = False
 
 
 
@@ -106,23 +107,26 @@ fine_tuning_flag = True
 
 
 
-
-
-def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\model.pth",start_training=True):
+def train(load_model_path,start_training=True):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_logger.info(f"[Train] Using device: {device}")
   
 
     #UNet - Model initialization, Optimizer Config, Custom Hybridloss function, Gradscaler.
-    model = UNet(in_channels=1, out_channels=1).to(device)
+    model = UNet(in_channels=1, out_channels=1)
+    print(f"Loading model to {device}")
+    model = model.to(device)
+    print(f"Model loaded to {device}")
 
     #Initializing deepspeed
-    model_engine, optimizer, _, scheduler = deepspeed.initialize(
-        model=model,
-        model_parameters=model.parameters()
-        config_params=ds_config
+    model_engine, optimizer, _, _ = deepspeed.initialize(
+        model=model, model_parameters=model.parameters(), config_params=ds_config
+        )
 
-    )
+        
+    base_optimizer = optimizer.optimizer    # Get the base PyTorch optimizer wrapped by DeepSpeed
+    scheduler = torch.optim.lr_scheduler.StepLR(base_optimizer, step_size=10, gamma=0.1)
+
     #Loss functionality
     criterion = Combinedloss()
 
@@ -136,7 +140,7 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
          combined_train_loader, combined_val_loader = create_dataloaders(
             musdb18_dir=MUSDB18_dir,
             dsd100_dir=DSD100_dataset_dir,
-            batch_size=ds_config["train_micro_batch_size_per_gpu"],
+            batch_size=ds_config["train_micro_batch_size_per_gpu"],  # Pass the batch size from DeepSpeed config
             num_workers=num_workers,
             sampling_rate=sampling_rate,
             max_length_seconds=max_length_seconds,
@@ -168,8 +172,11 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
                     print_inputs_targets_shape(inputs, targets, batch_idx)
 
 
-                    #Moves the data to device.
+                    #Moves the data to device. 
+                    print(f"[Train] Moving batch {batch_idx} data to {device}...")
+
                     inputs, targets = inputs.to(device, non_blocking=True), targets.to(device, non_blocking=True)
+                    print(f"[Train] Batch {batch_idx} moved to {device}.")
 
 
 
@@ -186,8 +193,7 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
                         combined_loss, mask_loss, hybrid_loss = criterion(predicted_mask, inputs, targets)
 
 
-                        
-                       
+
 
 
                     #LOGGING & APPENDING values
@@ -214,7 +220,7 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
 
                     # Check for invalid outputs
                     if torch.isnan(outputs).any() or torch.isinf(outputs).any():
-                        train_logger.error(f"Skipping Batch {batch_idx} due to NaN/Inf in outputs.")
+                        v.error(f"Skipping Batch {batch_idx} due to NaN/Inf in outputs.")
                         continue
 
                     running_loss += combined_loss.item()
@@ -222,8 +228,8 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
       
                 tensorboard_spectrogram_logging(representative_batch, log_spectrograms_to_tensorboard, epoch)
 
-            
                 scheduler.step(running_loss)
+            
 
                 # Current Learning Rate logging
                 current_lr = optimizer.param_groups[0]['lr']
@@ -296,7 +302,7 @@ def train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_
 
 if __name__ == "__main__":
 
-    train(load_model_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\Fine_tuned\model.pth")
+    train(load_model_path)
     
     
 

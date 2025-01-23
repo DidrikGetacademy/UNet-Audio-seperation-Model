@@ -5,10 +5,23 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 import stempeg
+import os
+import sys
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+sys.path.insert(0, project_root)
+from Training.Externals.utils import Return_root_dir
+
+
 from Training.Externals.Logger import setup_logger
 
-data_logger = setup_logger( 'dataloader_logger',r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
+
+root_dir = Return_root_dir() #Gets the root directory
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+data_logger = setup_logger( 'dataloader_logger',train_log_path)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+
 #MUSDB18 dataset returning (mixture_mag, vocals_mag)
 #Each is shape [1, freq, time].
 class MUSDB18StemDataset(Dataset):
@@ -20,7 +33,7 @@ class MUSDB18StemDataset(Dataset):
         sr=44100,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=15,
         max_files=None,
         validate_files=False
     ):
@@ -76,11 +89,16 @@ class MUSDB18StemDataset(Dataset):
             mixture_mag = self._adjust_length(mixture_mag)
             vocals_mag = self._adjust_length(vocals_mag)
 
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            print(f"[MUSDB18] Moving tensors to {device}...")
+
             # Return shape [1, freq, time]
-            return (
-                torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0),
-                torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0),
-            )
+            mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
+            vocals_mag_tensor = torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0).to(device)
+
+            print(f"[MUSDB18] Tensors moved to {device}.")
+            
+            return mixture_mag_tensor, vocals_mag_tensor
         except Exception as e:
             data_logger.error(f"Error processing file {file_path}: {e}")
             return None

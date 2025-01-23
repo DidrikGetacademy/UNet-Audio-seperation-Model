@@ -1,4 +1,3 @@
-# dataloader.py
 import os
 import sys
 import torch
@@ -8,30 +7,28 @@ from torch.utils.data import DataLoader, ConcatDataset
 # Adjust project root if necessary
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
-
 from Datasets.Scripts.Dataset_Musdb18 import MUSDB18StemDataset
 from Datasets.Scripts.Dataset_DSD100 import DSD100
 from Training.Externals.Logger import setup_logger
+from Training.Externals.utils import Return_root_dir
 
-data_loader = setup_logger(
-    'dataloader',
-    r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt'
-)
+
+root_dir = Return_root_dir() #Gets the root directory
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+
+data_loader = setup_logger(  'dataloader', train_log_path)
+TensorBoard_log_dir = os.path.join(root_dir, "Model_Performance_logg/Tensorboard")
+
 
 def robust_collate_fn(batch):
-    #2D cropping and padding:
-      #- Drops None items
-      #- Finds max freq, max time across the batch
-      #- Crops bigger shapes down, pads smaller shapes up
-      #- Stacks final shape => [B, 1, freq, time]
-
+    # 2D cropping and padding:
     batch = [item for item in batch if item is not None]
     if not batch:
-        return None, None
+        return torch.empty(0), torch.empty(0)
 
     inputs, targets = zip(*batch)
 
-    # find largest freq, time
+    # Find largest freq, time
     max_freq = max(x.size(-2) for x in inputs)
     max_time = max(x.size(-1) for x in inputs)
 
@@ -39,51 +36,34 @@ def robust_collate_fn(batch):
     padded_targets = []
 
     for inp, tgt in zip(inputs, targets):
-        freq_in, time_in = inp.size(-2), inp.size(-1)
-        # Crop freq if > max
-        if freq_in > max_freq:
-            inp = inp[..., :max_freq, :]
-        # Crop time if > max
-        if time_in > max_time:
-            inp = inp[..., :max_time]
-
-        freq_in, time_in = inp.size(-2), inp.size(-1)
-        freq_pad = max_freq - freq_in
-        time_pad = max_time - time_in
-        inp_padded = F.pad(inp, (0, time_pad, 0, freq_pad))
-
-        # same for target
-        freq_tgt, time_tgt = tgt.size(-2), tgt.size(-1)
-        if freq_tgt > max_freq:
-            tgt = tgt[..., :max_freq, :]
-        if time_tgt > max_time:
-            tgt = tgt[..., :max_time]
-
-        freq_tgt, time_tgt = tgt.size(-2), tgt.size(-1)
-        freq_pad_t = max_freq - freq_tgt
-        time_pad_t = max_time - time_tgt
-        tgt_padded = F.pad(tgt, (0, time_pad_t, 0, freq_pad_t))
-
-        padded_inputs.append(inp_padded)
-        padded_targets.append(tgt_padded)
+        # Crop and pad inputs
+        inp = F.pad(inp, (0, max_time - inp.size(-1), 0, max_freq - inp.size(-2)))
+        tgt = F.pad(tgt, (0, max_time - tgt.size(-1), 0, max_freq - tgt.size(-2)))
+        
+        padded_inputs.append(inp)
+        padded_targets.append(tgt)
 
     inputs_tensor = torch.stack(padded_inputs, dim=0)
     targets_tensor = torch.stack(padded_targets, dim=0)
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"[DataLoader] Moving batch to {device}...")
+    inputs_tensor = inputs_tensor.to(device)
+    targets_tensor = targets_tensor.to(device)
+    print(f"[DataLoader] Batch moved to {device}.")
+    
     return inputs_tensor, targets_tensor
 
 def create_dataloaders(
     musdb18_dir,
     dsd100_dir,
-    batch_size=2,
-    num_workers=0,
+    batch_size=8,
+    num_workers=0,  # Set num_workers to 0 to avoid multiprocessing issues
     sampling_rate=44100,
-    max_length_seconds=5,
+    max_length_seconds=15,
     max_files_train=None,
     max_files_val=None,
 ):
-    
-    #Creates train/val DataLoaders from MUSDB18 + DSD100 Will produce spectrograms of shape [1, freq, time].
     musdb18_train_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
         subset='train',
@@ -136,8 +116,7 @@ def create_dataloaders(
         num_workers=num_workers,
         pin_memory=True,
         drop_last=True,
-        collate_fn=robust_collate_fn,  
-        #prefetch_factor=2 
+        collate_fn=robust_collate_fn,
     )
 
     val_loader = DataLoader(
@@ -147,8 +126,7 @@ def create_dataloaders(
         num_workers=num_workers,
         pin_memory=True,
         drop_last=True,
-        collate_fn=robust_collate_fn, 
-        #prefetch_factor=2 
+        collate_fn=robust_collate_fn,
     )
 
     data_loader.info(f"Training dataset size: {len(combined_train_dataset)}")

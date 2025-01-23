@@ -2,14 +2,14 @@ import os
 import sys
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
-import torch
 from torch.utils.tensorboard import SummaryWriter
 from Training.Externals.Value_storage import writer_loss_batches, writer_loss_epoch
 
-
-writer = SummaryWriter(log_dir=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Performance_logg\TensorBoard")
-
 def log_batch_losses(global_step, combined_loss, mask_loss, hybrid_loss):
+    from Training.Externals.utils import Return_root_dir   
+    root_dir = Return_root_dir() #Gets the root directory
+
+    writer = SummaryWriter(log_dir=os.path.join(root_dir,"Model_Performance_logg/Tensorboard"))
     writer_loss_batches[global_step] = {
         'combined': combined_loss.item(),
         'mask': mask_loss.item(),
@@ -22,6 +22,9 @@ def log_batch_losses(global_step, combined_loss, mask_loss, hybrid_loss):
 
 
 def log_epoch_losses(epoch, combined_loss_avg, mask_loss_avg, hybrid_loss_avg):
+    from Training.Externals.Functions import Return_root_dir
+    root_dir = Return_root_dir() #Gets the root directory
+    writer = SummaryWriter(log_dir=os.path.join(root_dir,"Model_Performance_logg/Tensorboard"))
     writer_loss_epoch[epoch] = {
         'combined_epoch_avg': combined_loss_avg,
         'mask_epoch_avg': mask_loss_avg,

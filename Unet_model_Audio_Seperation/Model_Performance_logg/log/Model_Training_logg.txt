@@ -1,0 +1,1276 @@
+2025-01-23 21:39:54,163 - INFO - [Train] Using device: cuda
+2025-01-23 21:45:00,100 - INFO - [Train] Using device: cuda
+2025-01-23 22:01:04,866 - INFO - [Train] Using device: cuda
+2025-01-23 22:06:25,596 - INFO - [Train] Using device: cuda
+2025-01-23 22:06:33,959 - INFO - Total number of parameters: 28905365
+2025-01-23 22:06:33,960 - INFO - Trainable parameters: 28905365
+2025-01-23 22:06:33,961 - INFO - Model architecture:
+UNet(
+  (encoder): ModuleList(
+    (0): Sequential(
+      (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=64, out_features=4, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=4, out_features=64, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(8, 64, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (1): Sequential(
+      (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=128, out_features=8, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=8, out_features=128, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(128, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(16, 128, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (2): Sequential(
+      (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=256, out_features=16, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=16, out_features=256, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (3): Sequential(
+      (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=512, out_features=32, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=32, out_features=512, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(512, 64, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(64, 512, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+  )
+  (bottleneck): Sequential(
+    (0): Conv2d(512, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): InstanceNorm2d(1024, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+    (2): ReLU(inplace=True)
+    (3): SEBlock(
+      (avg_pool): AdaptiveAvgPool2d(output_size=1)
+      (fc): Sequential(
+        (0): Linear(in_features=1024, out_features=64, bias=False)
+        (1): ReLU(inplace=True)
+        (2): Linear(in_features=64, out_features=1024, bias=False)
+        (3): Sigmoid()
+      )
+    )
+    (4): SpectralAttentionBlock(
+      (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+      (fc): Sequential(
+        (0): Conv2d(1024, 128, kernel_size=(1, 1), stride=(1, 1))
+        (1): ReLU(inplace=True)
+        (2): Conv2d(128, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (3): Sigmoid()
+      )
+    )
+    (5): Dropout(p=0.4, inplace=False)
+    (6): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): InstanceNorm2d(1024, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+    (8): ReLU(inplace=True)
+  )
+  (decoder): ModuleList(
+    (0): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(1024, 512, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(1024, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=512, out_features=32, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=32, out_features=512, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(512, 64, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(64, 512, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (1): AttentionBlock(
+      (W_g): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (2): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(512, 256, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=256, out_features=16, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=16, out_features=256, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (3): AttentionBlock(
+      (W_g): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (4): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(256, 128, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=128, out_features=8, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=8, out_features=128, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(128, 16, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(16, 128, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (5): AttentionBlock(
+      (W_g): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (6): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=64, out_features=4, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=4, out_features=64, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(8, 64, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (7): AttentionBlock(
+      (W_g): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(32, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+  )
+  (final_conv): Sequential(
+    (0): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+    (1): Sigmoid()
+  )
+)
+2025-01-23 22:06:33,961 - INFO - [Train] No existing model path provided. Starting from scratch.
+2025-01-23 22:06:33,961 - INFO - [Memory Clearing memory before training] Timestamp: 2025-01-23 22:06:33
+2025-01-23 22:06:33,962 - INFO - [Memory Clearing memory before training] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.08 GB, Cached=0.08 GB
+2025-01-23 22:06:33,962 - INFO - [Memory Clearing memory before training] CPU Memory Usage: ~1.32 GB
+2025-01-23 22:06:34,092 - INFO - [Memory Memory after clearing it...] Timestamp: 2025-01-23 22:06:34
+2025-01-23 22:06:34,093 - INFO - [Memory Memory after clearing it...] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.08 GB, Cached=0.08 GB
+2025-01-23 22:06:34,093 - INFO - [Memory Memory after clearing it...] CPU Memory Usage: ~1.32 GB
+2025-01-23 22:06:34,097 - INFO - Found 100 files in '/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train' (subset='train')
+2025-01-23 22:06:34,097 - INFO - Dataset initialized with 100 valid files.
+2025-01-23 22:06:34,099 - INFO - Found 50 files in '/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/test' (subset='test')
+2025-01-23 22:06:34,099 - INFO - Dataset initialized with 50 valid files.
+2025-01-23 22:06:34,320 - INFO - Training dataset size: 150
+2025-01-23 22:06:34,320 - INFO - Validation dataset size: 100
+2025-01-23 22:06:34,320 - INFO - Training dataset: 2 batches
+2025-01-23 22:06:34,321 - INFO - Validation dataset: 1 batches
+2025-01-23 22:07:02,715 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/AvaLuna - Waterduct.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:07:03,901 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Music Delta - Rock.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:07:11,218 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Atlantis Bound - It Was My Fault For Waiting.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:07:19,510 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Flags - 54.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:07:22,248 - ERROR - [Dataset Sample Info] Error fetching samples: Caught RuntimeError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 351, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/dataset.py", line 350, in __getitem__
+    return self.datasets[dataset_idx][sample_idx]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Scripts/Dataset_DSD100.py", line 85, in __getitem__
+    mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/cuda/__init__.py", line 305, in _lazy_init
+    raise RuntimeError(
+RuntimeError: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+
+2025-01-23 22:07:22,248 - INFO - Training started with configuration: Batch size=64, Effective batch size: 64 Learning rate=0.001, Epochs=10
+2025-01-23 22:07:22,250 - INFO - [Train] Epoch 1/10 started.
+2025-01-23 22:07:32,970 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Music Delta - 80s Rock.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:07:36,226 - ERROR - [Train] Error during training: Caught RuntimeError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 351, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/dataset.py", line 350, in __getitem__
+    return self.datasets[dataset_idx][sample_idx]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Scripts/Dataset_DSD100.py", line 85, in __getitem__
+    mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/cuda/__init__.py", line 305, in _lazy_init
+    raise RuntimeError(
+RuntimeError: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+
+2025-01-23 22:10:47,338 - INFO - [Train] Using device: cuda
+2025-01-23 22:10:54,727 - INFO - Total number of parameters: 28905365
+2025-01-23 22:10:54,728 - INFO - Trainable parameters: 28905365
+2025-01-23 22:10:54,729 - INFO - Model architecture:
+UNet(
+  (encoder): ModuleList(
+    (0): Sequential(
+      (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=64, out_features=4, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=4, out_features=64, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(8, 64, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (1): Sequential(
+      (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=128, out_features=8, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=8, out_features=128, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(128, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(16, 128, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (2): Sequential(
+      (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=256, out_features=16, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=16, out_features=256, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (3): Sequential(
+      (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=512, out_features=32, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=32, out_features=512, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(512, 64, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(64, 512, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+  )
+  (bottleneck): Sequential(
+    (0): Conv2d(512, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): InstanceNorm2d(1024, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+    (2): ReLU(inplace=True)
+    (3): SEBlock(
+      (avg_pool): AdaptiveAvgPool2d(output_size=1)
+      (fc): Sequential(
+        (0): Linear(in_features=1024, out_features=64, bias=False)
+        (1): ReLU(inplace=True)
+        (2): Linear(in_features=64, out_features=1024, bias=False)
+        (3): Sigmoid()
+      )
+    )
+    (4): SpectralAttentionBlock(
+      (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+      (fc): Sequential(
+        (0): Conv2d(1024, 128, kernel_size=(1, 1), stride=(1, 1))
+        (1): ReLU(inplace=True)
+        (2): Conv2d(128, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (3): Sigmoid()
+      )
+    )
+    (5): Dropout(p=0.4, inplace=False)
+    (6): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): InstanceNorm2d(1024, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+    (8): ReLU(inplace=True)
+  )
+  (decoder): ModuleList(
+    (0): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(1024, 512, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(1024, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=512, out_features=32, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=32, out_features=512, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(512, 64, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(64, 512, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (1): AttentionBlock(
+      (W_g): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (2): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(512, 256, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=256, out_features=16, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=16, out_features=256, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (3): AttentionBlock(
+      (W_g): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (4): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(256, 128, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=128, out_features=8, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=8, out_features=128, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(128, 16, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(16, 128, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (5): AttentionBlock(
+      (W_g): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (6): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=64, out_features=4, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=4, out_features=64, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(8, 64, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (7): AttentionBlock(
+      (W_g): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(32, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+  )
+  (final_conv): Sequential(
+    (0): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+    (1): Sigmoid()
+  )
+)
+2025-01-23 22:10:54,729 - INFO - [Train] No existing model path provided. Starting from scratch.
+2025-01-23 22:10:54,729 - INFO - [Memory Clearing memory before training] Timestamp: 2025-01-23 22:10:54
+2025-01-23 22:10:54,730 - INFO - [Memory Clearing memory before training] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.08 GB, Cached=0.08 GB
+2025-01-23 22:10:54,730 - INFO - [Memory Clearing memory before training] CPU Memory Usage: ~1.32 GB
+2025-01-23 22:10:54,829 - INFO - [Memory Memory after clearing it...] Timestamp: 2025-01-23 22:10:54
+2025-01-23 22:10:54,830 - INFO - [Memory Memory after clearing it...] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.08 GB, Cached=0.08 GB
+2025-01-23 22:10:54,831 - INFO - [Memory Memory after clearing it...] CPU Memory Usage: ~1.32 GB
+2025-01-23 22:10:54,835 - INFO - Found 100 files in '/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train' (subset='train')
+2025-01-23 22:10:54,836 - INFO - Dataset initialized with 100 valid files.
+2025-01-23 22:10:54,839 - INFO - Found 50 files in '/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/test' (subset='test')
+2025-01-23 22:10:54,839 - INFO - Dataset initialized with 50 valid files.
+2025-01-23 22:10:55,014 - INFO - Training dataset size: 150
+2025-01-23 22:10:55,015 - INFO - Validation dataset size: 100
+2025-01-23 22:10:55,015 - INFO - Training dataset: 2 batches
+2025-01-23 22:10:55,015 - INFO - Validation dataset: 1 batches
+2025-01-23 22:11:12,399 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Jokers, Jacks & Kings - Sea Of Leaves.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:11:12,399 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Auctioneer - Our Future Faces.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:11:18,479 - ERROR - [Dataset Sample Info] Error fetching samples: Caught RuntimeError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 351, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/dataset.py", line 350, in __getitem__
+    return self.datasets[dataset_idx][sample_idx]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Scripts/Dataset_DSD100.py", line 85, in __getitem__
+    mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/cuda/__init__.py", line 305, in _lazy_init
+    raise RuntimeError(
+RuntimeError: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+
+2025-01-23 22:11:18,480 - INFO - Training started with configuration: Batch size=64, Effective batch size: 64 Learning rate=0.001, Epochs=10
+2025-01-23 22:11:18,482 - INFO - [Train] Epoch 1/10 started.
+2025-01-23 22:11:41,463 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Chris Durban - Celebrate.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:11:41,467 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Young Griffo - Blood To Bone.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:11:49,969 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Grants - PunchDrunk.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:11:50,674 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Leaf - Summerghost.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:11:52,328 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Music Delta - Beatles.stem.mp4: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+2025-01-23 22:11:56,054 - ERROR - [Train] Error during training: Caught RuntimeError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 351, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/utils/data/dataset.py", line 350, in __getitem__
+    return self.datasets[dataset_idx][sample_idx]
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Scripts/Dataset_DSD100.py", line 85, in __getitem__
+    mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
+  File "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/venv/lib/python3.10/site-packages/torch/cuda/__init__.py", line 305, in _lazy_init
+    raise RuntimeError(
+RuntimeError: Cannot re-initialize CUDA in forked subprocess. To use CUDA with multiprocessing, you must use the 'spawn' start method
+
+2025-01-23 22:13:51,801 - INFO - [Train] Using device: cuda
+2025-01-23 22:13:59,664 - INFO - Total number of parameters: 28905365
+2025-01-23 22:13:59,665 - INFO - Trainable parameters: 28905365
+2025-01-23 22:13:59,670 - INFO - Model architecture:
+UNet(
+  (encoder): ModuleList(
+    (0): Sequential(
+      (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=64, out_features=4, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=4, out_features=64, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(8, 64, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (1): Sequential(
+      (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=128, out_features=8, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=8, out_features=128, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(128, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(16, 128, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (2): Sequential(
+      (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=256, out_features=16, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=16, out_features=256, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (3): Sequential(
+      (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=512, out_features=32, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=32, out_features=512, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(512, 64, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(64, 512, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+  )
+  (bottleneck): Sequential(
+    (0): Conv2d(512, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): InstanceNorm2d(1024, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+    (2): ReLU(inplace=True)
+    (3): SEBlock(
+      (avg_pool): AdaptiveAvgPool2d(output_size=1)
+      (fc): Sequential(
+        (0): Linear(in_features=1024, out_features=64, bias=False)
+        (1): ReLU(inplace=True)
+        (2): Linear(in_features=64, out_features=1024, bias=False)
+        (3): Sigmoid()
+      )
+    )
+    (4): SpectralAttentionBlock(
+      (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+      (fc): Sequential(
+        (0): Conv2d(1024, 128, kernel_size=(1, 1), stride=(1, 1))
+        (1): ReLU(inplace=True)
+        (2): Conv2d(128, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (3): Sigmoid()
+      )
+    )
+    (5): Dropout(p=0.4, inplace=False)
+    (6): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): InstanceNorm2d(1024, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+    (8): ReLU(inplace=True)
+  )
+  (decoder): ModuleList(
+    (0): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(1024, 512, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(1024, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=512, out_features=32, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=32, out_features=512, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(512, 64, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(64, 512, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (1): AttentionBlock(
+      (W_g): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (2): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(512, 256, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=256, out_features=16, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=16, out_features=256, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (3): AttentionBlock(
+      (W_g): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (4): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(256, 128, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=128, out_features=8, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=8, out_features=128, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(128, 16, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(16, 128, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (5): AttentionBlock(
+      (W_g): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (6): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=64, out_features=4, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=4, out_features=64, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(8, 64, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (7): AttentionBlock(
+      (W_g): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(32, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+  )
+  (final_conv): Sequential(
+    (0): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+    (1): Sigmoid()
+  )
+)
+2025-01-23 22:13:59,670 - INFO - [Train] No existing model path provided. Starting from scratch.
+2025-01-23 22:13:59,671 - INFO - [Memory Clearing memory before training] Timestamp: 2025-01-23 22:13:59
+2025-01-23 22:13:59,672 - INFO - [Memory Clearing memory before training] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.08 GB, Cached=0.08 GB
+2025-01-23 22:13:59,673 - INFO - [Memory Clearing memory before training] CPU Memory Usage: ~1.32 GB
+2025-01-23 22:13:59,797 - INFO - [Memory Memory after clearing it...] Timestamp: 2025-01-23 22:13:59
+2025-01-23 22:13:59,798 - INFO - [Memory Memory after clearing it...] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.08 GB, Cached=0.08 GB
+2025-01-23 22:13:59,799 - INFO - [Memory Memory after clearing it...] CPU Memory Usage: ~1.32 GB
+2025-01-23 22:13:59,801 - INFO - Found 100 files in '/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train' (subset='train')
+2025-01-23 22:13:59,802 - INFO - Dataset initialized with 100 valid files.
+2025-01-23 22:13:59,805 - INFO - Found 50 files in '/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/test' (subset='test')
+2025-01-23 22:13:59,806 - INFO - Dataset initialized with 50 valid files.
+2025-01-23 22:14:00,007 - INFO - Training dataset size: 150
+2025-01-23 22:14:00,008 - INFO - Validation dataset size: 100
+2025-01-23 22:14:00,008 - INFO - Training dataset: 2 batches
+2025-01-23 22:14:00,008 - INFO - Validation dataset: 1 batches
+2025-01-23 22:16:45,967 - ERROR - [Dataset Sample Info] Error fetching samples: [Errno 5] Input/output error
+2025-01-23 22:16:45,967 - INFO - Training started with configuration: Batch size=64, Effective batch size: 64 Learning rate=0.001, Epochs=10
+2025-01-23 22:16:45,968 - INFO - [Train] Epoch 1/10 started.
+2025-01-23 22:16:51,860 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Actions - South Of The Water.stem.mp4: [Errno 5] Input/output error
+2025-01-23 22:16:57,958 - ERROR - Error processing file /mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train/Young Griffo - Facade.stem.mp4: [Errno 5] Input/output error
+2025-01-23 22:17:00,859 - ERROR - [Train] Error during training: [Errno 5] Input/output error
+2025-01-23 22:19:23,452 - INFO - [Train] Using device: cuda
+2025-01-23 22:19:31,649 - INFO - Total number of parameters: 28905365
+2025-01-23 22:19:31,649 - INFO - Trainable parameters: 28905365
+2025-01-23 22:19:31,651 - INFO - Model architecture:
+UNet(
+  (encoder): ModuleList(
+    (0): Sequential(
+      (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=64, out_features=4, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=4, out_features=64, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(8, 64, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (1): Sequential(
+      (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=128, out_features=8, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=8, out_features=128, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(128, 16, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(16, 128, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (2): Sequential(
+      (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=256, out_features=16, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=16, out_features=256, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+    (3): Sequential(
+      (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (2): ReLU(inplace=True)
+      (3): SEBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=1)
+        (fc): Sequential(
+          (0): Linear(in_features=512, out_features=32, bias=False)
+          (1): ReLU(inplace=True)
+          (2): Linear(in_features=32, out_features=512, bias=False)
+          (3): Sigmoid()
+        )
+      )
+      (4): SpectralAttentionBlock(
+        (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+        (fc): Sequential(
+          (0): Conv2d(512, 64, kernel_size=(1, 1), stride=(1, 1))
+          (1): ReLU(inplace=True)
+          (2): Conv2d(64, 512, kernel_size=(1, 1), stride=(1, 1))
+          (3): Sigmoid()
+        )
+      )
+      (5): Dropout(p=0.4, inplace=False)
+      (6): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (7): InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      (8): ReLU(inplace=True)
+    )
+  )
+  (bottleneck): Sequential(
+    (0): Conv2d(512, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): InstanceNorm2d(1024, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+    (2): ReLU(inplace=True)
+    (3): SEBlock(
+      (avg_pool): AdaptiveAvgPool2d(output_size=1)
+      (fc): Sequential(
+        (0): Linear(in_features=1024, out_features=64, bias=False)
+        (1): ReLU(inplace=True)
+        (2): Linear(in_features=64, out_features=1024, bias=False)
+        (3): Sigmoid()
+      )
+    )
+    (4): SpectralAttentionBlock(
+      (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+      (fc): Sequential(
+        (0): Conv2d(1024, 128, kernel_size=(1, 1), stride=(1, 1))
+        (1): ReLU(inplace=True)
+        (2): Conv2d(128, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (3): Sigmoid()
+      )
+    )
+    (5): Dropout(p=0.4, inplace=False)
+    (6): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): InstanceNorm2d(1024, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+    (8): ReLU(inplace=True)
+  )
+  (decoder): ModuleList(
+    (0): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(1024, 512, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(1024, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=512, out_features=32, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=32, out_features=512, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(512, 64, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(64, 512, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (1): AttentionBlock(
+      (W_g): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (2): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(512, 256, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=256, out_features=16, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=16, out_features=256, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(32, 256, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (3): AttentionBlock(
+      (W_g): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (4): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(256, 128, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=128, out_features=8, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=8, out_features=128, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(128, 16, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(16, 128, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (5): AttentionBlock(
+      (W_g): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+    (6): MultiScaleDecoderBlock(
+      (up): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
+      (conv): Sequential(
+        (0): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): SEBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=1)
+          (fc): Sequential(
+            (0): Linear(in_features=64, out_features=4, bias=False)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=4, out_features=64, bias=False)
+            (3): Sigmoid()
+          )
+        )
+        (4): SpectralAttentionBlock(
+          (avg_pool): AdaptiveAvgPool2d(output_size=(1, None))
+          (fc): Sequential(
+            (0): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+            (1): ReLU(inplace=True)
+            (2): Conv2d(8, 64, kernel_size=(1, 1), stride=(1, 1))
+            (3): Sigmoid()
+          )
+        )
+      )
+    )
+    (7): AttentionBlock(
+      (W_g): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+      (W_x): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+      (psi): Conv2d(32, 1, kernel_size=(1, 1), stride=(1, 1))
+      (relu): ReLU(inplace=True)
+      (sigmoid): Sigmoid()
+    )
+  )
+  (final_conv): Sequential(
+    (0): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+    (1): Sigmoid()
+  )
+)
+2025-01-23 22:19:31,651 - INFO - [Train] No existing model path provided. Starting from scratch.
+2025-01-23 22:19:31,652 - INFO - [Memory Clearing memory before training] Timestamp: 2025-01-23 22:19:31
+2025-01-23 22:19:31,652 - INFO - [Memory Clearing memory before training] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.08 GB, Cached=0.08 GB
+2025-01-23 22:19:31,653 - INFO - [Memory Clearing memory before training] CPU Memory Usage: ~1.32 GB
+2025-01-23 22:19:31,799 - INFO - [Memory Memory after clearing it...] Timestamp: 2025-01-23 22:19:31
+2025-01-23 22:19:31,800 - INFO - [Memory Memory after clearing it...] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.08 GB, Cached=0.08 GB
+2025-01-23 22:19:31,800 - INFO - [Memory Memory after clearing it...] CPU Memory Usage: ~1.32 GB
+2025-01-23 22:19:31,804 - INFO - Found 100 files in '/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/train' (subset='train')
+2025-01-23 22:19:31,804 - INFO - Dataset initialized with 100 valid files.
+2025-01-23 22:19:31,806 - INFO - Found 50 files in '/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/musdb18/test' (subset='test')
+2025-01-23 22:19:31,806 - INFO - Dataset initialized with 50 valid files.
+2025-01-23 22:19:32,023 - INFO - Training dataset size: 150
+2025-01-23 22:19:32,023 - INFO - Validation dataset size: 100
+2025-01-23 22:19:32,024 - INFO - Training dataset: 2 batches
+2025-01-23 22:19:32,024 - INFO - Validation dataset: 1 batches
+2025-01-23 22:26:53,545 - ERROR - [Dataset Sample Info] Error fetching samples: cannot pin 'torch.cuda.FloatTensor' only dense CPU tensors can be pinned
+2025-01-23 22:26:53,546 - INFO - Training started with configuration: Batch size=64, Effective batch size: 64 Learning rate=0.001, Epochs=10
+2025-01-23 22:26:53,547 - INFO - [Train] Epoch 1/10 started.

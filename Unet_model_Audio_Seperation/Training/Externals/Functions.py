@@ -3,15 +3,19 @@ import gc
 import os
 import sys
 import shutil
-from Training.Externals.Memory_debugging import log_memory_usage
+import platform
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
-train_logger = setup_logger( 'train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
 from Training.Externals.Memory_debugging import (  clear_memory_before_training )
 from Training.Fine_Tuned_model import fine_tune_model 
+from Training.Externals.utils import Return_root_dir
 
-Model_CheckPoint = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_Weights\CheckPoints"
+
+root_dir = Return_root_dir() #Gets the root directory
+Model_CheckPoint = os.path.join(root_dir, "Model_Weights/CheckPoints")
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+train_logger = setup_logger('train',train_log_path)
 os.makedirs(Model_CheckPoint, exist_ok=True)
 
     
@@ -22,6 +26,7 @@ def save_model_checkpoint(avg_epoch_loss, epoch, model, best_loss,  trigger_time
         best_model_path = os.path.join(Model_CheckPoint, f"best_model_epoch-{epoch}.pth")
         torch.save(model.state_dict(), best_model_path)
         train_logger.info(f"[Train] New best model saved at {best_model_path} with loss {best_loss:.6f}")
+        print(f"Model saved from {model.device} device.")
         trigger_times = 0  
     else:
         train_logger.info(f"[Train] No improvement in loss for epoch {epoch + 1} with loss: {avg_epoch_loss}. Best loss remains {best_loss:.6f}. Trigger_times: {trigger_times}")
@@ -36,45 +41,7 @@ def save_final_model(model, Final_model_path):
     os.makedirs(os.path.dirname(Final_model_path), exist_ok=True) 
     torch.save(model.state_dict(), os.path.join(Final_model_path, "final_model.pth"))
     train_logger.info(f"[Train] Final model saved at {Final_model_path}")
-
-
-
-#VALIDATION FUNCTION
-def Validate_epoch(model, val_loader, criterion, device):
-    model.eval()  # Set the model to evaluation mode
-    val_combined_loss = 0
-    val_mask_loss = 0
-    val_hybrid_loss = 0
-
-    with torch.no_grad():
-        for val_batch_idx, (inputs, targets) in enumerate(val_loader):
-      
-            inputs, targets = inputs.to(device, non_blocking=True), targets.to(device, non_blocking=True)
-            
-          
-            predicted_mask = model(inputs.to(device, non_blocking=True))
-
-            if predicted_mask.size() != targets.size():
-                raise ValueError(f"Validation shape mismatch: predicted_mask={predicted_mask.size()}, targets={targets.size()}")
-
-           
-            combined_loss, mask_loss, hybrid_loss = criterion(
-                predicted_mask.to(device), 
-                inputs.to(device), 
-                targets.to(device)
-            )
-
-    
-            val_combined_loss += combined_loss.item()
-            val_mask_loss += mask_loss.item()
-            val_hybrid_loss += hybrid_loss.item()
-
-
-    avg_combined_loss = val_combined_loss / len(val_loader)
-    avg_mask_loss = val_mask_loss / len(val_loader)
-    avg_hybrid_loss = val_hybrid_loss / len(val_loader)
-
-    return avg_combined_loss, avg_mask_loss, avg_hybrid_loss
+    print(f"Model saved from {model.device} device.")
 
 
 
@@ -91,7 +58,7 @@ def load_model_path_func(load_model_path, model, device):
     if load_model_path is not None:
         if os.path.exists(load_model_path):
             model.load_state_dict(torch.load(load_model_path, map_location=device, weights_only=True))
-            train_logger.info(f"Loaded model from {load_model_path}")
+            train_logger.info(f"Loaded model from {load_model_path} onto {device}")
         else:
             train_logger.info(f"[Train] Model path {load_model_path} does not exist. Starting from scratch.")
         clear_memory_before_training()
@@ -131,11 +98,13 @@ def dataset_sample_information(musdb18_Train_Dataloader, musdb18_Evaluation_Data
 #CHECK IF INPUTS OR TARGETS ARE VALID OR NONE
 def check_inputs_targets_dataset(inputs, targets, batch_idx):
     print(f" batch: {batch_idx} inputs: {inputs.shape} - targets: {targets.shape}")
+    device = inputs.device  # Log the device where the inputs are located
     if inputs is None or targets is None:
        train_logger.warning(f"[Train] Skipping batch {batch_idx} due to None data.")
        train_logger.debug(f"no valid data in {batch_idx}")
     else: 
-        train_logger.debug(f"batch: {batch_idx} is valid.")
+        train_logger.debug(f"batch: {batch_idx} is valid on device {device}")
+        print(f"batch: {batch_idx} is valid on device {device}")
 
 
 
@@ -144,7 +113,7 @@ def print_inputs_targets_shape(inputs, targets, batch_idx):
        train_logger.debug(f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}") 
        train_logger.debug(f"Inputs min={inputs.min().item():.4f}, max={inputs.max().item():.4f}")
        train_logger.debug(f"Targets min={targets.min().item():.4f}, max={targets.max().item():.4f}")
-
+       print(f"Inputs and Targets moved to device: {inputs.device}")
 
         
 
@@ -193,3 +162,16 @@ def return_representive_batch(inputs,targets,predicted_vocals,batch_idx):
       if batch_idx == 1:
          representative_batch = (inputs.detach().cpu(), predicted_vocals.detach().cpu(), targets.detach().cpu())
       return representative_batch
+
+
+
+
+def Return_root_dir():
+    if platform.system()  == "Windows":
+        root_dir = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation"
+    elif platform.system() == "Linux":
+        root_dir = "/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation"
+    else: 
+        raise OSError("Unsupported Platform")
+    return root_dir
+        

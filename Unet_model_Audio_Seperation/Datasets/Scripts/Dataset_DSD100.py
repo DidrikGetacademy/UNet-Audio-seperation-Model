@@ -4,10 +4,21 @@ import librosa
 import numpy as np
 import torch
 from torch.utils.data import Dataset
-from Training.Externals.Logger import setup_logger
-
+import os
+import sys
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+sys.path.insert(0, project_root)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-dataset_logger = setup_logger('dataset_Musdb18',r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
+from Training.Externals.Logger import setup_logger
+from Training.Externals.utils import Return_root_dir
+
+
+
+root_dir = Return_root_dir() #Gets the root directory
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+dataset_logger = setup_logger('dataset_Musdb18',train_log_path)
+
+
 
     #DSD100 dataset returning (mixture_mag, vocals_mag).
     #Each is shape [1, freq, time].
@@ -19,7 +30,7 @@ class DSD100(Dataset):
         sr=44100,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=15,
         max_files=None
     ):
         self.sr = sr
@@ -68,13 +79,15 @@ class DSD100(Dataset):
         #Adjust shape so time dimension matches the formula
         mixture_mag = self._adjust_length(mixture_mag)
         vocals_mag = self._adjust_length(vocals_mag)
-
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(f"[DSD100] Moving tensors to {device}...")
         #Return in shape [1, freq, time]
-        return (
-            torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0),
-            torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0)
-        )
-
+        mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
+        vocals_mag_tensor = torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0).to(device)
+        print(f"[DSD100] Tensors moved to {device}.")
+        
+        return mixture_mag_tensor, vocals_mag_tensor
+        
     def _pad_or_trim(self, audio):
         # 10 s => 441000 samples if sr=44100
         max_length_samples = int(self.sr * self.max_length_seconds)

@@ -7,9 +7,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
+from Training.Externals.utils import Return_root_dir
+
 from Training.Externals.Logger import setup_logger
-train_logger = setup_logger('train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
-diagramdirectory = r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\Diagrams"
+
+root_dir = Return_root_dir() #Gets the root directory
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+
+train_logger = setup_logger('train',train_log_path)
+diagramdirectory = os.path.join(root_dir,"Model_performance_logg/Diagrams")
 os.makedirs(diagramdirectory, exist_ok=True)
 
 
@@ -208,7 +214,7 @@ def log_spectrograms_to_tensorboard(audio, sr, tag, writer, global_step):
 
 
 ####FINE-TUNING#####
-def plot_loss_curves_FineTuning_script_(loss_history_finetuning_epoches, out_path=r"C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\Diagrams\loss_curves_finetuning_epoches.png"):
+def plot_loss_curves_FineTuning_script_(loss_history_finetuning_epoches, out_path=os.path.join(root_dir,"Model_performance_logg/finetuning.png")):
     epochs_count = len(loss_history_finetuning_epoches["combined"])
     epochs = range(1, epochs_count + 1)
     plt.figure(figsize=(10,6))

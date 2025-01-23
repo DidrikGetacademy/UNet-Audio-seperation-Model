@@ -4,13 +4,19 @@ import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import os
+import sys
 from scipy.io.wavfile import write
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.insert(0, project_root)
+from Training.Externals.Functions import Return_root_dir
 
-# Define paths
-onnx_model_path = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\ONNX\model.onnx"
-mixed_audio_path = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Datasets\Dataset_Audio_Folders\Custom_Dataset\Input\withsound(1).WAV"
-vocals_audio_path = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Datasets\Dataset_Audio_Folders\Custom_Dataset\Target\Only_vocals(1).WAV"
-output_dir = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model"
+root_dir = Return_root_dir() #Gets the root directory
+
+onnx_model_path = os.path.join(root_dir,"ONNX/model.onnx")
+mixed_audio_path = os.path.join(root_dir,"Datasets/Dataset_Audio_Folders/Custom_Dataset/Input/withsound(1).wav")
+vocals_audio_path = os.path.join(root_dir,"Datasets/Dataset_Audio_Folders/Custom_Dataset/Target/Only_vocals(1).WAV")
+
+output_dir = os.path.join(root_dir,"ONNX/")
 
 os.makedirs(output_dir, exist_ok=True)
 

@@ -1,12 +1,16 @@
-from Training.Externals.Logger import setup_logger
+
 import torch
 import os
 import sys
 import torch.nn as nn
-from Training.Externals.Logger import setup_logger
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
-train_logger = setup_logger( 'train', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
+from Training.Externals.Logger import setup_logger
+from Training.Externals.utils import Return_root_dir
+root_dir = Return_root_dir() #Gets the root directory
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+
+train_logger = setup_logger( 'train',train_log_path)
 
 
 #MASK-ESTIMATION-LOSS CLASS
@@ -17,10 +21,12 @@ class MaskEstimationLoss(nn.Module):
         self.mse_loss = nn.MSELoss()
 
     def forward(self, predicted_mask, mixture, target):
+            device = predicted_mask.device  # Log the device of the tensors
+            print(f"[MaskEstimationLoss] Moving tensors to {device}...")
 
             #Estimated vocal spectrum from mask
             predicted_vocals = predicted_mask * mixture
-
+            print(f"[MaskEstimationLoss] Predicted vocals on device {device}")
             #l1 loss
             l1 = self.l1_loss(predicted_vocals, target)
 
@@ -38,14 +44,18 @@ class Combinedloss(nn.Module):
         self.hybrid_loss = HybridLoss()
 
     def forward(self, predicted_mask, mixture, target):
+        device = predicted_mask.device  # Log the device of the tensors
+        print(f"[Combinedloss] Predicted mask and target on device {device}")
         # Calculate the mask loss
         mask_loss = self.mask_loss(predicted_mask, mixture, target)
+        print(f"[Combinedloss] Mask loss on device {device}: {mask_loss.item():.6f}")
 
         # Estimated vocals (applying mask to mixture)
         predicted_vocals = predicted_mask * mixture
 
         # Calculate the hybrid loss on the predicted vocals
         hybrid_loss, l1_loss, stft_loss = self.hybrid_loss(predicted_vocals, target)
+        print(f"[Combinedloss] Hybrid loss: {hybrid_loss.item():.6f}, L1 loss: {l1_loss.item():.6f}, STFT loss: {stft_loss.item():.6f}")
 
         # Combine the losses
         combined_loss = 0.5 * mask_loss + 0.5 * hybrid_loss
@@ -64,12 +74,16 @@ class HybridLoss(nn.Module):
         self.mse_loss = nn.MSELoss()
 
     def forward(self, pred, target):
+        device = pred.device  
         pred = pred.float()
         target = target.float()
+        print(f"[HybridLoss] Pred and Target on device {device}")
+
+
         l1 = self.l1_loss(pred, target)
         n_fft = min(1024, pred.size(-1))
         hop_length = 512
-        window = torch.hann_window(n_fft, device=pred.device)
+        window = torch.hann_window(n_fft, device=device)
         batch_size = pred.size(0)
         stft_loss = 0.0
         for i in range(batch_size):

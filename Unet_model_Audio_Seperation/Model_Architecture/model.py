@@ -6,11 +6,11 @@ import os
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
-Model_logger = setup_logger('Model', r'C:\Users\didri\Desktop\UNet-Models\Unet_model_Audio_Seperation\Model_performance_logg\log\Model_Training_logg.txt')
+from Training.Externals.utils import Return_root_dir
+root_dir = Return_root_dir() #Gets the root directory
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
 
-
-
-
+Model_logger = setup_logger('Model', train_log_path)
 
 #Frequency Channel Attention Module (FCAM). Leverage attention mechanisms specifically designed for frequency-domain processing.
 class SpectralAttentionBlock(nn.Module):
@@ -26,7 +26,6 @@ class SpectralAttentionBlock(nn.Module):
 
     def forward(self, x):
         # Attention map along frequency dimension
-       
         freq_attention = self.avg_pool(x)
         freq_attention = self.fc(freq_attention)
         return x * freq_attention
@@ -51,7 +50,7 @@ class SEBlock(nn.Module):
         return x * y
 
 
-# Attention Block: Applies an attention mechanism to enhance the feature representation.
+#Attention Block: Applies an attention mechanism to enhance the feature representation.
 class AttentionBlock(nn.Module):
     def __init__(self, in_channels, gating_channels, inter_channels):
         super(AttentionBlock, self).__init__()
@@ -79,7 +78,7 @@ class AttentionBlock(nn.Module):
         return out
 
 
-# MultiScaleDecoderBlock: Upsamples and concatenates with skip connections, followed by convolution.
+#MultiScaleDecoderBlock: Upsamples and concatenates with skip connections, followed by convolution.
 class MultiScaleDecoderBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(MultiScaleDecoderBlock, self).__init__()
@@ -95,7 +94,7 @@ class MultiScaleDecoderBlock(nn.Module):
     def forward(self, x, skip):
         x = self.up(x)
 
-        # Ensure dimensions match between upsampled x and skip connection
+        #this ensures dimensions match between upsampled x and skip connection
         if x.size(2) != skip.size(2) or x.size(3) != skip.size(3):
             x = F.interpolate(x, size=(skip.size(2), skip.size(3)), mode='bilinear', align_corners=False)
 
@@ -105,22 +104,22 @@ class MultiScaleDecoderBlock(nn.Module):
         return out
 
 
-# UNet Model: Includes encoder, bottleneck, decoder, and attention blocks.
+#UNet Model: Includes encoder, bottleneck, decoder, and attention blocks.
 class UNet(nn.Module):
     def __init__(self, in_channels=1, out_channels=1, features=[64, 128, 256, 512]):
         super(UNet, self).__init__()
         self.encoder = nn.ModuleList()
         prev_channels = in_channels
 
-        # Encoder
+        #Encoder
         for feature in features:
             self.encoder.append(self.conv_block(prev_channels, feature))
             prev_channels = feature
 
-        # Bottleneck
+        #Bottleneck
         self.bottleneck = self.conv_block(features[-1], features[-1] * 2)
 
-        # Decoder
+        #Decoder
         self.decoder = nn.ModuleList()
         reversed_features = list(reversed(features))
         for idx, feature in enumerate(reversed_features):
@@ -128,7 +127,7 @@ class UNet(nn.Module):
             self.decoder.append(MultiScaleDecoderBlock(input_channels, feature))
             self.decoder.append(AttentionBlock(feature, feature, feature // 2))
 
-        # Final convolution to predict the mask
+        #Final convolution to predict the mask
         self.final_conv = nn.Sequential(
             nn.Conv2d(features[0], out_channels, kernel_size=1),
             nn.Sigmoid()
@@ -151,16 +150,16 @@ class UNet(nn.Module):
         x = x.to(dtype=torch.float32)
         skip_connections = []
 
-        # Encoder
+        #Encoder
         for enc in self.encoder:
             x = enc(x)
             skip_connections.append(x)
             x = F.max_pool2d(x, kernel_size=2, stride=2)
 
-        # Bottleneck
+        #Bottleneck
         x = self.bottleneck(x)
 
-        # Decoder with skip connections and attention
+        #Decoder with skip connections and attention
         skip_connections = skip_connections[::-1]
         for idx in range(0, len(self.decoder), 2):
             dec_block = self.decoder[idx]
@@ -169,17 +168,17 @@ class UNet(nn.Module):
             x = dec_block(x, skip_connections[idx // 2])
             x = att_block(skip_connections[idx // 2], x)
 
-        # Predict mask
+        #Predict mask
         mask = self.final_conv(x)
 
-        # Apply mask to the input mixture
+        #Apply mask to the input mixture
         output = mask * x
 
-        # Ensure output matches input dimensions
+        #Ensure output matches input dimensions
         if output.size() != x.size():
             output = F.interpolate(output, size=x.size()[2:], mode='bilinear', align_corners=False)
             mask = F.interpolate(mask, size=x.size()[2:], mode='bilinear', align_corners=False)
 
         Model_logger.debug(f"Final mask shape: {mask.shape}, Final output shape: {output.shape}")
 
-        return mask, output  # Return both mask and output for debugging or loss computation
+        return mask, output  #Return both mask and output for debugging or loss computation

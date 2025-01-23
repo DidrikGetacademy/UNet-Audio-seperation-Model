@@ -9,13 +9,14 @@ sys.path.insert(0, project_root)  # Use insert(0) to prioritize this path
 
 from Datasets.Scripts.Dataset_Musdb18 import MUSDB18StemDataset
 from Model_Architecture.model import UNet
+from Training.Externals.Functions import Return_root_dir
 
-# Logging initialization
-print("Project root added to sys.path.")
-print(f"Project root: {project_root}")
+root_dir = Return_root_dir() #Gets the root directory
+
+MUSDB18_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/musdb18")
 
 # Load the dataset
-root_dir = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Datasets\Dataset_Audio_Folders\musdb18"
+root_dir = MUSDB18_dir
 print(f"Loading dataset from: {root_dir}")
 dataset = MUSDB18StemDataset(root_dir=root_dir, subset="train")
 print("Dataset loaded successfully.")
@@ -45,7 +46,7 @@ print("Initializing the UNet model.")
 model = UNet(in_channels=1, out_channels=1)
 
 # Load model weights
-model_path = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\Model_weights\Pre_trained\best_model_epoch-19.pth"
+model_path = os.path.join(root_dir,"Model_Weights/Onnx_model")
 if not os.path.exists(model_path):
     raise FileNotFoundError(f"Model weights not found at: {model_path}")
 
@@ -56,7 +57,7 @@ model.eval()
 print("Model set to evaluation mode.")
 
 # Convert to ONNX
-onnx_path = r"C:\Users\didri\Desktop\UNet Models\UNet_vocal_isolation_model\ONNX\model.onnx"
+onnx_path = os.path.join(root_dir,"ONNX/model.onnx")
 print(f"Saving the model to ONNX format at: {onnx_path}")
 
 try:
