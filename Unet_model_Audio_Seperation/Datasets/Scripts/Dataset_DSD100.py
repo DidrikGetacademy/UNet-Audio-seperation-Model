@@ -30,7 +30,7 @@ class DSD100(Dataset):
         sr=44100,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=15,
+        max_length_seconds=10,
         max_files=None
     ):
         self.sr = sr
@@ -64,6 +64,13 @@ class DSD100(Dataset):
         mixture, _ = librosa.load(mixture_path, sr=self.sr, mono=True)
         vocals, _ = librosa.load(vocals_path, sr=self.sr, mono=True)
 
+
+        max_start_sample = len(mixture) - int(self.sr * self.max_length_seconds)
+        start_sample = np.random.randint(0, max_start_sample)
+
+        mixture = mixture[start_sample:start_sample + int(self.sr * self.max_length_seconds)]
+        vocals = vocals[start_sample:start_sample + int(self.sr * self.max_length_seconds)]
+
         #Pad or trim to exact # of samples
         mixture = self._normalize(self._pad_or_trim(mixture))
         vocals = self._normalize(self._pad_or_trim(vocals))
@@ -85,7 +92,12 @@ class DSD100(Dataset):
         mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
         vocals_mag_tensor = torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0).to(device)
         print(f"[DSD100] Tensors moved to {device}.")
-        
+        print(f"[DSD100] Input_mag_tensor shape: {mixture_mag_tensor.shape}, "
+            f"device: {mixture_mag_tensor.device}, "
+            f"target_mag_tensor shape: {vocals_mag_tensor.shape}, "
+            f"device: {vocals_mag_tensor.device}")
+
+
         return mixture_mag_tensor, vocals_mag_tensor
         
     def _pad_or_trim(self, audio):
@@ -93,6 +105,7 @@ class DSD100(Dataset):
         max_length_samples = int(self.sr * self.max_length_seconds)
         if len(audio) < max_length_samples:
             return np.pad(audio, (0, max_length_samples - len(audio)), mode='constant')
+        print(f"Returning audio with max_length_samples: {max_length_samples}")
         return audio[:max_length_samples]
 
     def _normalize(self, audio):

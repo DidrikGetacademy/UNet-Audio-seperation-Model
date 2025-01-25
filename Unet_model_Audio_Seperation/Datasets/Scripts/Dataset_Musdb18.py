@@ -33,7 +33,7 @@ class MUSDB18StemDataset(Dataset):
         sr=44100,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=15,
+        max_length_seconds=10,
         max_files=None,
         validate_files=False
     ):
@@ -73,6 +73,13 @@ class MUSDB18StemDataset(Dataset):
             mixture = self._to_mono(mixture)
             vocals = self._to_mono(vocals)
 
+       
+            max_start_sample = len(mixture) - int(self.sr * self.max_length_seconds)
+            start_sample = np.random.randint(0, max_start_sample)
+
+            mixture = mixture[start_sample:start_sample + int(self.sr * self.max_length_seconds)]
+            vocals = vocals[start_sample:start_sample + int(self.sr * self.max_length_seconds)]
+
             # Pad/trim
             mixture = self._normalize(self._pad_or_trim(mixture))
             vocals = self._normalize(self._pad_or_trim(vocals))
@@ -97,7 +104,12 @@ class MUSDB18StemDataset(Dataset):
             vocals_mag_tensor = torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0).to(device)
 
             print(f"[MUSDB18] Tensors moved to {device}.")
-            
+            print(f"[MUSDB18] Input_mag_tensor shape: {mixture_mag_tensor.shape}, "
+                f"device: {mixture_mag_tensor.device}, dtype: {mixture_mag_tensor.dtype}, "
+                f"target_mag_tensor shape: {vocals_mag_tensor.shape}, "
+                f"device: {vocals_mag_tensor.device}, dtype: {vocals_mag_tensor.dtype}")
+
+
             return mixture_mag_tensor, vocals_mag_tensor
         except Exception as e:
             data_logger.error(f"Error processing file {file_path}: {e}")
@@ -113,6 +125,7 @@ class MUSDB18StemDataset(Dataset):
         max_length_samples = int(self.sr * self.max_length_seconds)
         if len(audio) < max_length_samples:
             return np.pad(audio, (0, max_length_samples - len(audio)), mode='constant')
+        print(f"Returning audio with max_length_samples: {max_length_samples}")
         return audio[:max_length_samples]
 
     def _normalize(self, audio):

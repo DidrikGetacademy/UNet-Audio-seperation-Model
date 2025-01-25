@@ -2,6 +2,14 @@ import torch
 import deepspeed
 import os
 
+print("CUDA device count:", torch.cuda.device_count())
+for i in range(torch.cuda.device_count()):
+    print(f"Device {i}: {torch.cuda.get_device_name(i)}")
+
+print(torch.cuda.is_available())  # Should return True
+print(torch.cuda.current_device())
+print(torch.cuda.get_device_name(0))  # Should print the name of your AMD GPU
+
 def check_deepspeed_compatibility():
     # Check PyTorch version and CUDA
     print("Checking PyTorch and CUDA:")

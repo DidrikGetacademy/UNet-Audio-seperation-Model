@@ -2,18 +2,19 @@ import matplotlib.pyplot as plt
 import sys
 import os
 import librosa
+import torch
 import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
-
 from Training.Externals.Logger import setup_logger
+
+
 
 root_dir = Return_root_dir() #Gets the root directory
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
-
 train_logger = setup_logger('train',train_log_path)
 diagramdirectory = os.path.join(root_dir,"Model_performance_logg/Diagrams")
 os.makedirs(diagramdirectory, exist_ok=True)
@@ -22,9 +23,6 @@ os.makedirs(diagramdirectory, exist_ok=True)
 
 
 
-
-
-##TRAINING-EPOCHES###### TRAINING-EPOCHES ####
 def plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path="loss_curves_training_epoches.png"):
     epochs_count = len(loss_history_Epoches["Total_loss_per_epoch"])
 
@@ -35,36 +33,34 @@ def plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path="los
         print(f"Error: Mismatch between epochs ({epochs_count}) and Total_loss_per_epoch ({len(loss_history_Epoches['Total_loss_per_epoch'])}).")
         train_logger.error(f"Epoch Loss Mismatch: Expected {epochs_count}, Found {len(loss_history_Epoches['Total_loss_per_epoch'])}.") 
         return  
-    
+
     epochs = list(range(1, epochs_count + 1))
+    
+    # Calculate min and max values manually
+    y_min, y_max = float('inf'), float('-inf')
+
+    # Update min/max based on the lists
+    for loss_name in ["mask_loss", "hybrid_loss", "combined", "Total_loss_per_epoch"]:
+        loss_list = loss_history_Epoches.get(loss_name, [])
+        if loss_list:  # Only consider non-empty lists
+            y_min = min(y_min, min(loss_list))
+            y_max = max(y_max, max(loss_list))
+
+    # Adjust y-axis for better visibility if valid min/max were found
+    if y_min < float('inf') and y_max > float('-inf'):
+        plt.ylim([y_min * 0.9, y_max * 1.1]) 
 
     plt.figure(figsize=(12, 6))
 
-    # Dynamisk skalering for y-aksen
-    y_min = min(
-        min(loss_history_Epoches["mask_loss"], default=0),
-        min(loss_history_Epoches["hybrid_loss"], default=0),
-        min(loss_history_Epoches["combined"], default=0),
-        min(loss_history_Epoches["Total_loss_per_epoch"], default=0),
-    )
-    y_max = max(
-        max(loss_history_Epoches["mask_loss"], default=1),
-        max(loss_history_Epoches["hybrid_loss"], default=1),
-        max(loss_history_Epoches["combined"], default=1),
-        max(loss_history_Epoches["Total_loss_per_epoch"], default=1),
-    )
-    plt.ylim([y_min * 0.9, y_max * 1.1])  # Juster y-aksen for bedre synlighet
-
-    if len(loss_history_Epoches["mask_loss"]) > 0:
-        plt.plot(epochs, loss_history_Epoches["mask_loss"], label="mask_loss", color="blue", linewidth=2)
-
-    if len(loss_history_Epoches["hybrid_loss"]) > 0:
-        plt.plot(epochs, loss_history_Epoches["hybrid_loss"], label="hybrid_loss", color="green", linewidth=2)
-
-    if len(loss_history_Epoches["combined"]) > 0:
-        plt.plot(epochs, loss_history_Epoches["combined"], label="Combined-loss", color="yellow", linewidth=2)
-
-    plt.plot(epochs, loss_history_Epoches["Total_loss_per_epoch"], label="Total_loss_per_epoch", color="purple", linewidth=2)
+    # Plot each loss curve if they exist
+    for loss_name, label, color in [
+        ("mask_loss", "mask_loss", "blue"),
+        ("hybrid_loss", "hybrid_loss", "green"),
+        ("combined", "Combined-loss", "yellow"),
+        ("Total_loss_per_epoch", "Total_loss_per_epoch", "purple")
+    ]:
+        if len(loss_history_Epoches.get(loss_name, [])) > 0:
+            plt.plot(epochs, loss_history_Epoches[loss_name], label=label, color=color, linewidth=2)
 
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
@@ -75,9 +71,9 @@ def plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path="los
     plt.xticks(range(1, epochs_count + 1))
     plt.xlim([1, epochs_count])
 
-    # Status-tekst
+    # Status-text for evaluating the performance
+    Final_loss = loss_history_Epoches["combined"][-1] if len(loss_history_Epoches["combined"]) > 0 else 0
     if epochs_count > 0:
-        Final_loss = loss_history_Epoches["combined"][-1]
         if Final_loss < 0.01:
             status_text = f"Epoch {epochs_count}: Outstanding! Loss is exceptionally low ({Final_loss:.4f}). Great job!"
         elif Final_loss < 0.05:
@@ -96,7 +92,7 @@ def plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path="los
     plt.text(0.5, 0.5, status_text, fontsize=12, transform=plt.gca().transAxes,
              bbox=dict(facecolor='white', alpha=0.7))
 
-    # Lagre plottet
+    # Save the plot
     base, ext = os.path.splitext(out_path)
     if ext.lower() not in [".png", ".jpg", ".jpeg", ".svg", ".pdf"]:
         out_path = base + ".png"
@@ -181,33 +177,25 @@ def plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path="los
 
 
 
-
-
 def create_loss_diagrams(loss_history_Batches, loss_history_Epoches):
-    train_logger.info("Creating Diagrams now")
-    batches_figpath = os.path.join(diagramdirectory, "loss_curves_training_batches.png")
-    epoch_figpath = os.path.join(diagramdirectory, "loss_curves_training_epoches.png")
-    plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path=batches_figpath)
-    plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path=epoch_figpath)
+    train_logger.info("Starting diagram creation process.")
 
+    # Check if loss history dictionaries have values
+    if not any(len(v) > 0 for v in loss_history_Batches.values()):
+        train_logger.warning("Loss history for batches is empty. Skipping batch loss diagram creation.")
+    else:
+        batches_figpath = os.path.join(diagramdirectory, "loss_curves_training_batches.png")
+        plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path=batches_figpath)
+        train_logger.info(f"Batch loss diagram saved at {batches_figpath}.")
 
+    if not any(len(v) > 0 for v in loss_history_Epoches.values()):
+        train_logger.warning("Loss history for epochs is empty. Skipping epoch loss diagram creation.")
+    else:
+        epoch_figpath = os.path.join(diagramdirectory, "loss_curves_training_epoches.png")
+        plot_loss_curves_Training_script_epoches(loss_history_Epoches, out_path=epoch_figpath)
+        train_logger.info(f"Epoch loss diagram saved at {epoch_figpath}.")
 
-
-#Logs spectrograms too tensorboard for visualisation
-def log_spectrograms_to_tensorboard(audio, sr, tag, writer, global_step):
-    stft = librosa.stft(audio)
-    stft_db = librosa.amplitude_to_db(np.abs(stft), ref=np.max())
-
-    fig, ax = plt.subplots(figsize=(10, 4))
-    librosa.display.specshow(stft_db, sr=sr, x_axis='time', y_axis='log', ax=ax)
-    ax.set_title(tag)
-    fig.colorbar(ax.images[0], ax=ax)
-    
-    # Add the figure to TensorBoard
-    writer.add_figure(tag, fig, global_step=global_step)
-    plt.close(fig)
-
-
+    train_logger.info("Diagram creation process completed.")
 
 
 

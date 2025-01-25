@@ -2,6 +2,7 @@ import torch
 import gc
 import os
 import sys
+import matplotlib.pyplot as plt
 import shutil
 import platform
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
@@ -18,31 +19,28 @@ train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Traini
 train_logger = setup_logger('train',train_log_path)
 os.makedirs(Model_CheckPoint, exist_ok=True)
 
-    
-def save_model_checkpoint(avg_epoch_loss, epoch, model, best_loss,  trigger_times):
-    global best_model_path 
-    if avg_epoch_loss < best_loss:
-        best_loss = avg_epoch_loss
-        best_model_path = os.path.join(Model_CheckPoint, f"best_model_epoch-{epoch}.pth")
-        torch.save(model.state_dict(), best_model_path)
-        train_logger.info(f"[Train] New best model saved at {best_model_path} with loss {best_loss:.6f}")
-        print(f"Model saved from {model.device} device.")
-        trigger_times = 0  
-    else:
-        train_logger.info(f"[Train] No improvement in loss for epoch {epoch + 1} with loss: {avg_epoch_loss}. Best loss remains {best_loss:.6f}. Trigger_times: {trigger_times}")
-        trigger_times += 1
-
-    return best_loss, trigger_times
 
 
 
 
-def save_final_model(model, Final_model_path):
-    os.makedirs(os.path.dirname(Final_model_path), exist_ok=True) 
-    torch.save(model.state_dict(), os.path.join(Final_model_path, "final_model.pth"))
-    train_logger.info(f"[Train] Final model saved at {Final_model_path}")
-    print(f"Model saved from {model.device} device.")
+def save_representative_batch(representative_batch, save_dir="/mnt/c/Users/didri/Desktop/UNet-Models/Unet_model_Audio_Seperation/Model_Performance_logg/Diagrams", file_prefix="batch"):
+    inputs, predicted_vocals, targets = representative_batch
 
+    # Ensure the save directory exists
+    os.makedirs(save_dir, exist_ok=True)
+
+    for i, (data, title) in enumerate(zip(
+        [inputs[0], predicted_vocals[0], targets[0]], 
+        ["Input", "Predicted_Vocals", "Target"]
+    )):
+        plt.figure(figsize=(10, 6))
+        plt.title(title)
+        plt.specgram(data.numpy(), NFFT=2048, Fs=44100, noverlap=1024)
+        plt.colorbar()
+        file_path = os.path.join(save_dir, f"{file_prefix}_{title.replace(' ', '_')}.png")
+        plt.savefig(file_path)
+        plt.close()  # Close the plot to free memory
+        print(f"Saved plot: {file_path}")
 
 
 
@@ -51,20 +49,54 @@ def training_completed():
     torch.cuda.empty_cache()
     gc.collect()
 
+def load_model_path_func(load_model_path, model_engine, model, device):
 
+    if load_model_path:
+        if os.path.isdir(load_model_path):
+            try:
+                # Check for 'latest' file to determine the checkpoint tag
+                latest_file = os.path.join(load_model_path, "latest")
+                if not os.path.isfile(latest_file):
+                    raise FileNotFoundError(f"'latest' file not found in {load_model_path}. Ensure it exists.")
 
+                with open(latest_file, "r") as f:
+                    tag = f.read().strip()
+                
+                print(f"[Train] Attempting to load DeepSpeed checkpoint from {load_model_path} with tag '{tag}'...")
+                train_logger.info(f"[Train] Attempting to load DeepSpeed checkpoint from {load_model_path} with tag '{tag}'...")
 
-def load_model_path_func(load_model_path, model, device):
-    if load_model_path is not None:
-        if os.path.exists(load_model_path):
-            model.load_state_dict(torch.load(load_model_path, map_location=device, weights_only=True))
-            train_logger.info(f"Loaded model from {load_model_path} onto {device}")
+                # Load checkpoint using DeepSpeed
+                model_engine.load_checkpoint(load_model_path, tag=tag)
+                train_logger.info(f"[Train] Successfully loaded DeepSpeed checkpoint from {load_model_path} with tag '{tag}'.")
+                print(f"[Train] Successfully loaded DeepSpeed checkpoint from {load_model_path} with tag '{tag}'.")
+            except Exception as e:
+                train_logger.error(f"[Train] Failed to load DeepSpeed checkpoint from {load_model_path}: {e}")
+                print(f"[Train] Failed to load DeepSpeed checkpoint from {load_model_path}: {e}")
+                raise RuntimeError(f"Failed to load DeepSpeed checkpoint: {e}")
+        elif os.path.isfile(load_model_path):
+            try:
+                # Load standard PyTorch checkpoint
+                print(f"[Train] Attempting to load PyTorch checkpoint from {load_model_path}...")
+                train_logger.info(f"[Train] Attempting to load PyTorch checkpoint from {load_model_path}...")
+
+                checkpoint = torch.load(load_model_path, map_location=device)
+                model.load_state_dict(checkpoint["model_state_dict"])
+                train_logger.info(f"[Train] Successfully loaded PyTorch checkpoint from {load_model_path}.")
+                print(f"[Train] Successfully loaded PyTorch checkpoint from {load_model_path}.")
+            except Exception as e:
+                train_logger.error(f"[Train] Failed to load PyTorch checkpoint from {load_model_path}: {e}")
+                print(f"[Train] Failed to load PyTorch checkpoint from {load_model_path}: {e}")
+                raise RuntimeError(f"Failed to load PyTorch checkpoint: {e}")
         else:
-            train_logger.info(f"[Train] Model path {load_model_path} does not exist. Starting from scratch.")
-        clear_memory_before_training()
+            train_logger.warning(f"[Train] Provided model path {load_model_path} does not exist. Starting training from scratch.")
+            print(f"[Train] Provided model path {load_model_path} does not exist. Starting training from scratch.")
     else:
-        train_logger.info("[Train] No existing model path provided. Starting from scratch.")
-        clear_memory_before_training()
+        train_logger.info("[Train] No model path provided. Starting training from scratch.")
+        print("[Train] No model path provided. Starting training from scratch.")
+
+    # Clear memory after loading
+    clear_memory_before_training()
+
 
 
 
@@ -126,43 +158,45 @@ def Early_break(trigger_times, patience, train_logger):
         return False
 
 
-def Automatic_Fine_Tune(combined_val_loader,combined_train_loader,fine_tuned_model_base_path,Final_model_path):
-        try:
-            fine_tuned_model_path = os.path.join(fine_tuned_model_base_path, "fine_tuned_model.pth")
-            pretrained_model_path = best_model_path if best_model_path else os.path.join(Final_model_path, "final_model.pth")
-            fine_tune_model(
-                pretrained_model_path=pretrained_model_path,
-                fine_tuned_model_path=fine_tuned_model_path,
-                Fine_tuned_training_loader=combined_train_loader,
-                Finetuned_validation_loader=combined_val_loader,
-                learning_rate=1e-3,
-                fine_tune_epochs=6,
-            )
-            train_logger.info("Fine-tuning completed.")
-        except Exception as e:
-            train_logger.error(f"Error during fine-tuning: {e}")
+def Automatic_Fine_Tune(combined_val_loader, combined_train_loader, fine_tuned_model_base_path, Final_model_path, best_model_path):
+    try:
+        fine_tuned_model_path = os.path.join(fine_tuned_model_base_path, "fine_tuned_model.pth")
+        pretrained_model_path = best_model_path if best_model_path else os.path.join(Final_model_path, "final_model.pth")
+        fine_tune_model(
+            pretrained_model_path=pretrained_model_path,
+            fine_tuned_model_path=fine_tuned_model_path,
+            Fine_tuned_training_loader=combined_train_loader,
+            Finetuned_validation_loader=combined_val_loader,
+            learning_rate=1e-3,
+            fine_tune_epochs=6,
+        )
+        train_logger.info("Fine-tuning completed.")
+    except Exception as e:
+        train_logger.error(f"Error during fine-tuning: {e}")
 
 
-
-def save_best_model(model,best_model_path,Final_model_path,train_logger):
-    if best_model_path is not None and  os.path.exists(best_model_path):
-        os.makedirs(Final_model_path, exist_ok=True)
-        final_pth = os.path.join(Final_model_path, "final_model_best_model.pth")
-        shutil.copyfile(best_model_path,final_pth)
-        train_logger.info(f"[Train] Copied best checkpoint and changed it's name to final_model_best_model.pth{best_model_path} -> {final_pth}")
-    else: 
-        save_final_model(model, Final_model_path)
-        train_logger.info(f"[Train] Copied Last Checkpoint of the epoch loop. {best_model_path} -> {Final_model_path}")
-
-
-
-
-                    
-def return_representive_batch(inputs,targets,predicted_vocals,batch_idx):
-      if batch_idx == 1:
-         representative_batch = (inputs.detach().cpu(), predicted_vocals.detach().cpu(), targets.detach().cpu())
-      return representative_batch
-
+def save_best_model(model_engine, best_model_path, final_model_dir, train_logger):
+    try:
+        if model_engine and best_model_path is None:
+            # Save model state using model_engine
+            os.makedirs(final_model_dir, exist_ok=True)
+            final_model_path = os.path.join(final_model_dir, "final_model_best_model.pth")
+            torch.save(model_engine.state_dict(), final_model_path)
+            train_logger.info(f"[Train] Model saved using model_engine at: {final_model_path}")
+            print(f"[Train] Model saved using model_engine: {final_model_path}")
+        elif best_model_path is not None and os.path.exists(best_model_path):
+            # Save the best checkpoint file
+            os.makedirs(final_model_dir, exist_ok=True)
+            final_model_path = os.path.join(final_model_dir, "final_model_best_model.pth")
+            shutil.copyfile(best_model_path, final_model_path)
+            train_logger.info(f"[Train] Copied best checkpoint to final model: {best_model_path} -> {final_model_path}")
+            print(f"[Train] Best model saved as: {final_model_path}")
+        else:
+            train_logger.warning(f"[Train] Neither model_engine nor best_model_path provided.")
+            print(f"[Train] No valid best model found to save.")
+    except Exception as e:
+        train_logger.error(f"[Train] Error saving best model: {str(e)}")
+        print(f"[Train] Error saving best model: {str(e)}")
 
 
 

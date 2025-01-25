@@ -3,12 +3,16 @@ import sys
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, ConcatDataset
+import torch.multiprocessing as mp
 
+# Set the start method for multiprocessing to avoid conflicts
+mp.set_start_method('spawn', force=True)
 # Adjust project root if necessary
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Datasets.Scripts.Dataset_Musdb18 import MUSDB18StemDataset
 from Datasets.Scripts.Dataset_DSD100 import DSD100
+from Datasets.Scripts.Custom_audio_dataset import CustomAudioDataset
 from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
 
@@ -46,21 +50,21 @@ def robust_collate_fn(batch):
     inputs_tensor = torch.stack(padded_inputs, dim=0)
     targets_tensor = torch.stack(padded_targets, dim=0)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"[DataLoader] Moving batch to {device}...")
-    inputs_tensor = inputs_tensor.to(device)
-    targets_tensor = targets_tensor.to(device)
-    print(f"[DataLoader] Batch moved to {device}.")
+    if inputs_tensor.is_cpu:
+        inputs_tensor = inputs_tensor.pin_memory()
+        targets_tensor = targets_tensor.pin_memory()
+   
     
     return inputs_tensor, targets_tensor
 
 def create_dataloaders(
+    custom_dataset_dir,
     musdb18_dir,
     dsd100_dir,
-    batch_size=8,
-    num_workers=0,  # Set num_workers to 0 to avoid multiprocessing issues
+    batch_size=0,
+    num_workers=6,
     sampling_rate=44100,
-    max_length_seconds=15,
+    max_length_seconds=10,
     max_files_train=None,
     max_files_val=None,
 ):
@@ -75,6 +79,24 @@ def create_dataloaders(
         validate_files=False,
     )
 
+    custom_mixed_train_dataset = CustomAudioDataset(
+        input_dir=os.path.join(custom_dataset_dir, 'Input'),
+        target_dir=os.path.join(custom_dataset_dir, 'Target'),
+        sr=sampling_rate,
+        n_fft=1024,
+        hop_length=512,
+        max_length_seconds=max_length_seconds,
+    )
+    
+    # Same for validation
+    custom_mixed_val_dataset = CustomAudioDataset(
+        input_dir=os.path.join(custom_dataset_dir, 'Input'),
+        target_dir=os.path.join(custom_dataset_dir, 'Target'),
+        sr=sampling_rate,
+        n_fft=1024,
+        hop_length=512,
+        max_length_seconds=max_length_seconds,
+    )
     musdb18_val_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
         subset='test',
@@ -106,15 +128,14 @@ def create_dataloaders(
         max_files=max_files_val,
     )
 
-    combined_train_dataset = ConcatDataset([musdb18_train_dataset, dsd100_dev])
-    combined_val_dataset = ConcatDataset([musdb18_val_dataset, dsd100_test])
+    combined_train_dataset = ConcatDataset([custom_mixed_train_dataset,musdb18_train_dataset, dsd100_dev])
+    combined_val_dataset = ConcatDataset([custom_mixed_val_dataset,musdb18_val_dataset, dsd100_test])
 
     train_loader = DataLoader(
         combined_train_dataset,
         batch_size=batch_size,
         shuffle=True,
         num_workers=num_workers,
-        pin_memory=True,
         drop_last=True,
         collate_fn=robust_collate_fn,
     )
@@ -124,7 +145,6 @@ def create_dataloaders(
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
-        pin_memory=True,
         drop_last=True,
         collate_fn=robust_collate_fn,
     )
