@@ -261,9 +261,6 @@ def train(start_training=True):
 
 
 
-
-               
-
                 # Calculate average losses for epoch
                 maskloss_avg, hybridloss_avg, combined_loss_avg = Get_calculated_average_loss_from_batches()
 
