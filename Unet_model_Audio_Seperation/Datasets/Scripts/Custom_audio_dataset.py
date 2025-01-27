@@ -14,7 +14,7 @@ train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Traini
 data_logger = setup_logger( 'dataloader_logger',train_log_path)
 
 class CustomAudioDataset(Dataset):
-    def __init__(self, input_dir, target_dir, sr=44100, n_fft=1024, hop_length=512, max_length_seconds=10):
+    def __init__(self, input_dir, target_dir, sr=44100, n_fft=1024, hop_length=512, max_length_seconds=10,max_files=None):
         self.input_dir = input_dir
         self.target_dir = target_dir
         self.sr = sr
@@ -25,7 +25,15 @@ class CustomAudioDataset(Dataset):
         self.target_files = sorted([f for f in os.listdir(target_dir) if f.endswith('.WAV')])
         data_logger.info(f"Dataset initialized with inputfiles:  {len(self.input_files)} valid files. & targetfiles : {len(self.target_files)} valid files.")
         assert len(self.input_files) == len(self.target_files), "Mismatch between input and target files."
+        if max_files is not None:
+            self.input_files = self.input_files[:max_files]
+            self.target_files = self.target_files[:max_files]
+    
+        data_logger.info(f"Dataset initialized with {len(self.input_files)} input files and {len(self.target_files)} target files.")
+        assert len(self.input_files) == len(self.target_files), "Mismatch between input and target files."
 
+
+        
     def __len__(self):
         return len(self.input_files)
 
@@ -53,18 +61,16 @@ class CustomAudioDataset(Dataset):
         input_mag = np.abs(input_stft)
         target_mag = np.abs(target_stft)
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+        
         # Convert to tensors
         input_mag_tensor = torch.tensor(input_mag, dtype=torch.float32).unsqueeze(0).to(device)
         target_mag_tensor = torch.tensor(target_mag, dtype=torch.float32).unsqueeze(0).to(device)
-        print(f"[Custom_dataset] Input_mag_tensor shape: {input_mag_tensor.shape}, "
-                f"device: {input_mag_tensor.device}, dtype: {input_mag_tensor.dtype}, "
-                f"target_mag_tensor shape: {target_mag_tensor.shape}, "
-                f"device: {target_mag_tensor.device}, dtype: {target_mag_tensor.dtype}")
+
 
         return input_mag_tensor, target_mag_tensor
 
     def _pad_or_trim(self, audio, max_length_samples):
         if len(audio) < max_length_samples:
             return np.pad(audio, (0, max_length_samples - len(audio)), mode='constant')
-        print(f"Returning audio with max_length_samples: {max_length_samples}")
         return audio[:max_length_samples]

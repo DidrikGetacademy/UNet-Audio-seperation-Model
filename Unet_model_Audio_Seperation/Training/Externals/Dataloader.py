@@ -15,16 +15,14 @@ from Datasets.Scripts.Dataset_DSD100 import DSD100
 from Datasets.Scripts.Custom_audio_dataset import CustomAudioDataset
 from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
-
-
-root_dir = Return_root_dir() #Gets the root directory
+root_dir = Return_root_dir() 
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
-
 data_loader = setup_logger(  'dataloader', train_log_path)
 TensorBoard_log_dir = os.path.join(root_dir, "Model_Performance_logg/Tensorboard")
 
 
 def robust_collate_fn(batch):
+    
     # 2D cropping and padding:
     batch = [item for item in batch if item is not None]
     if not batch:
@@ -49,12 +47,20 @@ def robust_collate_fn(batch):
 
     inputs_tensor = torch.stack(padded_inputs, dim=0)
     targets_tensor = torch.stack(padded_targets, dim=0)
+    print(f"Inputs tensor min: {inputs_tensor.min()}, max: {inputs_tensor.max()}, mean: {inputs_tensor.mean()}")
+    print(f"Targets tensor min: {targets_tensor.min()}, max: {targets_tensor.max()}, mean: {targets_tensor.mean()}")
+    data_loader.debug(f"Inputs tensor min: {inputs_tensor.min()}, max: {inputs_tensor.max()}, mean: {inputs_tensor.mean()}")
+    data_loader.debug(f"Targets tensor min: {targets_tensor.min()}, max: {targets_tensor.max()}, mean: {targets_tensor.mean()}")
 
     if inputs_tensor.is_cpu:
         inputs_tensor = inputs_tensor.pin_memory()
         targets_tensor = targets_tensor.pin_memory()
    
-    
+    print(f"Batch sizes: inputs - {len(inputs)}, targets - {len(targets)}")
+    print(f"Padded inputs shape: {inputs_tensor.shape}, Padded targets shape: {targets_tensor.shape}")
+    data_loader.debug(f"Padded inputs shape: {inputs_tensor.shape}, Padded targets shape: {targets_tensor.shape}")
+    data_loader.debug(f"Batch sizes: inputs - {len(inputs)}, targets - {len(targets)}")
+
     return inputs_tensor, targets_tensor
 
 def create_dataloaders(
@@ -62,11 +68,12 @@ def create_dataloaders(
     musdb18_dir,
     dsd100_dir,
     batch_size=0,
-    num_workers=6,
+    num_workers=4,
     sampling_rate=44100,
     max_length_seconds=10,
     max_files_train=None,
     max_files_val=None,
+    max_files_CustomDataset=None
 ):
     musdb18_train_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
@@ -85,6 +92,7 @@ def create_dataloaders(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
+        max_files=max_files_CustomDataset,
         max_length_seconds=max_length_seconds,
     )
     
@@ -95,6 +103,7 @@ def create_dataloaders(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
+        max_files=max_files_CustomDataset,
         max_length_seconds=max_length_seconds,
     )
     musdb18_val_dataset = MUSDB18StemDataset(
@@ -129,7 +138,9 @@ def create_dataloaders(
     )
 
     combined_train_dataset = ConcatDataset([custom_mixed_train_dataset,musdb18_train_dataset, dsd100_dev])
-    combined_val_dataset = ConcatDataset([custom_mixed_val_dataset,musdb18_val_dataset, dsd100_test])
+
+
+    combined_val_dataset = ConcatDataset([custom_mixed_train_dataset,custom_mixed_val_dataset,musdb18_val_dataset, dsd100_test])
 
     train_loader = DataLoader(
         combined_train_dataset,
@@ -153,5 +164,10 @@ def create_dataloaders(
     data_loader.info(f"Validation dataset size: {len(combined_val_dataset)}")
     print(f"Training dataset size: {len(combined_train_dataset)} samples")
     print(f"Validation dataset size: {len(combined_val_dataset)} samples")
+
+    print(f"Combined train DataLoader size: {len(train_loader.dataset)}")
+    print(f"Combined validation DataLoader size: {len(val_loader.dataset)}")
+    data_loader.debug(f"Combined train DataLoader size: {len(train_loader.dataset)}")
+    data_loader.debug(f"Combined validation DataLoader size: {len(val_loader.dataset)}")
 
     return train_loader, val_loader

@@ -8,9 +8,9 @@ sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
 root_dir = Return_root_dir() #Gets the root directory
-train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_logg.txt")
 
-Model_logger = setup_logger('Model', train_log_path)
+Model_logger = setup_logger('Model.py', train_log_path)
 
 #Frequency Channel Attention Module (FCAM). Leverage attention mechanisms specifically designed for frequency-domain processing.
 class SpectralAttentionBlock(nn.Module):
@@ -26,9 +26,27 @@ class SpectralAttentionBlock(nn.Module):
 
     def forward(self, x):
         # Attention map along frequency dimension
+        Model_logger.debug(f"Input stats - min: {x.min().item()}, max: {x.max().item()}, mean: {x.mean().item()}")
+        Model_logger.debug(f"[SpectralAttentionBlock (FORWARD)] ----> input shape: {x.shape}")
+
         freq_attention = self.avg_pool(x)
+
+        Model_logger.debug(f"[SpectralAttentionBlock (FORWARD)] ----> After avg pool shape: {freq_attention.shape}")
+
         freq_attention = self.fc(freq_attention)
-        return x * freq_attention
+
+        output = x * freq_attention
+
+        Model_logger.debug(f"Freq attention stats - min: {freq_attention.min().item()}, max: {freq_attention.max().item()}, mean: {freq_attention.mean().item()}")
+        Model_logger.debug(f"[SpectralAttentionBlock (FORWARD)] ----> After FC layer shape: {freq_attention.shape}")
+        Model_logger.debug(f"[SpectralAttentionBlock (FORWARD)] ---->   Output shape: {output.shape}")
+        Model_logger.debug(f"Output stats - min: {output.min().item()}, max: {output.max().item()}, mean: {output.mean().item()}")
+
+        return output
+
+
+
+
 
 
 #Squeeze-and-Excitation (SE) Blocks enhance feature maps by modeling inter-channel dependencies
@@ -44,10 +62,25 @@ class SEBlock(nn.Module):
         )
 
     def forward(self, x):
+        assert not torch.isnan(x).any(), "NaN values found in input"
+        assert not torch.isinf(x).any(), "Inf values found in input"
+
+        Model_logger.debug(f"Input to SEBlock - shape: {x.shape}, min: {x.min().item()}, max: {x.max().item()}, mean: {x.mean().item()}")
+
         b, c, _, _ = x.size()
         y = self.avg_pool(x).view(b, c)
-        y = self.fc(y).view(b, c, 1, 1)
-        return x * y
+        Model_logger.debug(f"After AvgPool - shape: {y.shape}, min: {y.min().item()}, max: {y.max().item()}, mean: {y.mean().item()}")
+        assert y.shape == (b, c), f"Shape mismatch in FC layers: expected {(b, c)}, got {y.shape}"
+
+        y = y.view(b, c, 1, 1)
+        output = x * y
+        Model_logger.debug(f"After FC layers - shape: {y.shape}, min: {y.min().item()}, max: {y.max().item()}, mean: {y.mean().item()}")
+
+        return output
+
+
+
+
 
 
 #Attention Block: Applies an attention mechanism to enhance the feature representation.
@@ -70,12 +103,16 @@ class AttentionBlock(nn.Module):
         psi = self.relu(g1 + x1)
         psi = self.sigmoid(self.psi(psi))
 
-        out = x * psi
+        output = x * psi
 
-      
 
-        Model_logger.debug(f"[AttentionBlock] Output shape: {out.shape}, psi min={psi.min().item():.4f}, max={psi.max().item():.4f}")
-        return out
+        Model_logger.debug(f"[AttentionBlock]Attention map (psi) - min: {psi.min().item()}, max: {psi.max().item()}, mean: {psi.mean().item()}")
+        Model_logger.debug(f"[AttentionBlock ]Output stats - min: {output.min().item()}, max: {output.max().item()}, mean: {output.mean().item()}")
+        return output
+
+
+
+
 
 
 #MultiScaleDecoderBlock: Upsamples and concatenates with skip connections, followed by convolution.
@@ -89,6 +126,7 @@ class MultiScaleDecoderBlock(nn.Module):
             nn.ReLU(inplace=True),
             SEBlock(out_channels), 
             SpectralAttentionBlock(out_channels),
+            nn.Dropout(p=0.5),
         )
 
     def forward(self, x, skip):
@@ -102,6 +140,10 @@ class MultiScaleDecoderBlock(nn.Module):
         out = self.conv(x)
         Model_logger.debug(f"[MultiScaleDecoderBlock] Output shape: {out.shape}")
         return out
+
+
+
+
 
 
 #UNet Model: Includes encoder, bottleneck, decoder, and attention blocks.
@@ -140,7 +182,7 @@ class UNet(nn.Module):
             nn.ReLU(inplace=True),
             SEBlock(out_channels),  
             SpectralAttentionBlock(out_channels), 
-            nn.Dropout(p=0.4),
+            nn.Dropout(p=0.5),
             nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
             nn.InstanceNorm2d(out_channels),
             nn.ReLU(inplace=True),
@@ -149,15 +191,18 @@ class UNet(nn.Module):
     def forward(self, x):
         x = x.to(dtype=torch.float32)
         skip_connections = []
+        Model_logger.debug(f"[U-net class(FORWARD)] Input to U-Net: {x.shape}")
 
         #Encoder
-        for enc in self.encoder:
+        for i, enc in self.encoder:
             x = enc(x)
             skip_connections.append(x)
             x = F.max_pool2d(x, kernel_size=2, stride=2)
+            Model_logger.debug(f"[U-net class (FORWARD)]  ---> Encoder block {i} output shape: {x.shape}")
 
         #Bottleneck
         x = self.bottleneck(x)
+        Model_logger.debug(f" [U-net class(FORWARD)] ---> Bottleneck output shape: {x.shape}")
 
         #Decoder with skip connections and attention
         skip_connections = skip_connections[::-1]
@@ -168,17 +213,43 @@ class UNet(nn.Module):
             x = dec_block(x, skip_connections[idx // 2])
             x = att_block(skip_connections[idx // 2], x)
 
-        #Predict mask
+
+        #debug print before final convolution
+        Model_logger.debug(f"[U-net class(FORWARD)]  -----> Before Final Convolution -----> Feature map shape: {x.shape}, min: {x.min().item()}, max: {x.max().item()}")
+
+        #predict mask using the final convolution
         mask = self.final_conv(x)
+        Model_logger.debug(f"[U-net class(FORWARD)]  ---->Final mask shape: {mask.shape}")
+        
+        #debug print after final convolution
+        Model_logger.debug(f"[U-net class(FORWARD)] After Final Convolution-----> Mask shape: {mask.shape}, min: {mask.min().item()}, max: {mask.max().item()}")
 
         #Apply mask to the input mixture
         output = mask * x
 
+        Model_logger.debug(f"[U-net class(FORWARD)] ---> Output before sizing: {output.shape}")
+
         #Ensure output matches input dimensions
         if output.size() != x.size():
+            Model_logger.debug(f"[U-net class(FORWARD)] ---> OUTPUT is getting Resized now with ---> : output:  {output.shape}")
+            Model_logger.debug(f"[U-net class(FORWARD)] ---> mask is getting Resized now with ---> : output:  {mask.shape}")
             output = F.interpolate(output, size=x.size()[2:], mode='bilinear', align_corners=False)
             mask = F.interpolate(mask, size=x.size()[2:], mode='bilinear', align_corners=False)
+            Model_logger.debug(f"[U-net class(FORWARD)] ---> OUTPUT AFTER REZIZING---> : output:  {output.shape}")
+            Model_logger.debug(f"[U-net class(FORWARD)] ---> MASK AFTER REZISING  ---> : output:  {mask.shape}")
 
-        Model_logger.debug(f"Final mask shape: {mask.shape}, Final output shape: {output.shape}")
-
+        Model_logger.debug(f"[U-net class(FORWARD)] Final mask shape: {mask.shape}, Final output shape: {output.shape}")
         return mask, output  #Return both mask and output for debugging or loss computation
+
+
+
+
+
+
+
+def Model_Structure_Information(model):
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    Model_logger.info(f"Total number of parameters: {total_params}")
+    Model_logger.info(f"Trainable parameters: {trainable_params}") 
+    Model_logger.info(f"Model architecture:\n{model}")

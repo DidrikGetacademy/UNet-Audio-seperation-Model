@@ -19,7 +19,7 @@ def logging_avg_loss_epoch(epoch, prev_epoch_loss, epochs, avg_epoch_loss, maskl
     )
 
 
-
+#Ikke i bruk 
 def logging_avg_loss_batches(train_logger,epoch,epochs,avg_combined_loss,avg_mask_loss,avg_hybrid_loss):
     train_logger.info(
     f"[Validation] Epoch {epoch + 1}/{epochs}: "

@@ -10,20 +10,13 @@ import sys
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
-
-
 from Training.Externals.Logger import setup_logger
-
-
 root_dir = Return_root_dir() #Gets the root directory
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
 data_logger = setup_logger( 'dataloader_logger',train_log_path)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-
-#MUSDB18 dataset returning (mixture_mag, vocals_mag)
-#Each is shape [1, freq, time].
 class MUSDB18StemDataset(Dataset):
 
     def __init__(
@@ -97,18 +90,16 @@ class MUSDB18StemDataset(Dataset):
             vocals_mag = self._adjust_length(vocals_mag)
 
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-            print(f"[MUSDB18] Moving tensors to {device}...")
+ 
 
             # Return shape [1, freq, time]
             mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
             vocals_mag_tensor = torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0).to(device)
 
-            print(f"[MUSDB18] Tensors moved to {device}.")
-            print(f"[MUSDB18] Input_mag_tensor shape: {mixture_mag_tensor.shape}, "
-                f"device: {mixture_mag_tensor.device}, dtype: {mixture_mag_tensor.dtype}, "
-                f"target_mag_tensor shape: {vocals_mag_tensor.shape}, "
-                f"device: {vocals_mag_tensor.device}, dtype: {vocals_mag_tensor.dtype}")
-
+            print(f"Mixture shape: {mixture.shape}, Vocals shape: {vocals.shape}")
+            print(f"STFT Mixture magnitude min: {mixture_mag.min()}, max: {mixture_mag.max()}")
+            data_logger.debug(f"Mixture shape: {mixture.shape}, Vocals shape: {vocals.shape}")
+            data_logger.debug(f"STFT Mixture magnitude min: {mixture_mag.min()}, max: {mixture_mag.max()}")
 
             return mixture_mag_tensor, vocals_mag_tensor
         except Exception as e:
@@ -117,7 +108,6 @@ class MUSDB18StemDataset(Dataset):
 
     def _to_mono(self, audio):
         if audio.ndim == 2:
-            # shape => (samples, channels) => mean over channel axis
             return np.mean(audio, axis=1)
         return audio
 
@@ -125,7 +115,6 @@ class MUSDB18StemDataset(Dataset):
         max_length_samples = int(self.sr * self.max_length_seconds)
         if len(audio) < max_length_samples:
             return np.pad(audio, (0, max_length_samples - len(audio)), mode='constant')
-        print(f"Returning audio with max_length_samples: {max_length_samples}")
         return audio[:max_length_samples]
 
     def _normalize(self, audio):
@@ -151,7 +140,7 @@ class MUSDB18StemDataset(Dataset):
                 if self._has_valid_audio(audio):
                     valid_files.append(file)
                 else:
-                    data_logger.warning(f"Skipping invalid audio file: {file}")
+                    data_logger.debug(f"Skipping invalid audio file: {file}")
             except Exception as e:
                 data_logger.error(f"Error loading file '{file}': {e}")
         return valid_files
