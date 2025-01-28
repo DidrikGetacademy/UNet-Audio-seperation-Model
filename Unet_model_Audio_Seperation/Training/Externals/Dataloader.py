@@ -73,42 +73,74 @@ def create_dataloaders(
     max_length_seconds=10,
     max_files_train=None,
     max_files_val=None,
-    max_files_CustomDataset=None
+    val_ratio=0.2,
 ):
+    # Splitting max_files dynamically for training and validation
+    if max_files_train:
+        num_val_files_musdb18 = int(max_files_train * val_ratio)
+        num_train_files_musdb18 = max_files_train - num_val_files_musdb18
+    else:
+        num_val_files_musdb18 = None
+        num_train_files_musdb18 = None
+
+    if max_files_val:
+        num_val_files_dsd100 = int(max_files_val * val_ratio)
+        num_train_files_dsd100 = max_files_val - num_val_files_dsd100
+    else:
+        num_val_files_dsd100 = None
+        num_train_files_dsd100 = None
+
+    # --- TRAINING ---
     musdb18_train_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
-        subset='train',
+        subset="train",
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=max_files_train,
+        max_files=num_train_files_musdb18,
         validate_files=False,
     )
 
-    custom_mixed_train_dataset = CustomAudioDataset(
-        input_dir=os.path.join(custom_dataset_dir, 'Input'),
-        target_dir=os.path.join(custom_dataset_dir, 'Target'),
+    dsd100_train_dataset = DSD100(
+        root_dir=dsd100_dir,
+        subset="Dev",
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_files=max_files_CustomDataset,
         max_length_seconds=max_length_seconds,
+        max_files=num_train_files_dsd100,
     )
-    
-    # Same for validation
-    custom_mixed_val_dataset = CustomAudioDataset(
-        input_dir=os.path.join(custom_dataset_dir, 'Input'),
-        target_dir=os.path.join(custom_dataset_dir, 'Target'),
-        sr=sampling_rate,
-        n_fft=1024,
-        hop_length=512,
-        max_files=max_files_CustomDataset,
-        max_length_seconds=max_length_seconds,
-    )
+
+
+    # --- VALIDATION ---
     musdb18_val_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
-        subset='test',
+        subset="train",
+        sr=sampling_rate,
+        n_fft=1024,
+        hop_length=512,
+        max_length_seconds=max_length_seconds,
+        max_files=num_val_files_musdb18,
+        validate_files=False,
+    )
+
+    dsd100_val_dataset = DSD100(
+        root_dir=dsd100_dir,
+        subset="Dev",
+        sr=sampling_rate,
+        n_fft=1024,
+        hop_length=512,
+        max_length_seconds=max_length_seconds,
+        max_files=num_val_files_dsd100,
+    )
+
+
+
+    # --- EVALUATION ---
+    musdb18_eval_dataset = MUSDB18StemDataset(
+        root_dir=musdb18_dir,
+        subset="test",
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
@@ -117,19 +149,9 @@ def create_dataloaders(
         validate_files=False,
     )
 
-    dsd100_dev = DSD100(
+    dsd100_eval_dataset = DSD100(
         root_dir=dsd100_dir,
-        subset='Dev',
-        sr=sampling_rate,
-        n_fft=1024,
-        hop_length=512,
-        max_length_seconds=max_length_seconds,
-        max_files=max_files_train,
-    )
-
-    dsd100_test = DSD100(
-        root_dir=dsd100_dir,
-        subset='Test',
+        subset="Test",
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
@@ -137,13 +159,9 @@ def create_dataloaders(
         max_files=max_files_val,
     )
 
-    combined_train_dataset = ConcatDataset([custom_mixed_train_dataset,musdb18_train_dataset, dsd100_dev])
-
-
-    combined_val_dataset = ConcatDataset([custom_mixed_train_dataset,custom_mixed_val_dataset,musdb18_val_dataset, dsd100_test])
-
-    train_loader = DataLoader(
-        combined_train_dataset,
+    # Create DataLoaders
+    train_loader = DataLoader( #(combined training datasets).
+        ConcatDataset([musdb18_train_dataset, dsd100_train_dataset]),
         batch_size=batch_size,
         shuffle=True,
         num_workers=num_workers,
@@ -151,8 +169,8 @@ def create_dataloaders(
         collate_fn=robust_collate_fn,
     )
 
-    val_loader = DataLoader(
-        combined_val_dataset,
+    val_loader = DataLoader( #val_loader (combined validation datasets) after each epoch.
+        ConcatDataset([musdb18_val_dataset, dsd100_val_dataset]),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
@@ -160,14 +178,13 @@ def create_dataloaders(
         collate_fn=robust_collate_fn,
     )
 
-    data_loader.info(f"Training dataset size: {len(combined_train_dataset)}")
-    data_loader.info(f"Validation dataset size: {len(combined_val_dataset)}")
-    print(f"Training dataset size: {len(combined_train_dataset)} samples")
-    print(f"Validation dataset size: {len(combined_val_dataset)} samples")
+    eval_loader = DataLoader( #(combined evaluation datasets) to assess the model's final performance on unseen data.
+        ConcatDataset([musdb18_eval_dataset, dsd100_eval_dataset]),
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        drop_last=True,
+        collate_fn=robust_collate_fn,
+    )
 
-    print(f"Combined train DataLoader size: {len(train_loader.dataset)}")
-    print(f"Combined validation DataLoader size: {len(val_loader.dataset)}")
-    data_loader.debug(f"Combined train DataLoader size: {len(train_loader.dataset)}")
-    data_loader.debug(f"Combined validation DataLoader size: {len(val_loader.dataset)}")
-
-    return train_loader, val_loader
+    return train_loader, val_loader, eval_loader

@@ -18,8 +18,7 @@ from Model_Architecture.model import UNet,Model_Structure_Information
 from Training.Externals.Loss_Class_Functions import Combinedloss 
 from Training.Externals.Memory_debugging import log_memory_after_index_epoch,clear_memory_before_training
 from Training.Externals.Loss_Diagram_Values import  create_loss_diagrams
-import logging
-from Training.Externals.Functions import ( training_completed, load_model_path_func, Early_break, save_best_model, Return_root_dir,)
+from Training.Externals.Functions import ( training_completed, load_model_path_func, save_best_model, Return_root_dir,)
 from Training.Externals.Debugging_Values import check_inputs_targets_dataset, print_inputs_targets_shape,dataset_sample_information
 #PATHS
 root_dir = Return_root_dir() #Gets the root directory
@@ -30,7 +29,7 @@ MUSDB18_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/musdb18")
 DSD100_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/DSD100")
 custom_dataset_dir = os.path.join(root_dir,"Datasets/Dataset_Audio_Folders/Custom_Dataset")
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
-train_logger = setup_logger('train', train_log_path,level=logging.INFO)
+train_logger = setup_logger('train', train_log_path)
 with open(os.path.join(root_dir, "Training/ds.config.json"), "r") as f:
     ds_config = json.load(f)
 
@@ -46,7 +45,7 @@ def train(start_training=True):
     epochs = 25
     patience = 5
     best_loss = float('inf')
-    trigger_times = 0
+    trigger_times = 0   
     prev_epoch_loss = None
     best_model_path = None 
     current_step = 0
@@ -85,7 +84,6 @@ def train(start_training=True):
 
     if 'combined_train_loader' not in globals():
          combined_train_loader, combined_val_loader = create_dataloaders(
-            custom_dataset_dir,
             musdb18_dir=MUSDB18_dir,
             dsd100_dir=DSD100_dataset_dir,
             batch_size=ds_config["train_micro_batch_size_per_gpu"], 
@@ -108,19 +106,17 @@ def train(start_training=True):
                 train_logger.info(f"[Train] Epoch {epoch + 1}/{epochs} started.")
                 print(f"[Train] Epoch {epoch + 1}/{epochs} started.")
 
-
-
                 for batch_idx, (inputs, targets) in enumerate(combined_train_loader, start=1):
-       
                     current_step += 1
                     
                     #Prints sample of the dataset.
                     dataset_sample_information(combined_train_loader,combined_val_loader)
 
+
                     #Moves the data to device. 
                     print(f"[Train] Moving batch {batch_idx} data to {device}...")
-                    inputs = inputs.to(device, dtype=torch.float32, non_blocking=True)
-                    targets = targets.to(device, dtype=torch.float32, non_blocking=True)
+                    inputs = inputs.to(device,  non_blocking=True)
+                    targets = targets.to(device, non_blocking=True)
 
 
                     if batch_idx <= 2:
@@ -204,31 +200,11 @@ def train(start_training=True):
                 train_logger.info(f"[Epoch {epoch + 1}] Average Training Loss: {avg_epoch_loss:.6f}")
 
 
-
+               #Validate_ModelEngine
+               
                 prev_epoch_loss_log(train_logger, prev_epoch_loss, avg_epoch_loss, epoch)
 
 
-
-                if avg_epoch_loss < best_loss:
-                    print("New best epoch loss! saving model now")
-                    best_loss = avg_epoch_loss
-                    train_logger.info(f"Avg_epoch_loss={avg_epoch_loss}, bestloss= {best_loss}")
-                    checkpoint_dir = os.path.join(Model_CheckPoint, f"checkpoint_epochsss_{epoch + 1}")
-                    client_sd = {'step': current_step, 'best_loss': best_loss, 'trigger_times': trigger_times}           
-                    try:
-                       model_engine.save_checkpoint(checkpoint_dir,client_sd)
-                       train_logger.info(f"New best model saved to {checkpoint_dir}, [Epoch {epoch + 1}] with client_sd: {client_sd} with loss {avg_epoch_loss:.6f}")
-                    except Exception as e:
-                        train_logger.error(f"Error while saving checkpoint: {e}")
-                else:
-                    trigger_times += 1
-                    train_logger.info(f"NO IMPROVEMENT IN LOSS!. Previous best epoch loss: {best_loss:.6f}, This epoch's loss: {avg_epoch_loss:.6f}, trigger times: {trigger_times}")                      
-
-
-
-                if Early_break(trigger_times, patience):
-                    print(f"[Epoch {epoch + 1}] Early stopping triggered.")
-                    break
 
 
                 # Calculate average losses for epoch
@@ -236,10 +212,10 @@ def train(start_training=True):
 
      
 
-                # Logging memory after each epoch
+                #Logging memory after each epoch
                 log_memory_after_index_epoch(epoch)
 
-                # Logging average loss per epoch
+                #Logging average loss per epoch
                 logging_avg_loss_epoch(epoch, prev_epoch_loss, epochs, avg_epoch_loss, maskloss_avg, hybridloss_avg, train_logger)
 
                 prev_epoch_loss = avg_epoch_loss

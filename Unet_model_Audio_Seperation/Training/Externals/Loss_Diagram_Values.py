@@ -114,7 +114,7 @@ def plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path="los
 
     print(f"Batch Count: {batch_count}, Combined Loss Entries: {len(loss_history_Batches['combined'])}")
 
-    plt.figure(figsize=(14, 7))  # Larger figure for better readability
+    plt.figure(figsize=(14, 7))  
 
     # Plot L1-loss
     if len(loss_history_Batches["mask_loss"]) > 0:
@@ -134,7 +134,7 @@ def plot_loss_curves_Training_script_Batches(loss_history_Batches, out_path="los
 
     # Customize ticks and grid
     plt.grid(True, which="both", linestyle="--", linewidth=0.5, alpha=0.7)
-    plt.yscale("log")  # Use log scale for better visualization
+    plt.yscale("log") 
     if batch_count > 20:
         plt.xticks(range(1, batch_count + 1, max(1, batch_count // 10)))
     plt.xlim([1, batch_count])
