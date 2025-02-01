@@ -8,53 +8,13 @@ import platform
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
-from Training.Externals.Memory_debugging import (  clear_memory_before_training )
-from Fine_tuning.Fine_Tuned_model import fine_tune_model 
+
 from Training.Externals.utils import Return_root_dir
 
 
 root_dir = Return_root_dir() 
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
 Function_logger = setup_logger('Functions.py',train_log_path)
-
-
-
-
-
-
-
-def load_model_path_func(load_model_path, model_engine, model, device):
-    print("Loading Model file....")
-    if load_model_path:
-        if os.path.isdir(load_model_path):
-            try:
-                latest_file = os.path.join(load_model_path, "latest")
-                if not os.path.isfile(latest_file):
-                    raise FileNotFoundError(f"'latest' file not found in {load_model_path}. Ensure it exists.")
-
-                with open(latest_file, "r") as f:
-                    tag = f.read().strip()
-                
-                model_engine.load_checkpoint(load_model_path, tag=tag)
-                Function_logger.info(f"loaded model engine from {load_model_path}")
-            except Exception as e:
-                raise RuntimeError(f"Failed to load DeepSpeed checkpoint: {e}")
-        elif os.path.isfile(load_model_path):
-            try:
-                checkpoint = torch.load(load_model_path, map_location=device)
-                model.load_state_dict(checkpoint["model_state_dict"])
-                Function_logger.info("loaded model engine direct file")
-            except Exception as e:
-                raise RuntimeError(f"Failed to load PyTorch checkpoint: {e}")
-        else:
-            Function_logger.debug(f"[Train] Provided model path {load_model_path} does not exist. Starting training from scratch.")
-    else:
-        Function_logger.info("[Train] No model path provided. Starting training from scratch.")
-
-
-
-
-
 
 
 
@@ -76,6 +36,42 @@ def training_completed():
     torch.cuda.empty_cache()
     gc.collect()
     print("Memory Cleared.")
+
+
+
+
+
+def load_model_path_func(load_model_path, model_engine, model, device):
+    print("Loading Model file....")
+
+    if load_model_path and os.path.isdir(load_model_path):
+        latest_file = os.path.join(load_model_path, "latest")
+
+        if os.path.isfile(latest_file):
+            try:
+                with open(latest_file, "r") as f:
+                    tag = f.read().strip()
+                
+                model_engine.load_checkpoint(load_model_path, tag=tag)
+                Function_logger.info(f"Loaded model checkpoint from {load_model_path}")
+                return  
+            except Exception as e:
+                Function_logger.warning(f"Failed to load DeepSpeed checkpoint, starting from scratch. Error: {e}")
+        else:
+            Function_logger.info(f"No 'latest' file found in {load_model_path}. Starting from scratch.")
+
+    elif load_model_path and os.path.isfile(load_model_path):
+        try:
+            checkpoint = torch.load(load_model_path, map_location=device)
+            model.load_state_dict(checkpoint["model_state_dict"])
+            Function_logger.info("Loaded model from direct file")
+            return  # Successfully loaded, return early.
+        except Exception as e:
+            Function_logger.warning(f"Failed to load PyTorch checkpoint, starting from scratch. Error: {e}")
+
+    # If no checkpoint is found, log and proceed with training from scratch.
+    Function_logger.info("No checkpoint found. Starting training from scratch.")
+
 
 
 

@@ -19,46 +19,41 @@ from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
 from Training.Externals.Dataloader import create_dataloaders
 from Training.Externals.Loss_Diagram_Values import plot_loss_curves_FineTuning_script_
+from Training.Externals.Functions import load_model_path_func
 
+root_dir = Return_root_dir() 
 
-root_dir = Return_root_dir() #Gets the root directory
-pretrained_model_path = os.path.join(root_dir,"Model_Weights/CheckPoints/best_model_epoch-18.pth")
 fine_tuned_model_path = os.path.join(root_dir,"Model_Weights/Fine_Tuned/Model.pth")
 
-# Initialize Logger
-train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/Fine_tune.txt")
 Fine_tune_logger = setup_logger('Fine-Tuning',train_log_path)
 
-# DeepSpeed Configuration
 
-
-ds_config_path = os.path.join(root_dir, "Training/ds.config.json")
-
-# Load DeepSpeed config (You can load and modify it dynamically here)
+ds_config_path = os.path.join(root_dir, "DeepSeed_Configuration/ds_fine_tuning.json")
 import json
 with open(ds_config_path, 'r') as f:
     ds_config = json.load(f)
 
-# Get world size dynamically (number of available GPUs)
-world_size = torch.cuda.device_count()  # or set it manually if needed
+
+world_size = torch.cuda.device_count()  
 train_batch_size = ds_config["train_batch_size"]
 
-# Dynamically calculate micro_batch_size and gradient_accumulation_steps
+
 train_micro_batch_size_per_gpu = train_batch_size // world_size
 gradient_accumulation_steps = train_batch_size // (train_micro_batch_size_per_gpu * world_size)
 
-# Ensure this dynamic calculation makes sense and aligns
+
 assert train_micro_batch_size_per_gpu * gradient_accumulation_steps * world_size == train_batch_size, \
     f"Inconsistent batch sizes: {train_micro_batch_size_per_gpu} * {gradient_accumulation_steps} * {world_size} != {train_batch_size}"
 
 # Update DeepSpeed config dynamically
 ds_config["train_micro_batch_size_per_gpu"] = train_micro_batch_size_per_gpu
 ds_config["gradient_accumulation_steps"] = gradient_accumulation_steps
-ds_config["world_size"] = world_size  # or set manually if needed
+ds_config["world_size"] = world_size 
 
 
-torch.backends.cudnn.benchmark = True  #CUDNN
-torch.set_num_threads(8) #CPU THREADS
+torch.backends.cudnn.benchmark = True 
+torch.set_num_threads(8)
 # Global loss history
 loss_history_finetuning_epoches = {
     "l1": [],
@@ -70,7 +65,7 @@ loss_history_finetuning_epoches = {
 }
 
 def Append_loss_values(loss_history, total_loss, l1_val, mse_val, spectral_val, perceptual_val, multi_scale_val, epoch):
-    #Appends loss values to the loss history and logs them.
+ 
 
     loss_history["l1"].append(l1_val.item())
     loss_history["mse"].append(mse_val.item())
@@ -95,11 +90,11 @@ class CombinedLoss(nn.Module):
         self.l1_loss = nn.L1Loss()
         self.mse_loss = nn.MSELoss()
         Fine_tune_logger.info("Loading VGGish model for perceptual loss...")
-        self.audio_model = torch.hub.load('harritaylor/torchvggish', 'vggish', trust_repo=True).to(device)
+        self.audio_model = torch.hub.load('harritaylor/torchvggish', 'vggish',trust_repo=True).to(device)
         self.audio_model.eval()
         Fine_tune_logger.info("VGGish model loaded and set to evaluation mode.")
 
-    def spectrogram_to_waveform(self, spectrogram, n_fft=2048, hop_length=512):
+    def spectrogram_to_waveform(self, spectrogram, n_fft=1024, hop_length=512):
         Fine_tune_logger.debug("Converting spectrogram to waveform using Griffin-Lim.")
         spectrogram_np = spectrogram.detach().cpu().numpy()
         waveforms = []
@@ -146,7 +141,7 @@ class CombinedLoss(nn.Module):
         Fine_tune_logger.debug(f"Batch size for perceptual loss: {batch_size}")
 
         orig_sr, new_sr = 44100, 16000
-        max_length = 176400  # 10 seconds at 16kHz
+        max_length = 176400 
 
         output_audio_list, target_audio_list = [], []
 
@@ -182,13 +177,15 @@ class CombinedLoss(nn.Module):
         with torch.no_grad():
             for i in range(batch_size):
                 try:
-                    out_feat = self.audio_model(torch.from_numpy(output_audio_np[i]).unsqueeze(0).to(self.device), fs=new_sr)
-                    tgt_feat = self.audio_model(torch.from_numpy(target_audio_np[i]).unsqueeze(0).to(self.device), fs=new_sr)
+                    out_feat = self.audio_model(torch.from_numpy(output_audio_np[i]).float().unsqueeze(0).to(self.device),fs=new_sr)
+                    tgt_feat = self.audio_model(torch.from_numpy(target_audio_np[i]).float().unsqueeze(0).to(self.device),fs=new_sr)
                     output_features_list.append(out_feat)
                     target_features_list.append(tgt_feat)
                     Fine_tune_logger.debug(f"VGGish features extracted for sample {i+1}.")
                 except Exception as e:
+                    import traceback
                     Fine_tune_logger.error(f"Error extracting VGGish features for sample {i+1}: {e}")
+                    Fine_tune_logger.debug(traceback.format_exc())
                     continue
 
         if not output_features_list or not target_features_list:
@@ -217,7 +214,7 @@ class CombinedLoss(nn.Module):
             Fine_tune_logger.debug("Silent input detected during normalization. Returning zeros.")
             return torch.zeros_like(waveform)
 
-    def spectral_loss(self, output, target, n_fft=2048, hop_length=512):
+    def spectral_loss(self, output, target, n_fft=1024, hop_length=512):
         Fine_tune_logger.debug("Calculating spectral loss.")
 
         output = self.normalize_waveform(output)
@@ -347,7 +344,7 @@ def resample_audio(waveform, orig_sr, target_sr=16000):
         resampled = np.zeros_like(resampled)
     return resampled
 
-def evaluate_metrics_from_spectrograms(ground_truth, predicted, loss_function, n_fft=2048, hop_length=512):
+def evaluate_metrics_from_spectrograms(ground_truth, predicted, loss_function, n_fft=1024, hop_length=512):
     Fine_tune_logger.debug("Evaluating metrics from spectrograms.")
     if predicted.size(1) != ground_truth.size(1): 
         Fine_tune_logger.warning(
@@ -388,14 +385,32 @@ def evaluate_metrics_from_spectrograms(ground_truth, predicted, loss_function, n
 
     Fine_tune_logger.debug("Metrics evaluation completed.")
     return sdr_list, sir_list, sar_list
+   
+MUSDB18_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset")
+DSD100_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Training_DSD100_dataset")
 
-def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_training_loader, Finetuned_validation_loader, ds_config, fine_tune_epochs=6):
+train_loader, val_loader_phase = create_dataloaders(
+            musdb18_dir=MUSDB18_dir,
+            dsd100_dir=DSD100_dataset_dir,
+            batch_size=ds_config["train_micro_batch_size_per_gpu"],
+            num_workers=0,
+            sampling_rate=44100,
+            max_length_seconds=10,
+            max_files_train=None,
+            max_files_val=None,
+        )
+Fine_tune_logger.info("Data loaders created successfully.")
+
+def fine_tune_model( fine_tuned_model_path, Fine_tuned_training_loader, Finetuned_validation_loader, ds_config, fine_tune_epochs=6):
+
+
+
     from Model_Architecture.model import UNet
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     Fine_tune_logger.info(f"Fine-tuning --> Using device: {device}")
-
+    load_model_path = os.path.join(root_dir, "Model_Weights/CheckPoints/checkpoint_epochsss_25")
     Fine_tune_logger.info("Initializing model...")
-    model = UNet(in_channels=1, out_channels=1)
+    model = UNet(in_channels=1, out_channels=1).to(device)
 
     # DeepSpeed Initializing
     model_engine, optimizer, _, scheduler = deepspeed.initialize(
@@ -405,26 +420,12 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
     )
     Fine_tune_logger.debug("DeepSpeed model_engine initialized.")
 
-    if pretrained_model_path is None:
-        Fine_tune_logger.error("Pretrained model path must be provided for fine-tuning.")
-        raise ValueError("Pretrained model path is None.")
 
-    try:
-        # Load pretrained weights
-        state_dict = torch.load(pretrained_model_path, map_location=device)
-        if 'weights_only' in state_dict:
-            state_dict = state_dict['weights_only']
-        model_engine.load_state_dict(state_dict, strict=False)
-        Fine_tune_logger.info(f"Fine-tuning --> Pretrained model loaded from: {pretrained_model_path}")
-    except Exception as e:
-        Fine_tune_logger.error(f"Error loading pretrained model: {e}")
-        Fine_tune_logger.debug(traceback.format_exc())
-        raise e
 
-    # Freeze encoder layers
+    load_model_path_func(load_model_path, model_engine, model, device)
+
     freeze_encoder(model_engine)
 
-    # Define loss function
     loss_function = CombinedLoss(device)
 
     # Visualization directory
@@ -517,8 +518,8 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
                                 )
                                 continue
 
-                            gt_waveform = loss_function.spectrogram_to_waveform(targets[sample_idx].unsqueeze(0), n_fft=2048, hop_length=512)[0]
-                            pred_waveform = loss_function.spectrogram_to_waveform(outputs[sample_idx].unsqueeze(0), n_fft=2048, hop_length=512)[0]
+                            gt_waveform = loss_function.spectrogram_to_waveform(targets[sample_idx].unsqueeze(0), n_fft=1024, hop_length=512)[0]
+                            pred_waveform = loss_function.spectrogram_to_waveform(outputs[sample_idx].unsqueeze(0), n_fft=1024, hop_length=512)[0]
 
                             visualize_and_save_waveforms(
                                 gt_waveform=gt_waveform,
@@ -572,38 +573,10 @@ def fine_tune_model(pretrained_model_path, fine_tuned_model_path, Fine_tuned_tra
         sys.exit(1)
 
 if __name__ == "__main__":
-    # Dataset directories
-    MUSDB18_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/musdb18")
-    DSD100_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/DSD100")
-    
-    try:
-        # Create data loaders
-        Fine_tuned_training_loader, Finetuned_validation_loader = create_dataloaders(
-            musdb18_dir=MUSDB18_dir,
-            dsd100_dir=DSD100_dataset_dir,
-            batch_size=ds_config["train_micro_batch_size_per_gpu"],
-            num_workers=8,
-            sampling_rate=44100,
-            max_length_seconds=10,
-            max_files_train=None,
-            max_files_val=None,
-        )
-        Fine_tune_logger.info("Data loaders created successfully.")
-    except Exception as e:
-        Fine_tune_logger.error(f"Error creating data loaders: {e}")
-        Fine_tune_logger.debug(traceback.format_exc())
-        sys.exit(1)
-    
-    try:
         fine_tune_model(
-            pretrained_model_path=pretrained_model_path,
             fine_tuned_model_path=fine_tuned_model_path,
-            Fine_tuned_training_loader=Fine_tuned_training_loader,
-            Finetuned_validation_loader=Finetuned_validation_loader,
+            Fine_tuned_training_loader=train_loader,
+            Finetuned_validation_loader=val_loader_phase,
             ds_config=ds_config,
-            fine_tune_epochs=6
+            fine_tune_epochs=8
         )
-    except Exception as e:
-        Fine_tune_logger.error(f"Fine-tuning failed: {e}")
-        Fine_tune_logger.debug(traceback.format_exc())
-        sys.exit(1)

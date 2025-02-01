@@ -12,7 +12,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
 root_dir = Return_root_dir() #Gets the root directory
-train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 dataset_logger = setup_logger('dataset_Musdb18',train_log_path)
 
 
@@ -68,25 +68,45 @@ class DSD100(Dataset):
         #Pad or trim to exact # of samples
         mixture = self._normalize(self._pad_or_trim(mixture))
         vocals = self._normalize(self._pad_or_trim(vocals))
-
+        
+        #waveform
+        dataset_logger.debug(
+                f"[Dataset] file: {os.path.basename(song_folder)}, "
+                f"mixture wave => shape: {mixture.shape}, "
+                f"min: {mixture.min():.5f}, max: {mixture.max():.5f}, mean: {mixture.mean():.5f}; "
+                f"vocals wave => shape: {vocals.shape}, "
+                f"min: {vocals.min():.5f}, max: {vocals.max():.5f}, mean: {vocals.mean():.5f}"
+            )
+        
         #STFT
         mix_stft = librosa.stft(mixture, n_fft=self.n_fft, hop_length=self.hop_length)
         voc_stft = librosa.stft(vocals, n_fft=self.n_fft, hop_length=self.hop_length)
 
-        #Magnitude
+        #Phase + Magnitude
         mixture_mag = np.abs(mix_stft)
         vocals_mag = np.abs(voc_stft)
+
 
         #Adjust shape so time dimension matches the formula
         mixture_mag = self._adjust_length(mixture_mag)
         vocals_mag = self._adjust_length(vocals_mag)
+
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
         vocals_mag_tensor = torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0).to(device)
 
 
+        dataset_logger.debug(
+        f"voc_mag_tensor shape: {vocals_mag_tensor.shape}, "
+        f"[Dataset] Mixture Mag stats => min: {mixture_mag.min():.5f}, "
+        f"max: {mixture_mag.max():.5f}, mean: {mixture_mag.mean():.5f} | "
+        f"[Dataset] Vocals Mag stats => min: {vocals_mag.min():.5f}, "
+        f"max: {vocals_mag.max():.5f}, mean: {vocals_mag.mean():.5f} | "
+        )
 
+        
+        
         return mixture_mag_tensor, vocals_mag_tensor
         
     def _pad_or_trim(self, audio):

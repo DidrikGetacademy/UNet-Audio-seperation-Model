@@ -110,11 +110,11 @@ class Combinedloss(nn.Module):
 
         # Hybrid Loss
         predicted_vocals = predicted_mask * mixture
-        hybrid_loss, l1_loss, stft_loss = self.hybrid_loss(predicted_vocals, target)
+        hybrid_loss_val, l1_loss_val, stft_loss_val  = self.hybrid_loss(predicted_vocals, target)
 
         # Combine losses
-        combined_loss = 0.5 * mask_loss + 0.5 * hybrid_loss
+        combined_loss = 0.5 * mask_loss + 0.5 * hybrid_loss_val
 
         # Debugging
-        train_logger.debug(f"[CombinedLoss] Mask Loss={mask_loss.item():.6f}, Hybrid Loss={hybrid_loss.item():.6f}")
-        return combined_loss, mask_loss, hybrid_loss
+        train_logger.debug(f"[CombinedLoss] Mask Loss={mask_loss.item():.6f}, Hybrid Loss={hybrid_loss_val.item():.6f}")
+        return combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val

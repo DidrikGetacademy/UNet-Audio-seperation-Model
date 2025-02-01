@@ -7,18 +7,17 @@ from torch.utils.data import Dataset
 import stempeg
 import os
 import sys
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
 root_dir = Return_root_dir() #Gets the root directory
-train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
+train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 data_logger = setup_logger( 'dataloader_logger',train_log_path)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class MUSDB18StemDataset(Dataset):
-
     def __init__(
         self,
         root_dir,
@@ -28,7 +27,6 @@ class MUSDB18StemDataset(Dataset):
         hop_length=512,
         max_length_seconds=10,
         max_files=None,
-        validate_files=False
     ):
         self.root_dir = os.path.join(root_dir, subset)
         self.sr = sr
@@ -46,11 +44,7 @@ class MUSDB18StemDataset(Dataset):
             self.file_paths = self.file_paths[:max_files]
 
         data_logger.info(f"Found {len(self.file_paths)} files in '{self.root_dir}' (subset='{subset}')")
-
-        if validate_files:
-            self.file_paths = self._validate_files(self.file_paths)
-
-        data_logger.info(f"Dataset initialized with {len(self.file_paths)} valid files.")
+        data_logger.info(f"Dataset initialized with {len(self.file_paths)} valid files.\n")
 
     def __len__(self):
         return len(self.file_paths)
@@ -76,32 +70,48 @@ class MUSDB18StemDataset(Dataset):
             # Pad/trim
             mixture = self._normalize(self._pad_or_trim(mixture))
             vocals = self._normalize(self._pad_or_trim(vocals))
-
+            
+            #waveform
+            data_logger.debug(
+                f"[Dataset] file: {os.path.basename(file_path)}, "
+                f"mixture wave => shape: {mixture.shape}, "
+                f"min: {mixture.min():.5f}, max: {mixture.max():.5f}, mean: {mixture.mean():.5f}; "
+                f"vocals wave => shape: {vocals.shape}, "
+                f"min: {vocals.min():.5f}, max: {vocals.max():.5f}, mean: {vocals.mean():.5f}"
+            )
+            
+            
             # STFT
             mix_stft = librosa.stft(mixture, n_fft=self.n_fft, hop_length=self.hop_length)
             voc_stft = librosa.stft(vocals, n_fft=self.n_fft, hop_length=self.hop_length)
 
-            # Magnitude
+            # Phase + Magnitude
             mixture_mag = np.abs(mix_stft)
+
             vocals_mag = np.abs(voc_stft)
+ 
 
             # Adjust time dimension
             mixture_mag = self._adjust_length(mixture_mag)
             vocals_mag = self._adjust_length(vocals_mag)
+           
+
+
 
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
- 
 
-            # Return shape [1, freq, time]
+            data_logger.debug(
+                f"[Dataset] Mixture mag => shape: {mixture_mag.shape}, "
+                f"min: {mixture_mag.min():.5f}, max: {mixture_mag.max():.5f}, mean: {mixture_mag.mean():.5f}; "
+                f"[Dataset] Vocals mag => shape: {vocals_mag.shape}, "
+                f"min: {vocals_mag.min():.5f}, max: {vocals_mag.max():.5f}, mean: {vocals_mag.mean():.5f}; "
+            )
+
             mixture_mag_tensor = torch.tensor(mixture_mag, dtype=torch.float32).unsqueeze(0).to(device)
             vocals_mag_tensor = torch.tensor(vocals_mag, dtype=torch.float32).unsqueeze(0).to(device)
+          
+            return mixture_mag_tensor,vocals_mag_tensor,
 
-            print(f"Mixture shape: {mixture.shape}, Vocals shape: {vocals.shape}")
-            print(f"STFT Mixture magnitude min: {mixture_mag.min()}, max: {mixture_mag.max()}")
-            data_logger.debug(f"Mixture shape: {mixture.shape}, Vocals shape: {vocals.shape}")
-            data_logger.debug(f"STFT Mixture magnitude min: {mixture_mag.min()}, max: {mixture_mag.max()}")
-
-            return mixture_mag_tensor, vocals_mag_tensor
         except Exception as e:
             data_logger.error(f"Error processing file {file_path}: {e}")
             return None
@@ -132,18 +142,3 @@ class MUSDB18StemDataset(Dataset):
         else:
             return spectrogram[:, :desired_time_dim]
 
-    def _validate_files(self, file_paths):
-        valid_files = []
-        for file in file_paths:
-            try:
-                audio, _ = librosa.load(file, sr=self.sr, mono=True)
-                if self._has_valid_audio(audio):
-                    valid_files.append(file)
-                else:
-                    data_logger.debug(f"Skipping invalid audio file: {file}")
-            except Exception as e:
-                data_logger.error(f"Error loading file '{file}': {e}")
-        return valid_files
-
-    def _has_valid_audio(self, audio, threshold=0.01):
-        return np.max(np.abs(audio)) > threshold

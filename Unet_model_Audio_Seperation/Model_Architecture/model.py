@@ -194,7 +194,7 @@ class UNet(nn.Module):
         Model_logger.debug(f"[U-net class(FORWARD)] Input to U-Net: {x.shape}")
 
         #Encoder
-        for i, enc in self.encoder:
+        for i, enc in enumerate(self.encoder):
             x = enc(x)
             skip_connections.append(x)
             x = F.max_pool2d(x, kernel_size=2, stride=2)
