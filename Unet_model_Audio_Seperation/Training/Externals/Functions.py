@@ -23,6 +23,7 @@ Function_logger = setup_logger('Functions.py',train_log_path)
 
 #Stops training if trigger hit the amount of times configured. 
 def Early_break(trigger_times, patience):
+    Function_logger.info(f"Trigger times: {trigger_times}, patience: {patience}")
     if trigger_times >= patience:
         Function_logger.info(f"Early stopping triggered.")
         return True

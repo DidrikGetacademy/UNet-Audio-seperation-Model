@@ -17,7 +17,7 @@ def Validate_ModelEngine(epoch, Model_Engine, combined_val_loader, criterion, Mo
     device = next(Model_Engine.parameters()).device
     Model_Engine.to(device)
     Model_Engine.eval()
-    Model_Engine.to(dtype=torch.float16)
+    Model_Engine.to(dtype=torch.bfloat16)
     
     val_running_loss = 0.0
     with torch.no_grad():

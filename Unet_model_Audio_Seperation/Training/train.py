@@ -5,12 +5,8 @@ import os
 import sys
 import deepspeed
 from torch import autocast
-from tabulate import tabulate
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
-#print("Current working directory:", os.getcwd())
-#print("Current sys.path:", sys.path)
-#print(f"project root {project_root}")
 import json
 from Training.Externals.Dataloader import create_dataloaders
 from Training.Externals.Value_storage import  Append_loss_values_for_batch, Append_loss_values_for_epoches, Get_calculated_average_loss_from_batches, get_loss_value_list
@@ -22,7 +18,8 @@ from Training.Externals.Loss_Diagram_Values import  create_loss_diagrams,create_
 from Training.Externals.Functions import ( training_completed, load_model_path_func, save_best_model, Return_root_dir,)
 from Training.Externals.Debugging_Values import check_Nan_Inf_loss, print_inputs_targets_shape,dataset_sample_information,logging_avg_loss_epoch,logging_avg_loss_epoch,log_first_2_batches_inputs_targets,log_first_2_batches_outputs_inputs_targets_predicted_mask,prev_epoch_loss_log
 from Training.Validation import Validate_ModelEngine
-root_dir = Return_root_dir() #Gets the root directory
+from Training.Fine_Tuned_model import fine_tune_model
+root_dir = Return_root_dir()
 fine_tuned_model_base_path = os.path.join(root_dir, "Model_weights/Fine_tuned")
 Model_CheckPoint = os.path.join(root_dir, "Model_Weights/CheckPoints")
 Final_model_path = os.path.join(root_dir, "Model_Weights/Pre_trained")
@@ -30,8 +27,13 @@ train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Traini
 loss_log_path = os.path.join(root_dir,"Model_Performance_logg/log/loss_values.txt")
 train_logger = setup_logger('train', train_log_path)
 loss_logger = setup_logger("loss",loss_log_path)
-with open(os.path.join(root_dir, "DeepSeed_Configuration/ds.config.json"), "r") as f:
+with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config.json"), "r") as f:
     ds_config = json.load(f)
+
+
+
+
+
 
 
 
@@ -39,7 +41,7 @@ def train(start_training=True):
     load_model_path = os.path.join(Model_CheckPoint, "CheckPoints/checkpoint_epochsss_25")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_logger.info(f"[Train] Using device: {device}")
-    epochs = 15
+    epochs = 2
     prev_epoch_loss = None
     best_model_path = None 
     current_step = 0
@@ -49,37 +51,29 @@ def train(start_training=True):
     max_length_seconds = 15
     tried = 0
 
-    
     clear_memory_before_training()
-
+    
     #UNet - Model initialization, Optimizer Config, Custom Hybridloss function, Gradscaler.
     model = UNet(in_channels=1, out_channels=1).to(device)
 
-
+    for name, param in model.named_parameters():
+       print(f"{name}: {param.shape}, requires_grad={param.requires_grad}")
+    #prininting Model Structure/Information
+    Model_Structure_Information(model)
     #initializing deepspeed
     model_engine, optimizer, _, _ = deepspeed.initialize(  model=model, model_parameters=model.parameters(), config_params=ds_config)
 
-    if ds_config.get("fp16", {}).get("enabled", False):
-       model_engine.to(dtype=torch.float16)
+    if ds_config.get("bf16", {}).get("enabled", False):
+       model_engine.to(dtype=torch.bfloat16)
 
     #loading model if exists.
     load_model_path_func(load_model_path, model_engine, model, device)
-
     
-
     #loss functionality
     criterion = Combinedloss()
 
-
-    #prininting Model Structure/Information
-    Model_Structure_Information(model)
-
-     
-
     if 'combined_train_loader' not in globals():
          train_loader, val_loader_phase = create_dataloaders(
-            musdb18_dir=MUSDB18_dir,
-            dsd100_dir=DSD100_dataset_dir,
             batch_size=ds_config["train_micro_batch_size_per_gpu"], 
             num_workers=num_workers,
             sampling_rate=sampling_rate,
@@ -87,10 +81,9 @@ def train(start_training=True):
             max_files_train=None,
             max_files_val=None,
     )
-    if tried <= 1:
+    if tried <= 2:
         dataset_sample_information(train_loader,val_loader_phase)
         tried += 1
-
 
 #TRAINING LOOP STARTS HERE.....
     if start_training:
@@ -103,8 +96,8 @@ def train(start_training=True):
 
                 for batch_idx, (inputs, targets) in enumerate(train_loader, start=1):
                     current_step += 1
-                    inputs = inputs.to(device,  non_blocking=True)
-                    targets = targets.to(device, non_blocking=True)
+                    inputs = inputs.to(device,  dtype=torch.bfloat16, non_blocking=True)
+                    targets = targets.to(device, dtype=torch.bfloat16, non_blocking=True)
 
                     #Prints sample of the dataset.
                     log_first_2_batches_inputs_targets(batch_idx,train_logger,inputs,targets)
@@ -114,7 +107,7 @@ def train(start_training=True):
                    ###AUTOCAST###
                     model_engine.zero_grad()
     
-                    with autocast(device_type='cuda', enabled=(device.type == 'cuda'),dtype=torch.float16):
+                    with autocast(device_type='cuda', enabled=(device.type == 'cuda'), dtype=torch.bfloat16):
                         train_logger.debug(f"inputs into the --> model {inputs.shape}\n")
                         predicted_mask, outputs = model_engine(inputs)
                         predicted_vocals = predicted_mask * inputs
@@ -122,7 +115,8 @@ def train(start_training=True):
                         
                         log_first_2_batches_outputs_inputs_targets_predicted_mask(batch_idx, outputs, inputs, targets, predicted_mask, train_logger,predicted_vocals)
 
-                        combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val  = criterion(predicted_mask, inputs, targets)
+                        combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val = criterion(predicted_mask, inputs, targets)
+
 
         
                     check_Nan_Inf_loss(combined_loss,batch_idx,outputs)
@@ -210,9 +204,19 @@ def train(start_training=True):
 
  
             training_completed()
-            
 
             save_best_model(model_engine, best_model_path, Final_model_path)
+            final_model_path = os.path.join(Final_model_path, "final_model_best_model.pth")
+            print("Starting fine tuning")
+            fine_tuned_model_path = os.path.join(root_dir,"Model_Weights/Fine_Tuned/Model.pth")
+            fine_tune_model(
+            fine_tuned_model_path=fine_tuned_model_path,
+            Fine_tuned_training_loader=train_loader,
+            Finetuned_validation_loader=val_loader_phase,
+            ds_config=ds_config,
+            fine_tune_epochs=8,
+            pretrained_model_path=final_model_path
+)
 
             if torch.distributed.is_initialized():
                 torch.distributed.destroy_process_group()

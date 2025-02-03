@@ -1,0 +1,8 @@
+2025-02-03 23:05:58,274 - INFO - [Train] Using device: cuda
+2025-02-03 23:09:18,588 - INFO - [Train] Using device: cuda
+2025-02-03 23:09:24,731 - INFO - No checkpoint found. Starting training from scratch.
+2025-02-03 23:10:00,577 - INFO - [Train] Using device: cuda
+2025-02-03 23:10:06,641 - INFO - No checkpoint found. Starting training from scratch.
+2025-02-03 23:10:18,837 - INFO - [Train] Epoch 1/2 started.
+
+2025-02-03 23:10:21,572 - ERROR - [Train] Error during training: cuFFT doesn't support tensor of type: BFloat16

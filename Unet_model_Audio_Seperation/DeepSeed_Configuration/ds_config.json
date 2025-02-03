@@ -1,26 +1,20 @@
 {
-    "train_batch_size": 32,
-    "train_micro_batch_size_per_gpu": 4,
-    "gradient_accumulation_steps": 8,
-    "world_size": 1,
-
-    "fp16": {
-        "enabled": true,
-        "loss_scale": 0,
-        "loss_scale_window": 500,
-        "hysteresis": 2,
-        "min_loss_scale": 1
+    "train_batch_size": 32,  
+    "train_micro_batch_size_per_gpu": 8,  
+    "gradient_accumulation_steps": 4,  
+    "world_size": 2,  
+    "bf16": {
+        "enabled": true  
     },
-
     "zero_optimization": {
         "stage": 3,
         "offload_optimizer": {
-            "device": "cpu",
-            "pin_memory": true
+            "device": "cpu",  
+            "pin_memory": true  
         },
         "offload_param": {
-            "device": "cpu",
-            "pin_memory": true
+            "device": "cpu",  
+            "pin_memory": true  
         },
         "contiguous_gradients": true,
         "overlap_comm": true,
@@ -30,7 +24,6 @@
         "prefetch_bucket_size": 50000000,
         "sub_group_size": 1000000
     },
-
     "optimizer": {
         "type": "AdamW",
         "params": {
@@ -40,7 +33,6 @@
             "eps": 1e-8
         }
     },
-
     "scheduler": {
         "type": "WarmupDecayLR",
         "params": {
@@ -50,39 +42,31 @@
             "total_num_steps": 1000
         }
     },
-
     "gradient_clipping": 0.5,
     "steps_per_print": 10,
-
     "tensorboard": {
         "enabled": true,
         "output_path": "/mnt/c/Users/didri/Desktop/Programmering/Artifical intelligence Models/UNet-Models/Unet_model_Audio_Seperation/Model_Performance_logg/TensorBoard/DeepSpeed Logging",
-        "job_name": ""
+        "job_name": "Two_GPU_Training"
     },
-
     "wall_clock_breakdown": true,
-
     "flops_profiler": {
-        "enabled": false  
+        "enabled": true  
     },
-
     "activation_checkpointing": {
         "partition_activations": true,
         "contiguous_memory_optimization": true,
         "cpu_checkpointing": false
     },
-
     "aio": {
         "block_size": 1048576,
         "queue_depth": 16,
         "single_submit": false,
         "overlap_events": true
     },
-
     "gradient_accumulation_fp16_enabled": true,
-
     "pipeline_parallel": {
-        "pipeline_stages": 1,
+        "pipeline_stages": 2,  
         "activation_checkpoint_interval": 0
     }
 }

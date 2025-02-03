@@ -19,15 +19,14 @@ data_loader = setup_logger(  'dataloader', train_log_path)
 
 
 
-
 def robust_collate_fn(batch):
     batch = [item for item in batch if item is not None]
     if not batch:
-        raise ValueError
-
+        raise ValueError("Empty batch")
+    for item in batch:
+        data_loader.info(f"Batch item: {item}")
     inputs, targets = zip(*batch)
-
-   
+    
     max_freq = max(x.size(-2) for x in inputs)
     max_time = max(x.size(-1) for x in inputs)
 
@@ -35,31 +34,30 @@ def robust_collate_fn(batch):
     padded_targets = []
 
     for inp, tgt in zip(inputs, targets):
-   
         inp = F.pad(inp, (0, max_time - inp.size(-1), 0, max_freq - inp.size(-2)))
         tgt = F.pad(tgt, (0, max_time - tgt.size(-1), 0, max_freq - tgt.size(-2)))
-        
         padded_inputs.append(inp)
         padded_targets.append(tgt)
 
-    inputs_tensor = torch.stack(padded_inputs, dim=0)
-    targets_tensor = torch.stack(padded_targets, dim=0)
+    inputs_tensor = torch.stack(padded_inputs, dim=0).to(torch.bfloat16)
+    targets_tensor = torch.stack(padded_targets, dim=0).to(torch.bfloat16)
     
     TestTime = 2
     if TestTime <= 2:
         data_loader.info(f"[Dataloader-robust_collate_fn]Inputs tensor min: {inputs_tensor.min()}, max: {inputs_tensor.max()}, mean: {inputs_tensor.mean()}")
         data_loader.info(f"[Dataloader-robust_collate_fn]Targets tensor min: {targets_tensor.min()}, max: {targets_tensor.max()}, mean: {targets_tensor.mean()}\n")
 
-
     if inputs_tensor.is_cpu:
         inputs_tensor = inputs_tensor.pin_memory()
         targets_tensor = targets_tensor.pin_memory()
-    if TestTime <=2:
+        data_loader.info("Pin memory, Tensors where stored on cpu.")
+    if TestTime <= 2:
         data_loader.info(f"[Dataloader-robust_collate_fn]Padded inputs shape: {inputs_tensor.shape}, Padded targets shape: {targets_tensor.shape}")
         data_loader.info(f"[Dataloader-robust_collate_fn]Batch sizes: inputs - {len(inputs)}, targets - {len(targets)}\n")
         TestTime += 1
 
     return inputs_tensor, targets_tensor
+
 
 MUSDB18_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset")
 DSD100_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Training_DSD100_dataset")
@@ -71,7 +69,7 @@ def create_dataloaders(
     batch_size=0,
     num_workers=0,
     sampling_rate=44100,
-    max_length_seconds=10,
+    max_length_seconds=15,
     max_files_train=None,
     max_files_val=None,
     val_ratio=0.2,

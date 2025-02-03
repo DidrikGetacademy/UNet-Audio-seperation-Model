@@ -9,14 +9,13 @@ from Training.Externals.Logger import setup_logger
 root_dir = Return_root_dir()  # Gets the root directory
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 data_logger = setup_logger('dataloader_logger', train_log_path)
-
 class CustomAudioDataset(Dataset):
     def __init__(
         self, root_dir, 
         sr=44100, 
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=10,
+        max_length_seconds=15,
         max_files=None
         ):
         

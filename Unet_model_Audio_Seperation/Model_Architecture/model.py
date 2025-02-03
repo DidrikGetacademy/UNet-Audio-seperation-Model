@@ -9,7 +9,6 @@ from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
 root_dir = Return_root_dir() #Gets the root directory
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_logg.txt")
-
 Model_logger = setup_logger('Model.py', train_log_path)
 
 #Frequency Channel Attention Module (FCAM). Leverage attention mechanisms specifically designed for frequency-domain processing.
@@ -44,11 +43,6 @@ class SpectralAttentionBlock(nn.Module):
 
         return output
 
-
-
-
-
-
 #Squeeze-and-Excitation (SE) Blocks enhance feature maps by modeling inter-channel dependencies
 class SEBlock(nn.Module):
     def __init__(self, channels, reduction=16):
@@ -78,11 +72,6 @@ class SEBlock(nn.Module):
 
         return output
 
-
-
-
-
-
 #Attention Block: Applies an attention mechanism to enhance the feature representation.
 class AttentionBlock(nn.Module):
     def __init__(self, in_channels, gating_channels, inter_channels):
@@ -105,15 +94,9 @@ class AttentionBlock(nn.Module):
 
         output = x * psi
 
-
         Model_logger.debug(f"[AttentionBlock]Attention map (psi) - min: {psi.min().item()}, max: {psi.max().item()}, mean: {psi.mean().item()}")
         Model_logger.debug(f"[AttentionBlock ]Output stats - min: {output.min().item()}, max: {output.max().item()}, mean: {output.mean().item()}")
         return output
-
-
-
-
-
 
 #MultiScaleDecoderBlock: Upsamples and concatenates with skip connections, followed by convolution.
 class MultiScaleDecoderBlock(nn.Module):
@@ -140,11 +123,6 @@ class MultiScaleDecoderBlock(nn.Module):
         out = self.conv(x)
         Model_logger.debug(f"[MultiScaleDecoderBlock] Output shape: {out.shape}")
         return out
-
-
-
-
-
 
 #UNet Model: Includes encoder, bottleneck, decoder, and attention blocks.
 class UNet(nn.Module):
@@ -213,7 +191,6 @@ class UNet(nn.Module):
             x = dec_block(x, skip_connections[idx // 2])
             x = att_block(skip_connections[idx // 2], x)
 
-
         #debug print before final convolution
         Model_logger.debug(f"[U-net class(FORWARD)]  -----> Before Final Convolution -----> Feature map shape: {x.shape}, min: {x.min().item()}, max: {x.max().item()}")
 
@@ -240,12 +217,6 @@ class UNet(nn.Module):
 
         Model_logger.debug(f"[U-net class(FORWARD)] Final mask shape: {mask.shape}, Final output shape: {output.shape}")
         return mask, output  #Return both mask and output for debugging or loss computation
-
-
-
-
-
-
 
 def Model_Structure_Information(model):
     total_params = sum(p.numel() for p in model.parameters())
