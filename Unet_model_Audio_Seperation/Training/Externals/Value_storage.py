@@ -15,6 +15,7 @@ train_logger = setup_logger('train',train_log_path)
 
 global loss_history_Epoches
 global loss_history_Batches
+global loss_history_finetuning_epoches
 # Define loss history dictionaries
 loss_history_Epoches = {
     "mask_loss": [],        # Mask loss per epoch
@@ -29,7 +30,18 @@ loss_history_Batches = {
     "combined": [],         # Combined loss per batch
 }
 
+loss_history_finetuning_epoches = {
+    "l1": [],
+    "mse": [],
+    "spectral": [],
+    "perceptual": [],
+    "multiscale": [],
+    "combined": [],
+}
 
+
+
+#Training-Functions
 def Append_loss_values_for_batch(mask_loss, hybrid_loss, combined_loss):
     train_logger = setup_logger('train',train_log_path)
     train_logger.info(f"Appending Batch Losses: Mask: {mask_loss.item()}, Hybrid: {hybrid_loss.item()}, Combined: {combined_loss.item()}")
@@ -80,3 +92,24 @@ def Get_calculated_average_loss_from_batches(loss_logger):
 
 def get_loss_value_list():
     return loss_history_Batches,loss_history_Epoches
+
+
+
+def get_loss_value_list_loss_history_finetuning_epoches():
+    return loss_history_finetuning_epoches
+
+#FineTuning- Functions
+def Append_loss_values_epoches(Fine_tune_logger,loss_history, epoch_losses, epoch):
+    for key in loss_history.keys():
+        loss_history[key].append(epoch_losses[key] / epoch_losses["count"])
+    
+    log_message = (
+        f"[Fine-Tune] Epoch {epoch+1} | "
+        f"L1 Loss={loss_history['l1'][-1]:.6f}, MSE Loss={loss_history['mse'][-1]:.6f}, "
+        f"Spectral Loss={loss_history['spectral'][-1]:.6f}, Perceptual Loss={loss_history['perceptual'][-1]:.6f}, "
+        f"Multi-Scale Loss={loss_history['multiscale'][-1]:.6f}, Combined Loss={loss_history['combined'][-1]:.6f}"
+    )
+    Fine_tune_logger.info(log_message)
+
+
+

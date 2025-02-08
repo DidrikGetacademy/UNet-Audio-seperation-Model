@@ -2,16 +2,11 @@ import torch
 import gc
 import os
 import sys
-import matplotlib.pyplot as plt
 import shutil
-import platform
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
-
 from Training.Externals.utils import Return_root_dir
-
-
 root_dir = Return_root_dir() 
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
 Function_logger = setup_logger('Functions.py',train_log_path)
@@ -21,7 +16,7 @@ Function_logger = setup_logger('Functions.py',train_log_path)
 
 
 
-#Stops training if trigger hit the amount of times configured. 
+
 def Early_break(trigger_times, patience):
     Function_logger.info(f"Trigger times: {trigger_times}, patience: {patience}")
     if trigger_times >= patience:
@@ -70,13 +65,11 @@ def load_model_path_func(load_model_path, model_engine, model, device):
         except Exception as e:
             Function_logger.warning(f"Failed to load PyTorch checkpoint, starting from scratch. Error: {e}")
 
-    # If no checkpoint is found, log and proceed with training from scratch.
     Function_logger.info("No checkpoint found. Starting training from scratch.")
 
 
 
 
-#Saving the best model out of the best checkpoint, else it just saves normal.
 def save_best_model(model_engine, best_model_path, final_model_dir):
     try:
         if model_engine and best_model_path is None:
@@ -96,5 +89,35 @@ def save_best_model(model_engine, best_model_path, final_model_dir):
     
     except Exception as e:
         Function_logger.error(f"[Train] Error saving best model: {str(e)}")
+
+
+
+
+
+
+###FINE TUNING###
+def freeze_encoder(Fine_tune_logger,model):
+    Fine_tune_logger.debug("Freezing encoder layers.")
+    try:
+
+        module = model.module if hasattr(model, 'module') else model
+        encoder = getattr(module, 'encoder', None)
+        if encoder is None:
+            raise AttributeError("Model does not have an 'encoder' attribute.")
+     
+        if hasattr(encoder, '__iter__'):
+            for layer in encoder:
+                for param in layer.parameters():
+                    param.requires_grad = False
+        else:
+            for param in encoder.parameters():
+                param.requires_grad = False
+        encoder.eval()  
+        Fine_tune_logger.info("Encoder layers frozen for fine-tuning.")
+    except AttributeError as e:
+        Fine_tune_logger.error(f"Error freezing encoder layers: {e}")
+        raise
+
+
 
 

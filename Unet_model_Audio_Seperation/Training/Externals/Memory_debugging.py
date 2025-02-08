@@ -12,7 +12,7 @@ from Training.Externals.utils import Return_root_dir
 
 
 
-root_dir = Return_root_dir() #Gets the root directory
+root_dir = Return_root_dir()
 Memory_logger = setup_logger('Memory_debugging',os.path.join(root_dir,"Model_Performance_logg/log/Memory.txt"))
 
 

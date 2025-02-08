@@ -8,40 +8,46 @@ from torch import autocast
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 import json
-from Training.Externals.Dataloader import create_dataloaders
+from Training.Externals.Functions import Early_break
+import gc
+
+from Training.Externals.Dataloader import create_dataloaders,create_dataloaders2
 from Training.Externals.Value_storage import  Append_loss_values_for_batch, Append_loss_values_for_epoches, Get_calculated_average_loss_from_batches, get_loss_value_list
 from Training.Externals.Logger import setup_logger
 from Model_Architecture.model import UNet,Model_Structure_Information
 from Training.Externals.Loss_Class_Functions import Combinedloss 
 from Training.Externals.Memory_debugging import log_memory_after_index_epoch,clear_memory_before_training
 from Training.Externals.Loss_Diagram_Values import  create_loss_diagrams,create_loss_tabel_epoches,create_loss_table_batches
-from Training.Externals.Functions import ( training_completed, load_model_path_func, save_best_model, Return_root_dir,)
+from Training.Externals.Functions import ( training_completed, load_model_path_func, save_best_model)
 from Training.Externals.Debugging_Values import check_Nan_Inf_loss, print_inputs_targets_shape,dataset_sample_information,logging_avg_loss_epoch,logging_avg_loss_epoch,log_first_2_batches_inputs_targets,log_first_2_batches_outputs_inputs_targets_predicted_mask,prev_epoch_loss_log
 from Training.Validation import Validate_ModelEngine
+from Training.Externals.utils import Return_root_dir
 from Training.Fine_Tuned_model import fine_tune_model
+from Training.Validation import Validate_ModelEngine
 root_dir = Return_root_dir()
 fine_tuned_model_base_path = os.path.join(root_dir, "Model_weights/Fine_tuned")
-Model_CheckPoint = os.path.join(root_dir, "Model_Weights/CheckPoints")
+Model_CheckPoint_Training = os.path.join(root_dir, "Model_Weights/CheckPoints/Training")
+Model_CheckPoint_Evaluation = os.path.join(root_dir, "Model_Weights/CheckPoints/Evaluation")
 Final_model_path = os.path.join(root_dir, "Model_Weights/Pre_trained")
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
 loss_log_path = os.path.join(root_dir,"Model_Performance_logg/log/loss_values.txt")
 train_logger = setup_logger('train', train_log_path)
 loss_logger = setup_logger("loss",loss_log_path)
+
+
+
 with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config.json"), "r") as f:
     ds_config = json.load(f)
 
 
 
-
-
-
-
-
 def train(start_training=True):
-    load_model_path = os.path.join(Model_CheckPoint, "CheckPoints/checkpoint_epochsss_25")
+    torch.cuda.empty_cache()
+    gc.collect()
+    load_model_path = os.path.join(Model_CheckPoint_Training, "CheckPoints/checkpoint_epoch_18")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_logger.info(f"[Train] Using device: {device}")
-    epochs = 2
+    epochs = 1
     prev_epoch_loss = None
     best_model_path = None 
     current_step = 0
@@ -49,27 +55,32 @@ def train(start_training=True):
     num_workers = 0
     sampling_rate = 44100
     max_length_seconds = 15
-    tried = 0
-
+    patience = 5
+    tried = float('inf')
+    bestloss = float('inf')
     clear_memory_before_training()
     
-    #UNet - Model initialization, Optimizer Config, Custom Hybridloss function, Gradscaler.
+
     model = UNet(in_channels=1, out_channels=1).to(device)
+
 
     for name, param in model.named_parameters():
        print(f"{name}: {param.shape}, requires_grad={param.requires_grad}")
-    #prininting Model Structure/Information
+
     Model_Structure_Information(model)
-    #initializing deepspeed
-    model_engine, optimizer, _, _ = deepspeed.initialize(  model=model, model_parameters=model.parameters(), config_params=ds_config)
-
-    if ds_config.get("bf16", {}).get("enabled", False):
-       model_engine.to(dtype=torch.bfloat16)
-
-    #loading model if exists.
-    load_model_path_func(load_model_path, model_engine, model, device)
     
-    #loss functionality
+
+    model_engine, optimizer, _, _ = deepspeed.initialize(
+        model=model,
+        model_parameters=model.parameters(),
+        config_params=ds_config
+    )
+
+
+    model_path_temp=r'/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_1'
+
+    load_model_path_func(model_path_temp, model_engine, model, device)
+
     criterion = Combinedloss()
 
     if 'combined_train_loader' not in globals():
@@ -95,24 +106,29 @@ def train(start_training=True):
                 print(f"[Train] Epoch {epoch + 1}/{epochs} started.")
 
                 for batch_idx, (inputs, targets) in enumerate(train_loader, start=1):
+                    print(f"Starting... Batch: {batch_idx} inputs:{inputs.shape}, targets: {targets.shape}")
                     current_step += 1
-                    inputs = inputs.to(device,  dtype=torch.bfloat16, non_blocking=True)
-                    targets = targets.to(device, dtype=torch.bfloat16, non_blocking=True)
 
-                    #Prints sample of the dataset.
+
+          
+                    inputs = inputs.to(device, dtype=torch.float16, non_blocking=True)
+                    targets = targets.to(device, dtype=torch.float16, non_blocking=True)
+
+
+           
                     log_first_2_batches_inputs_targets(batch_idx,train_logger,inputs,targets)
                     print_inputs_targets_shape(inputs, targets, batch_idx)
               
 
-                   ###AUTOCAST###
                     model_engine.zero_grad()
     
-                    with autocast(device_type='cuda', enabled=(device.type == 'cuda'), dtype=torch.bfloat16):
+                    with autocast(device_type='cuda', dtype=torch.float16, enabled=(device.type == 'cuda')):
                         train_logger.debug(f"inputs into the --> model {inputs.shape}\n")
                         predicted_mask, outputs = model_engine(inputs)
                         predicted_vocals = predicted_mask * inputs
-        
-                        
+                      
+    
+                           
                         log_first_2_batches_outputs_inputs_targets_predicted_mask(batch_idx, outputs, inputs, targets, predicted_mask, train_logger,predicted_vocals)
 
                         combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val = criterion(predicted_mask, inputs, targets)
@@ -134,17 +150,11 @@ def train(start_training=True):
                         f"L1 Loss: {l1_loss_val.item()}," 
                         f"STFT Loss: {stft_loss_val.item()},"
                         )
-
-
-
-                 
-    
-            
-        
-               
+                    
 
                
-                # Current Learning Rate logging
+
+         
                 current_lr = optimizer.param_groups[0]['lr']
                 train_logger.info(f"Current Learning Rate {current_lr}\n")
 
@@ -153,19 +163,42 @@ def train(start_training=True):
                 
                 
 
-                Validate_ModelEngine(epoch,model_engine,val_loader_phase,criterion,Model_CheckPoint, current_step)
+                Validate_ModelEngine(epoch,model_engine,val_loader_phase,criterion,Model_CheckPoint_Evaluation, current_step)
+        
+                if running_loss < bestloss:
+                    train_logger.info(f"New best model (Loss: {running_loss:.6f} < {bestloss:.6f})")
+                    bestloss = running_loss
+                    checkpoint_dir = os.path.join(Model_CheckPoint_Training, f"checkpoint_epoch_{epoch + 1}")
+                    try:
+                        model_engine.save_checkpoint(checkpoint_dir, {
+                            'step': current_step,
+                            'best_loss': bestloss,
+                            'trigger_times': trigger_times
+                        })
+                        trigger_times = 0
+                    except Exception as e:
+                            train_logger.error(f"Checkpoint save failed: {str(e)}")
+                else:
+                    trigger_times += 1
+                    train_logger.info(f"No improvement (Trigger: {trigger_times}/{patience})")
+
+            
+                if Early_break(trigger_times, patience):
+                    train_logger.warning(f"Early stopping triggered at epoch {epoch + 1}")
+
+                    return bestloss, trigger_times, running_loss
 
                
                 prev_epoch_loss_log(train_logger, prev_epoch_loss, avg_epoch_loss, epoch)
 
-                # Calculate average losses for epoch
-                maskloss_avg, hybridloss_avg, combined_loss_avg = Get_calculated_average_loss_from_batches()
+             
+                maskloss_avg, hybridloss_avg, combined_loss_avg = Get_calculated_average_loss_from_batches(loss_logger)
 
      
-                #Logging memory after each epoch
+            
                 log_memory_after_index_epoch(epoch)
 
-                #Logging average loss per epoch
+            
                 logging_avg_loss_epoch(epoch, prev_epoch_loss, epochs, avg_epoch_loss, maskloss_avg, hybridloss_avg, train_logger)
 
                 prev_epoch_loss = avg_epoch_loss
@@ -189,8 +222,8 @@ def train(start_training=True):
                 Append_loss_values_for_epoches(maskloss_avg, hybridloss_avg, combined_loss_avg, avg_epoch_loss,loss_logger)
 
 
-            # Create loss diagrams after training
-            loss_history_Batches, loss_history_Epoches = get_loss_value_list(loss_logger)
+            
+            loss_history_Batches, loss_history_Epoches = get_loss_value_list()
 
             loss_logger.info(
                 f"Loss_history_batches = {len(loss_history_Batches)}" 
@@ -209,15 +242,30 @@ def train(start_training=True):
             final_model_path = os.path.join(Final_model_path, "final_model_best_model.pth")
             print("Starting fine tuning")
             fine_tuned_model_path = os.path.join(root_dir,"Model_Weights/Fine_Tuned/Model.pth")
+            if 'eval_loader' not in globals():
+                eval_loader = create_dataloaders2(
+                batch_size=ds_config["train_micro_batch_size_per_gpu"], 
+                num_workers=num_workers,
+                sampling_rate=sampling_rate,
+                max_length_seconds=max_length_seconds,
+                max_files_val=None,
+                )
+            avg_loss_before_finetune, avg_sdr_after_finetune, avg_sir_before_finetune, avg_sar_before_finetune = Validate_ModelEngine(epoch,model_engine, eval_loader,criterion,Model_CheckPoint_Evaluation,current_step)
+   
+            loss_logger.info(f"Before Fine-tuning - Average Loss: {avg_loss_before_finetune:.6f}")
+            loss_logger.info(f"Before Fine-tuning - Average SDR: {avg_sdr_after_finetune:.4f}, SIR: {avg_sir_before_finetune:.4f}, SAR: {avg_sar_before_finetune:.4f}")
+
             fine_tune_model(
             fine_tuned_model_path=fine_tuned_model_path,
             Fine_tuned_training_loader=train_loader,
             Finetuned_validation_loader=val_loader_phase,
             ds_config=ds_config,
-            fine_tune_epochs=8,
+            fine_tune_epochs=5,
             pretrained_model_path=final_model_path
 )
-
+            avg_loss_after_finetune, avg_sdr_after_finetune, avg_sir_after_finetune, avg_sar_after_finetune = Validate_ModelEngine(model_engine, eval_loader, device)
+            loss_logger.info(f"After Fine-tuning - Average Loss: {avg_loss_after_finetune:.6f}")
+            loss_logger.info(f"After Fine-tuning - Average SDR: {avg_sdr_after_finetune:.4f}, SIR: {avg_sir_after_finetune:.4f}, SAR: {avg_sar_after_finetune:.4f}")
             if torch.distributed.is_initialized():
                 torch.distributed.destroy_process_group()
 

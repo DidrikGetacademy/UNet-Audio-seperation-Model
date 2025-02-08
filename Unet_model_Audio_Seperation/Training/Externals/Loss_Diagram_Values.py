@@ -18,16 +18,15 @@ os.makedirs(diagramdirectory, exist_ok=True)
 
 
 
+####TRAINING####
+
 def create_loss_tabel_epoches(loss_history_Epoches,loss_logger):
     table_rows = []
     for i, epoch_data in enumerate(loss_history_Epoches, start=1):
         mask_avg, hybrid_avg, combined_avg, epoch_loss = epoch_data
         table_rows.append((i, mask_avg, hybrid_avg, combined_avg, epoch_loss))
 
-
     headers = ["Epoch", "Mask Loss Avg", "Hybrid Loss Avg", "Combined Loss Avg", "Epoch Loss"]
-
-   
     loss_logger.info("=" * 80)
     loss_logger.info(f"{headers[0]:<5}  {headers[1]:<14}  {headers[2]:<16}  {headers[3]:<16}  {headers[4]:<10}")
     loss_logger.info("=" * 80)
@@ -35,6 +34,9 @@ def create_loss_tabel_epoches(loss_history_Epoches,loss_logger):
     for (epoch, mask_avg, hybrid_avg, combined_avg, epoch_loss) in table_rows:
         row_str = f"{epoch:<5}  {mask_avg:<14.6f}  {hybrid_avg:<16.6f}  {combined_avg:<16.6f}  {epoch_loss:<10.6f}"
         loss_logger.info(row_str+ "\n")
+
+
+
 
 
 
@@ -52,6 +54,9 @@ def create_loss_table_batches(loss_history_Batches, loss_logger):
     for (batch, mask_val, hybrid_val, combined_val) in table_rows:
         row_str = (f"{batch:<6}  {mask_val:<10.6f}  {hybrid_val:<12.6f}  {combined_val:<14.6f}")
         loss_logger.info(row_str + "\n")
+
+
+
 
 
 
@@ -244,7 +249,14 @@ def plot_loss_curves_Training_script_Batches(loss_history_Batches, loss_logger,o
 
 
 
+
+
+
+
+
+
 ####FINE-TUNING#####
+
 def plot_loss_curves_FineTuning_script_(loss_history_finetuning_epoches, out_path=os.path.join(root_dir,"Model_performance_logg/finetuning.png")):
     epochs_count = len(loss_history_finetuning_epoches["combined"])
     epochs = range(1, epochs_count + 1)
@@ -311,12 +323,65 @@ def plot_loss_curves_FineTuning_script_(loss_history_finetuning_epoches, out_pat
 
 
 
+def visualize_and_save_waveforms(Fine_tune_logger,gt_waveform, pred_waveform, sample_idx, epoch, save_dir):
+    plt.figure(figsize=(12, 4))
+    plt.subplot(1, 2, 1)
+    plt.title(f"Epoch {epoch+1} - Ground Truth Sample {sample_idx+1}")
+    librosa.display.waveshow(gt_waveform, sr=16000)
+    plt.xlabel("Time (s)")
+    plt.ylabel("Amplitude")
+    plt.subplot(1, 2, 2)
+    plt.title(f"Epoch {epoch+1} - Predicted Sample {sample_idx+1}")
+    librosa.display.waveshow(pred_waveform, sr=16000)
+    plt.xlabel("Time (s)")
+    plt.ylabel("Amplitude")
+    plt.tight_layout()
+    os.makedirs(save_dir, exist_ok=True)
+    save_path = os.path.join(save_dir, f"epoch_{epoch+1}_sample_{sample_idx+1}.png")
+    plt.savefig(save_path)
+    plt.close()
+    Fine_tune_logger.info(f"Saved waveform visualization at {save_path}")
 
 
 
 
 
 
+
+
+
+
+
+def evaluate_metrics_from_spectrograms(Fine_tune_logger,ground_truth, predicted, loss_function, n_fft=1024, hop_length=512):
+    Fine_tune_logger.debug("Evaluating metrics from spectrograms.")
+    if predicted.size(1) != ground_truth.size(1):
+        Fine_tune_logger.warning(
+            f"Channel mismatch: predicted {predicted.size(1)}, ground truth {ground_truth.size(1)}. Adjusting predicted channels."
+        )
+        predicted = predicted[:, :ground_truth.size(1), :, :]
+    if predicted.size() != ground_truth.size():
+        raise ValueError(f"Shape mismatch in evaluation! Predicted: {predicted.size()}, Ground Truth: {ground_truth.size()}")
+    gt_waveforms = loss_function.spectrogram_to_waveform(ground_truth, n_fft, hop_length)
+    pred_waveforms = loss_function.spectrogram_to_waveform(predicted, n_fft, hop_length)
+    sdr_list, sir_list, sar_list = [], [], []
+    for idx, (gt, pred) in enumerate(zip(gt_waveforms, pred_waveforms)):
+        if np.allclose(gt, 0):
+            Fine_tune_logger.info(f"Skipping evaluation for a silent reference in sample {idx+1}.")
+            continue
+        min_len = min(len(gt), len(pred))
+        gt = gt[:min_len]
+        pred = pred[:min_len]
+        try:
+            sdr, sir, sar, _ = bss_eval_sources(gt[np.newaxis, :], pred[np.newaxis, :])
+            sdr_list.append(sdr[0])
+            sir_list.append(sir[0])
+            sar_list.append(sar[0])
+            Fine_tune_logger.debug(f"Metrics for sample {idx+1} - SDR: {sdr[0]:.4f}, SIR: {sir[0]:.4f}, SAR: {sar[0]:.4f}")
+        except Exception as e:
+            Fine_tune_logger.error(f"Error evaluating metrics for sample {idx+1}: {e}")
+            continue
+    Fine_tune_logger.debug("Metrics evaluation completed.")
+    return sdr_list, sir_list, sar_list
 
 
 
