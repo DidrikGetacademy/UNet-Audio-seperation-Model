@@ -21,12 +21,14 @@ data_loader = setup_logger('dataloader', train_log_path)
 
 
 def robust_collate_fn(batch):
-
+    check_batch =  float('inf')
     batch = [item for item in batch if item is not None]
     if not batch:
         raise ValueError("Empty batch")
     for item in batch:
-        data_loader.info(f"Batch item: {item}")
+        if check_batch <= 1:
+          data_loader.info(f"Batch item: {item}")
+          check_batch += 1
     inputs, targets = zip(*batch)
     
 
@@ -67,9 +69,9 @@ def create_dataloaders(
     musdb18_dir=MUSDB18_dir,
     dsd100_dir=DSD100_dataset_dir,
     batch_size=0,
-    num_workers=0,
+    num_workers=4,
     sampling_rate=44100,
-    max_length_seconds=15,
+    max_length_seconds=11,
     max_files_train=None,
     max_files_val=None,
     val_ratio=0.2,

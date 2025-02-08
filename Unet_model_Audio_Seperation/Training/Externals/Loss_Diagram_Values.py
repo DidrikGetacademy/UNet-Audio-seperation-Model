@@ -19,7 +19,6 @@ os.makedirs(diagramdirectory, exist_ok=True)
 
 
 ####TRAINING####
-
 def create_loss_tabel_epoches(loss_history_Epoches,loss_logger):
     table_rows = []
     for i, epoch_data in enumerate(loss_history_Epoches, start=1):

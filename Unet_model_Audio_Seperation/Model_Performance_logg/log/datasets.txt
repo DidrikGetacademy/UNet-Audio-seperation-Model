@@ -1,0 +1,80 @@
+2025-02-08 11:34:50,815 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:34:50,815 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:34:50,902 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:34:50,903 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:34:50,905 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:34:50,905 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:34:50,991 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:34:50,991 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:34:56,890 - INFO - Initialized MUSDB18 Dataset with 100 files
+2025-02-08 11:34:56,890 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=11s
+2025-02-08 11:34:56,980 - INFO - Initialized DSD100 with 50 tracks
+2025-02-08 11:34:56,980 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:34:56,982 - INFO - Initialized MUSDB18 Dataset with 100 files
+2025-02-08 11:34:56,982 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=11s
+2025-02-08 11:34:57,069 - INFO - Initialized DSD100 with 50 tracks
+2025-02-08 11:34:57,069 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:35:03,822 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:35:03,822 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:35:03,836 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:35:03,836 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:35:03,857 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:35:03,857 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:35:03,859 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:35:03,860 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:35:03,864 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:35:03,864 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:35:03,866 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:35:03,866 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:35:03,872 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:35:03,872 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:35:03,889 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:35:03,889 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:35:03,892 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:35:03,892 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:35:03,918 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:35:03,919 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:35:03,921 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:35:03,921 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:35:04,020 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:35:04,020 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:35:04,128 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:35:04,128 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:35:04,218 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:35:04,218 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:35:04,219 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:35:04,220 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:35:04,319 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:35:04,319 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:38:57,144 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:38:57,144 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:38:57,168 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:38:57,168 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:38:57,173 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:38:57,173 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:38:57,187 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:38:57,188 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:38:57,190 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:38:57,190 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:38:57,193 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:38:57,193 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:38:57,195 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:38:57,195 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:38:57,198 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:38:57,198 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:38:57,199 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:38:57,200 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:38:57,214 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:38:57,214 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:38:57,221 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:38:57,221 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:38:57,238 - INFO - Initialized MUSDB18 Dataset with 40 files
+2025-02-08 11:38:57,238 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:38:57,239 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:38:57,240 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:38:57,339 - INFO - Initialized DSD100 with 16 tracks
+2025-02-08 11:38:57,339 - INFO - STFT params: n_fft=1024, hop=512
+2025-02-08 11:38:57,342 - INFO - Initialized MUSDB18 Dataset with 10 files
+2025-02-08 11:38:57,342 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-08 11:38:57,430 - INFO - Initialized DSD100 with 4 tracks
+2025-02-08 11:38:57,430 - INFO - STFT params: n_fft=1024, hop=512

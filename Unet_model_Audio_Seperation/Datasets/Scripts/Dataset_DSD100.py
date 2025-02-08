@@ -20,7 +20,7 @@ device = torch.device("cpu")
 
 class DSD100(Dataset):
     def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=15, max_files=None):
+                 hop_length=512, max_length_seconds=11, max_files=None):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length

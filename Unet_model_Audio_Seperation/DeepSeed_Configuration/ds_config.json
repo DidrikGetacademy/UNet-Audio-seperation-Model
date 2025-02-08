@@ -1,10 +1,13 @@
 {
   "train_batch_size": 32,
-  "train_micro_batch_size_per_gpu": 2,
-  "gradient_accumulation_steps": 16,
+  "train_micro_batch_size_per_gpu": 4,
+  "gradient_accumulation_steps": 8,
   "fp16": {
     "enabled": true,
-    "dynamic_loss_scale": true
+    "loss_scale": 0,
+    "initial_scale_power": 16,
+    "min_loss_scale": 1,
+    "hysteresis": 2
   },
   "zero_optimization": {
     "stage": 3,
@@ -19,43 +22,44 @@
     "contiguous_gradients": true,
     "overlap_comm": true,
     "reduce_scatter": true,
+    "reduce_bucket_size": 500000000,
     "allgather_bucket_size": 500000000,
-    "allgather_partitions": true,
-    "prefetch_bucket_size": 25000000,
-    "sub_group_size": 1000000
+    "sub_group_size": 1000000000,
+    "stage3_max_live_parameters": 1e9,
+    "stage3_max_reuse_distance": 1e9
   },
   "optimizer": {
     "type": "AdamW",
     "params": {
-      "lr": 0.0003,
-      "weight_decay": 0.0001,
+      "lr": 0.0001,
+      "weight_decay": 0.01,
       "betas": [0.9, 0.999],
-      "eps": 1e-8
+      "eps": 1e-8,
+      "torch_adam": true
     }
   },
   "scheduler": {
     "type": "WarmupDecayLR",
     "params": {
       "warmup_min_lr": 0.0,
-      "warmup_max_lr": 0.0003,
-      "warmup_num_steps": 100,
-      "total_num_steps": 2000
+      "warmup_max_lr": 0.0001,
+      "warmup_num_steps": 500,
+      "total_num_steps": 5000,
+      "last_batch_iteration": -1
     }
   },
-  "gradient_clipping": 0.50,
-  "steps_per_print": 10,
+  "gradient_clipping": 1.0,
+  "steps_per_print": 50,
+  "activation_checkpointing": {
+    "partition_activations": true,
+    "contiguous_memory_optimization": true,
+    "cpu_checkpointing": false
+  },
+  "flops_profiler": {
+    "enabled": false
+  },
   "tensorboard": {
     "enabled": true,
     "output_path": "/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Performance_logg/TensorBoard/DeepSpeed Logging",
     "job_name": "Two_GPU_Training"
-  },
-  "wall_clock_breakdown": true,
-  "flops_profiler": {
-    "enabled": true
-  },
-  "activation_checkpointing": {
-    "partition_activations": true,
-    "contiguous_memory_optimization": true,
-    "cpu_checkpointing": true
-  }
-}
+  }}

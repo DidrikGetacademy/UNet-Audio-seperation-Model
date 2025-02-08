@@ -24,7 +24,7 @@ def Validate_ModelEngine(epoch, Model_Engine, combined_val_loader, criterion, Mo
     with torch.no_grad(), autocast(device_type='cuda', enabled=(device.type == 'cuda')):
         for val_batch_idx, (val_inputs, val_targets) in enumerate(combined_val_loader):
             if val_batch_idx <= 3:
-              Validation_logger.info(f"val_batch_idx: [{val_batch_idx}], inputs: [{val_inputs}], target: [{val_targets}]")
+              Validation_logger.info(f"val_batch_idx: [{val_batch_idx}], inputs: [{val_inputs.shape}], target: [{val_targets.shape}]")
             val_inputs = val_inputs.to(device,torch.float16, non_blocking=True)
             val_targets = val_targets.to(device,torch.float16, non_blocking=True)
 
@@ -34,7 +34,15 @@ def Validate_ModelEngine(epoch, Model_Engine, combined_val_loader, criterion, Mo
             val_running_loss += val_combined_loss.item()
 
     avg_validation_loss = val_running_loss / len(combined_val_loader)
-    Validation_logger.info(f"[Epoch {epoch + 1}] Validation Loss: [{avg_validation_loss:.6f}], runningloss: [{val_running_loss}],val_combined_loss: [{val_combined_loss.item()}], val_predicted_mask: [{val_predicted_mask.item()}], val_outputs: [{val_outputs.shape}]")
+    Validation_logger.info(
+    f"[VALIDATION]\n"
+    f"[Epoch {epoch + 1}] Validation Loss: [{avg_validation_loss:.6f}], runningloss: [{val_running_loss}],"
+    f"val_combined_loss: [{val_combined_loss.item()}], "
+    f"val_predicted_mask shape: [{val_predicted_mask.shape}], "
+    f"val_predicted_mask mean: [{val_predicted_mask.mean().item():.6f}], "
+    f"val_outputs: [{val_outputs.shape}]\n"
+)
+
 
     # Model checkpointing logic
     if avg_validation_loss < bestloss:

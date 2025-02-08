@@ -1,0 +1,504 @@
+2025-02-08 11:34:50,813 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:34:50,813 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:34:56,887 - INFO - [None] Number of files in MUSDB18 for training: None
+[None] Number of files in MUSDB18 for validation: None
+
+2025-02-08 11:34:56,887 - INFO - [None] Number of files in DSD100 for training: None
+[None] Number of files in DSD100 for validation: None
+
+2025-02-08 11:35:03,819 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:35:03,819 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:35:03,834 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:35:03,834 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:35:03,870 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:35:03,870 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:35:04,126 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:35:04,126 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:35:22,005 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 135.333740234375, mean: 0.815551221370697
+2025-02-08 11:35:22,007 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 159.7313690185547, mean: 0.519633412361145
+2025-02-08 11:35:22,008 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:35:22,008 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:35:22,008 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:35:25,966 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 138.83119201660156, mean: 0.6508315205574036
+2025-02-08 11:35:25,968 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 175.19473266601562, mean: 0.5412545204162598
+2025-02-08 11:35:25,968 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:35:25,968 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:35:25,969 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:35:26,904 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 147.57281494140625, mean: 0.6462823748588562
+2025-02-08 11:35:26,906 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 136.10891723632812, mean: 1.11040461063385
+2025-02-08 11:35:26,906 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:35:26,907 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:35:26,907 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:35:33,289 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 151.75025939941406, mean: 0.6237934827804565
+2025-02-08 11:35:33,291 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 188.55470275878906, mean: 0.630847156047821
+2025-02-08 11:35:33,292 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:35:33,292 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:35:33,292 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:35:44,749 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 130.8355255126953, mean: 0.6337459683418274
+2025-02-08 11:35:44,751 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 468.694091796875, mean: 0.32775211334228516
+2025-02-08 11:35:44,751 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:35:44,751 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:35:44,752 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:35:47,448 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 164.66714477539062, mean: 0.48159292340278625
+2025-02-08 11:35:47,450 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 120.16632843017578, mean: 0.09434286504983902
+2025-02-08 11:35:47,450 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:35:47,450 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:35:47,451 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:35:52,700 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 152.50262451171875, mean: 0.7041259407997131
+2025-02-08 11:35:52,702 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 123.61515045166016, mean: 0.4028026759624481
+2025-02-08 11:35:52,703 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:35:52,703 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:35:52,703 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:35:56,168 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 138.51710510253906, mean: 0.9462030529975891
+2025-02-08 11:35:56,170 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 145.4229736328125, mean: 0.5274723768234253
+2025-02-08 11:35:56,171 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:35:56,171 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:35:56,171 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:09,432 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 215.80401611328125, mean: 0.4859597086906433
+2025-02-08 11:36:09,435 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 125.38349151611328, mean: 1.6907970905303955
+2025-02-08 11:36:09,435 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:09,435 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:09,435 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:09,559 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 138.11256408691406, mean: 0.867188572883606
+2025-02-08 11:36:09,561 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 144.06985473632812, mean: 0.29920610785484314
+2025-02-08 11:36:09,561 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:09,561 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:09,562 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:13,261 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 141.76284790039062, mean: 0.6319115161895752
+2025-02-08 11:36:13,263 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 122.93636322021484, mean: 0.4130856692790985
+2025-02-08 11:36:13,263 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:13,263 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:13,263 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:23,300 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 149.010986328125, mean: 0.4907144010066986
+2025-02-08 11:36:23,303 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 154.8964080810547, mean: 0.4681362509727478
+2025-02-08 11:36:23,303 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:23,304 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:23,304 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:24,551 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 163.4762725830078, mean: 0.6243575811386108
+2025-02-08 11:36:24,553 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 148.6239013671875, mean: 0.2734653353691101
+2025-02-08 11:36:24,553 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:24,553 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:24,554 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:34,629 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 142.68121337890625, mean: 0.5809423327445984
+2025-02-08 11:36:34,631 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 185.5755157470703, mean: 0.1961246281862259
+2025-02-08 11:36:34,632 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:34,632 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:34,632 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:36,702 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 228.41433715820312, mean: 0.5002163648605347
+2025-02-08 11:36:36,704 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 155.6126708984375, mean: 0.3445069193840027
+2025-02-08 11:36:36,704 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:36,704 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:36,705 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:42,318 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 198.82275390625, mean: 0.7955309152603149
+2025-02-08 11:36:42,320 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 145.68829345703125, mean: 0.6244605183601379
+2025-02-08 11:36:42,320 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:42,320 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:42,321 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:36:57,614 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 170.9839630126953, mean: 0.5310109257698059
+2025-02-08 11:36:57,615 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 138.56976318359375, mean: 0.34885257482528687
+2025-02-08 11:36:57,616 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:36:57,616 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:36:57,616 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:00,266 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 188.4619140625, mean: 0.6588979959487915
+2025-02-08 11:37:00,269 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 178.0786895751953, mean: 0.4204241931438446
+2025-02-08 11:37:00,269 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:00,269 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:00,269 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:04,087 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 202.87603759765625, mean: 0.7653402090072632
+2025-02-08 11:37:04,090 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 178.26687622070312, mean: 0.3894665539264679
+2025-02-08 11:37:04,091 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:04,091 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:04,091 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:09,829 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 135.0684814453125, mean: 0.9414864778518677
+2025-02-08 11:37:09,831 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 86.20500183105469, mean: 0.8944758176803589
+2025-02-08 11:37:09,831 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:09,832 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:09,832 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:16,400 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 150.04318237304688, mean: 0.8871049284934998
+2025-02-08 11:37:16,401 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 148.58338928222656, mean: 1.1420544385910034
+2025-02-08 11:37:16,402 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:16,402 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:16,402 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:17,090 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 140.67141723632812, mean: 0.6610374450683594
+2025-02-08 11:37:17,092 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 164.38417053222656, mean: 0.3392672836780548
+2025-02-08 11:37:17,093 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:17,093 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:17,093 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:19,404 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 172.901123046875, mean: 0.5394582152366638
+2025-02-08 11:37:19,406 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 208.33367919921875, mean: 0.8985973596572876
+2025-02-08 11:37:19,406 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:19,406 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:19,406 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:25,172 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 131.55421447753906, mean: 0.7254094481468201
+2025-02-08 11:37:25,175 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 154.7960205078125, mean: 0.41609838604927063
+2025-02-08 11:37:25,175 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:25,175 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:25,175 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:40,856 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 209.4089813232422, mean: 0.7514482140541077
+2025-02-08 11:37:40,858 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 133.16253662109375, mean: 0.5234801769256592
+2025-02-08 11:37:40,859 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:40,859 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:40,859 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:41,873 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 157.049560546875, mean: 0.7821831703186035
+2025-02-08 11:37:41,877 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 161.90980529785156, mean: 0.5754876732826233
+2025-02-08 11:37:41,878 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:41,878 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:41,878 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:42,181 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 120.47917938232422, mean: 1.6731692552566528
+2025-02-08 11:37:42,183 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 178.74588012695312, mean: 0.5958312749862671
+2025-02-08 11:37:42,183 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:42,183 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:42,184 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:37:56,089 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 171.11473083496094, mean: 0.6933245658874512
+2025-02-08 11:37:56,092 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 211.182373046875, mean: 0.5355731248855591
+2025-02-08 11:37:56,092 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:37:56,092 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:37:56,092 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:03,750 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 200.96463012695312, mean: 0.6359989047050476
+2025-02-08 11:38:03,752 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 117.17424774169922, mean: 0.7265954613685608
+2025-02-08 11:38:03,753 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:03,753 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:03,753 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:05,806 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 152.1040496826172, mean: 0.7022095918655396
+2025-02-08 11:38:05,807 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 145.64158630371094, mean: 0.8717095851898193
+2025-02-08 11:38:05,807 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:05,808 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:05,808 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:10,106 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 143.27183532714844, mean: 0.9495345950126648
+2025-02-08 11:38:10,108 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 134.2161102294922, mean: 1.044165015220642
+2025-02-08 11:38:10,109 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:10,109 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:10,109 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:15,954 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 163.7815704345703, mean: 0.8578439354896545
+2025-02-08 11:38:15,956 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 193.99510192871094, mean: 1.4762325286865234
+2025-02-08 11:38:15,956 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:15,956 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:15,957 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:19,063 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 133.75926208496094, mean: 0.7636067867279053
+2025-02-08 11:38:19,066 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 135.34315490722656, mean: 0.09393387287855148
+2025-02-08 11:38:19,067 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:19,067 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:19,067 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:26,814 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 154.18966674804688, mean: 0.7860264778137207
+2025-02-08 11:38:26,816 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 174.8820343017578, mean: 0.5598453283309937
+2025-02-08 11:38:26,817 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:26,817 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:26,817 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:33,644 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 190.79812622070312, mean: 0.6140738129615784
+2025-02-08 11:38:33,646 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 438.8160400390625, mean: 1.1251803636550903
+2025-02-08 11:38:33,646 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:33,646 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:33,647 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:35,959 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 204.1155548095703, mean: 0.845439612865448
+2025-02-08 11:38:35,961 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 511.832275390625, mean: 0.9416214823722839
+2025-02-08 11:38:35,961 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:35,961 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:35,961 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:46,036 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 157.28579711914062, mean: 0.8885183334350586
+2025-02-08 11:38:46,038 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 147.82125854492188, mean: 0.7686477899551392
+2025-02-08 11:38:46,039 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:38:46,039 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:38:46,039 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:38:57,142 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:38:57,142 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:38:57,165 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:38:57,166 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:38:57,170 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:38:57,170 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:38:57,236 - INFO - [splitting files/max_files_train] Number of files in MUSDB18 for training: 40
+[splitting files/max_files_train] Number of files in MUSDB18 for validation: 10
+
+2025-02-08 11:38:57,236 - INFO - [splitting files/max_files_val] Number of files in DSD100 for training: 16
+[splitting files/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-08 11:39:19,193 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 135.15757751464844, mean: 1.1092593669891357
+2025-02-08 11:39:19,195 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 195.29371643066406, mean: 0.9603708386421204
+2025-02-08 11:39:19,195 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:39:19,195 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:39:19,196 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:39:22,515 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 214.30081176757812, mean: 0.7160784006118774
+2025-02-08 11:39:22,517 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 148.6383514404297, mean: 0.5075973868370056
+2025-02-08 11:39:22,517 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:39:22,517 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:39:22,517 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:39:23,329 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 138.04173278808594, mean: 0.7751694321632385
+2025-02-08 11:39:23,331 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 188.28860473632812, mean: 0.36938416957855225
+2025-02-08 11:39:23,331 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:39:23,332 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:39:23,332 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:39:34,347 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 157.54476928710938, mean: 0.5957856178283691
+2025-02-08 11:39:34,349 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 150.08853149414062, mean: 0.4412510097026825
+2025-02-08 11:39:34,349 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:39:34,349 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:39:34,349 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:39:48,383 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 125.6336669921875, mean: 0.6760342717170715
+2025-02-08 11:39:48,385 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 183.4272918701172, mean: 0.5036545395851135
+2025-02-08 11:39:48,385 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:39:48,386 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:39:48,386 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:39:52,019 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 148.583740234375, mean: 0.8084051609039307
+2025-02-08 11:39:52,021 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 153.8534698486328, mean: 1.0451499223709106
+2025-02-08 11:39:52,021 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:39:52,021 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:39:52,021 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:39:55,850 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 154.52882385253906, mean: 0.8686821460723877
+2025-02-08 11:39:55,852 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 227.61585998535156, mean: 0.5955730080604553
+2025-02-08 11:39:55,853 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:39:55,853 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:39:55,853 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:02,948 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 143.3991241455078, mean: 0.9186258912086487
+2025-02-08 11:40:02,950 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 159.38710021972656, mean: 1.0374051332473755
+2025-02-08 11:40:02,950 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:02,950 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:02,951 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:17,047 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 156.871826171875, mean: 0.6162850856781006
+2025-02-08 11:40:17,051 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 129.8469696044922, mean: 0.487667977809906
+2025-02-08 11:40:17,052 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:17,052 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:17,052 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:17,593 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 132.7688751220703, mean: 0.9417900443077087
+2025-02-08 11:40:17,597 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 186.51385498046875, mean: 0.5748989582061768
+2025-02-08 11:40:17,597 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:17,597 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:17,598 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:25,004 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 167.44418334960938, mean: 0.44687730073928833
+2025-02-08 11:40:25,006 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 169.59393310546875, mean: 0.4082700312137604
+2025-02-08 11:40:25,006 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:25,006 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:25,006 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:26,738 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 145.3501434326172, mean: 1.0088235139846802
+2025-02-08 11:40:26,740 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 175.2249755859375, mean: 0.8372498154640198
+2025-02-08 11:40:26,740 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:26,740 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:26,740 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:29,376 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 194.64784240722656, mean: 0.8044407367706299
+2025-02-08 11:40:29,378 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 124.00262451171875, mean: 0.42860299348831177
+2025-02-08 11:40:29,378 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:29,378 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:29,379 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:35,280 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 134.228271484375, mean: 0.78570955991745
+2025-02-08 11:40:35,283 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 180.80247497558594, mean: 0.6955990195274353
+2025-02-08 11:40:35,283 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:35,283 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:35,283 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:50,185 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 152.4158172607422, mean: 0.5278805494308472
+2025-02-08 11:40:50,189 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 152.33631896972656, mean: 1.092571496963501
+2025-02-08 11:40:50,189 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:50,189 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:50,189 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:40:52,937 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 126.51499938964844, mean: 0.8984112739562988
+2025-02-08 11:40:52,941 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 298.8653564453125, mean: 0.6113384962081909
+2025-02-08 11:40:52,941 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:40:52,941 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:40:52,942 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:01,876 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 148.9029541015625, mean: 0.9038405418395996
+2025-02-08 11:41:01,880 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 150.0860595703125, mean: 0.51321941614151
+2025-02-08 11:41:01,880 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:01,880 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:01,880 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:01,889 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 161.34205627441406, mean: 0.7984238266944885
+2025-02-08 11:41:01,891 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 164.9075927734375, mean: 0.6873378157615662
+2025-02-08 11:41:01,892 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:01,892 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:01,892 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:10,644 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 162.74351501464844, mean: 1.1126549243927002
+2025-02-08 11:41:10,646 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 144.25086975097656, mean: 0.6844831705093384
+2025-02-08 11:41:10,646 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:10,647 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:10,647 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:23,286 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 127.77037811279297, mean: 0.6502319574356079
+2025-02-08 11:41:23,289 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 157.83346557617188, mean: 0.24142548441886902
+2025-02-08 11:41:23,290 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:23,290 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:23,290 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:32,717 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 172.18971252441406, mean: 0.8311092257499695
+2025-02-08 11:41:32,719 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 125.80040740966797, mean: 0.6234560012817383
+2025-02-08 11:41:32,719 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:32,719 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:32,719 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:37,799 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 142.04598999023438, mean: 0.967853307723999
+2025-02-08 11:41:37,800 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 143.2766876220703, mean: 0.7826474905014038
+2025-02-08 11:41:37,801 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:37,801 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:37,801 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:42,390 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 200.96463012695312, mean: 0.422691285610199
+2025-02-08 11:41:42,392 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 0.0, mean: 0.0
+2025-02-08 11:41:42,393 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:42,393 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:42,393 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:42,913 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 162.9336395263672, mean: 0.709860622882843
+2025-02-08 11:41:42,915 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 166.3801727294922, mean: 0.6964927911758423
+2025-02-08 11:41:42,915 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:42,915 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:42,915 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:50,455 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 204.1155548095703, mean: 0.31300216913223267
+2025-02-08 11:41:50,457 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 511.832275390625, mean: 1.0664664506912231
+2025-02-08 11:41:50,457 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:50,457 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:50,457 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:51,304 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 165.51930236816406, mean: 0.8398999571800232
+2025-02-08 11:41:51,306 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 148.9488067626953, mean: 0.44928452372550964
+2025-02-08 11:41:51,306 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:51,306 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:51,306 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:58,277 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 163.7815704345703, mean: 0.7228944897651672
+2025-02-08 11:41:58,280 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 146.6102294921875, mean: 0.9848376512527466
+2025-02-08 11:41:58,281 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:58,281 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:58,281 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:58,639 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 170.9839630126953, mean: 0.6267350316047668
+2025-02-08 11:41:58,642 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 468.694091796875, mean: 0.6124317049980164
+2025-02-08 11:41:58,642 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:58,642 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:58,642 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:41:58,845 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 149.010986328125, mean: 0.5338920950889587
+2025-02-08 11:41:58,847 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 125.38349151611328, mean: 1.0077253580093384
+2025-02-08 11:41:58,847 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:41:58,847 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:41:58,847 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:42:03,876 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 133.64382934570312, mean: 0.8415667414665222
+2025-02-08 11:42:03,878 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 163.13595581054688, mean: 0.5887606739997864
+2025-02-08 11:42:03,879 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:42:03,879 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:42:03,879 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:42:04,169 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 198.82275390625, mean: 0.5052167773246765
+2025-02-08 11:42:04,170 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 17.045246124267578, mean: 0.5300820469856262
+2025-02-08 11:42:04,171 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:42:04,171 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:42:04,171 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:42:11,701 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 133.75926208496094, mean: 1.2835776805877686
+2025-02-08 11:42:11,703 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 0.0, mean: 0.0
+2025-02-08 11:42:11,703 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:42:11,703 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:42:11,703 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:42:12,265 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 228.41433715820312, mean: 0.6459808945655823
+2025-02-08 11:42:12,268 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 122.07505798339844, mean: 0.06755110621452332
+2025-02-08 11:42:12,268 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:42:12,268 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:42:12,268 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:42:12,996 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 7.031485438346863e-08, max: 140.67141723632812, mean: 0.5465059280395508
+2025-02-08 11:42:12,998 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 208.33367919921875, mean: 0.22116735577583313
+2025-02-08 11:42:12,998 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:42:12,998 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:42:12,998 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:42:13,373 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 164.66714477539062, mean: 0.44255292415618896
+2025-02-08 11:42:13,375 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 438.8160400390625, mean: 0.9183225631713867
+2025-02-08 11:42:13,376 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:42:13,376 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:42:13,377 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:42:17,603 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 209.4089813232422, mean: 0.3208966553211212
+2025-02-08 11:42:17,605 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 133.16253662109375, mean: 0.8584508895874023
+2025-02-08 11:42:17,605 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:42:17,606 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:42:17,606 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-08 11:42:24,141 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 0.0, max: 215.80401611328125, mean: 0.5379053950309753
+2025-02-08 11:42:24,143 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 122.10892486572266, mean: 0.12951979041099548
+2025-02-08 11:42:24,143 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 948]), Padded targets shape: torch.Size([4, 1, 513, 948])
+2025-02-08 11:42:24,144 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-08 11:42:24,144 - INFO - Tensors are on CPU, skipping pin_memory.

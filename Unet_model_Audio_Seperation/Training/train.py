@@ -4,13 +4,11 @@ import torch
 import os
 import sys
 import deepspeed
-from torch import autocast
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 import json
 from Training.Externals.Functions import Early_break
 import gc
-
 from Training.Externals.Dataloader import create_dataloaders,create_dataloaders2
 from Training.Externals.Value_storage import  Append_loss_values_for_batch, Append_loss_values_for_epoches, Get_calculated_average_loss_from_batches, get_loss_value_list
 from Training.Externals.Logger import setup_logger
@@ -42,24 +40,21 @@ with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config.json"), "r") 
 
 
 def train(start_training=True):
-    torch.cuda.empty_cache()
-    gc.collect()
-    load_model_path = os.path.join(Model_CheckPoint_Training, "CheckPoints/checkpoint_epoch_18")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_logger.info(f"[Train] Using device: {device}")
-    epochs = 1
+    epochs = 25
     prev_epoch_loss = None
     best_model_path = None 
     current_step = 0
     maskloss_avg, hybridloss_avg, combined_loss_avg = 0.0, 0.0, 0.0 
-    num_workers = 0
+    num_workers = 4 
     sampling_rate = 44100
-    max_length_seconds = 15
+    max_length_seconds = 11
     patience = 5
+    trigger_times = 0
     tried = float('inf')
     bestloss = float('inf')
     clear_memory_before_training()
-    
 
     model = UNet(in_channels=1, out_channels=1).to(device)
 
@@ -86,7 +81,7 @@ def train(start_training=True):
     if 'combined_train_loader' not in globals():
          train_loader, val_loader_phase = create_dataloaders(
             batch_size=ds_config["train_micro_batch_size_per_gpu"], 
-            num_workers=num_workers,
+            num_workers=4,
             sampling_rate=sampling_rate,
             max_length_seconds=max_length_seconds,
             max_files_train=None,
@@ -97,9 +92,15 @@ def train(start_training=True):
         tried += 1
 
 #TRAINING LOOP STARTS HERE.....
+
+
+    torch.cuda.empty_cache()
+    gc.collect()
+
     if start_training:
         try:
             for epoch in range(epochs):
+
                 model_engine.train()
                 running_loss = 0.0
                 train_logger.info(f"[Train] Epoch {epoch + 1}/{epochs} started.\n")
@@ -122,7 +123,7 @@ def train(start_training=True):
 
                     model_engine.zero_grad()
     
-                    with autocast(device_type='cuda', dtype=torch.float16, enabled=(device.type == 'cuda')):
+                    with torch.amp.autocast(device_type='cuda',dtype=torch.float16):
                         train_logger.debug(f"inputs into the --> model {inputs.shape}\n")
                         predicted_mask, outputs = model_engine(inputs)
                         predicted_vocals = predicted_mask * inputs

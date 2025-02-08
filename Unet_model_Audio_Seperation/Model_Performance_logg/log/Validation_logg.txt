@@ -1,0 +1,9 @@
+2025-02-08 11:38:50,052 - INFO - Validation Size: [37]
+2025-02-08 11:39:19,205 - INFO - val_batch_idx: [0], inputs: [torch.Size([4, 1, 513, 948])], target: [torch.Size([4, 1, 513, 948])]
+2025-02-08 11:39:34,360 - INFO - val_batch_idx: [1], inputs: [torch.Size([4, 1, 513, 948])], target: [torch.Size([4, 1, 513, 948])]
+2025-02-08 11:39:34,717 - INFO - val_batch_idx: [2], inputs: [torch.Size([4, 1, 513, 948])], target: [torch.Size([4, 1, 513, 948])]
+2025-02-08 11:39:35,086 - INFO - val_batch_idx: [3], inputs: [torch.Size([4, 1, 513, 948])], target: [torch.Size([4, 1, 513, 948])]
+2025-02-08 11:42:25,791 - INFO - [VALIDATION]
+[Epoch 1] Validation Loss: [0.878635], runningloss: [32.50950199365616],val_combined_loss: [0.5015878081321716], val_predicted_mask shape: [torch.Size([4, 1, 513, 948])], val_predicted_mask mean: [0.533203], val_outputs: [torch.Size([4, 64, 513, 948])]
+
+2025-02-08 11:42:25,791 - INFO - New best model (Loss: 0.878635 < inf)
