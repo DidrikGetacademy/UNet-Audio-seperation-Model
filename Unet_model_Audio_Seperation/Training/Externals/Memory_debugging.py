@@ -57,6 +57,9 @@ def log_memory_usage(tag=""):
 def clear_memory_before_training():
     log_memory_usage(tag="Clearing memory before training")
     torch.cuda.empty_cache()
+    torch.cuda.reset_max_memory_allocated()
+    torch.cuda.reset_max_memory_cached()
+    torch.cuda.ipc_collect()
     gc.collect()
     log_memory_usage(tag="Memory after clearing it...")
 

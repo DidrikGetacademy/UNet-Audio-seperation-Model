@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 import stempeg
 import numpy as np
 import sys
-
+import torchaudio
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
@@ -18,10 +18,9 @@ data_logger = setup_logger('dataloader_logger', train_log_path)
 
 
 device = torch.device("cpu")
-
 class MUSDB18StemDataset(Dataset):
     def __init__(self, root_dir, subset='train', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=11, max_files=None):
+                 hop_length=512, max_length_seconds=5, max_files=None):
         self.root_dir = os.path.join(root_dir, subset)
         self.sr = sr
         self.n_fft = n_fft
@@ -61,11 +60,11 @@ class MUSDB18StemDataset(Dataset):
             vocals = vocals[start:end]
 
     
-            mixture_tensor = self._normalize(self._pad_or_trim(mixture))
-            vocals_tensor = self._normalize(self._pad_or_trim(vocals))
+            mixture_tensor = torch.from_numpy(mixture)
+            vocals_tensor = torch.from_numpy(vocals)
 
     
-            window = torch.hann_window(self.n_fft, device=device)
+            window = torch.hann_window(self.n_fft)
             mix_stft = torch.stft(mixture_tensor, n_fft=self.n_fft, hop_length=self.hop_length, 
                                   window=window, return_complex=True)
             voc_stft = torch.stft(vocals_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
@@ -85,7 +84,7 @@ class MUSDB18StemDataset(Dataset):
 
     def _pad_or_trim(self, audio):
         max_samples = int(self.sr * self.max_length_seconds)
-        audio_tensor = torch.from_numpy(audio).to(device)
+        audio_tensor = torch.from_numpy(audio)
         if len(audio) < max_samples:
             return F.pad(audio_tensor, (0, max_samples - len(audio)))
         return audio_tensor[:max_samples]
@@ -95,3 +94,19 @@ class MUSDB18StemDataset(Dataset):
         max_val = torch.max(torch.abs(audio)) + 1e-8
         return audio / max_val
 
+def spectrogram_to_waveform(magnitude_spectrogram, n_fft=1024, hop_length=512, num_iters=32, win_length=None):
+    magnitude_spectrogram = magnitude_spectrogram.squeeze(0).to(torch.float32)
+    window = torch.hann_window(win_length or n_fft, dtype=torch.float32)  
+    waveform = torchaudio.functional.griffinlim(
+        magnitude_spectrogram, 
+        n_fft=n_fft, 
+        hop_length=hop_length, 
+        win_length=win_length or n_fft, 
+        window=window, 
+        power=1, 
+        n_iter=num_iters,
+        momentum=0.99, 
+        length=None, 
+        rand_init=True
+    )
+    return waveform

@@ -16,11 +16,9 @@ train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt
 dataset_logger = setup_logger('dataset_DSD100', train_log_path)
 
 
-device = torch.device("cpu")
-
 class DSD100(Dataset):
     def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=11, max_files=None):
+                 hop_length=512, max_length_seconds=5, max_files=None):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length
@@ -55,7 +53,7 @@ class DSD100(Dataset):
             voc_tensor = self._normalize(self._pad_or_trim(vocals))
 
      
-            window = torch.hann_window(self.n_fft, device=device)
+            window = torch.hann_window(self.n_fft)
             mix_stft = torch.stft(mix_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
                                   window=window, return_complex=True)
             voc_stft = torch.stft(voc_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
@@ -74,7 +72,7 @@ class DSD100(Dataset):
 
     def _pad_or_trim(self, audio):
         max_samples = int(self.sr * self.max_length_seconds)
-        audio_tensor = torch.from_numpy(audio).to(device)
+        audio_tensor = torch.from_numpy(audio)
         if len(audio) < max_samples:
             return F.pad(audio_tensor, (0, max_samples - len(audio)))
         return audio_tensor[:max_samples]

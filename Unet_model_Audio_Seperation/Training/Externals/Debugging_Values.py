@@ -1,17 +1,26 @@
 import os
 import sys
 import torch 
+import torchaudio
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
-
+from Datasets.Scripts.Dataset_Musdb18 import spectrogram_to_waveform
 root_dir = Return_root_dir() #Gets the root directory
 Debug_value = setup_logger('debugging_values',os.path.join(root_dir,"Model_Performance_logg/log/Debugging_values.txt"))
 
 
 
-
+def save_audio_files_from_model_dataset_mask(predicted_vocals,targets,inputs,outputs):
+        predicted_waveform = spectrogram_to_waveform(predicted_vocals.to("cpu"))
+        target_waveform = spectrogram_to_waveform(targets.to("cpu"))
+        input_waveform= spectrogram_to_waveform(inputs.to("cpu"))
+        output_waveform = spectrogram_to_waveform(outputs.to("cpu"))
+        torchaudio.save("/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/predictions/predicted__audio.wav", predicted_waveform.unsqueeze(0), sample_rate=44100)
+        torchaudio.save("/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/outputs/output_audio.wav", output_waveform.unsqueeze(0), sample_rate=44100)
+        torchaudio.save("/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/inputs/input_audio.wav", input_waveform.unsqueeze(0), sample_rate=44100)
+        torchaudio.save("/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/targets/target_audio.wav", target_waveform.unsqueeze(0), sample_rate=44100)
 
 
 def dataset_sample_information(musdb18_Train_Dataloader, musdb18_Evaluation_Dataloader):

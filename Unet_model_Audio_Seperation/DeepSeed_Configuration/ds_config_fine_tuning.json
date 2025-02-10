@@ -31,7 +31,7 @@
   "optimizer": {
     "type": "AdamW",
     "params": {
-      "lr": 0.0001,
+      "lr": 0.005,          
       "weight_decay": 0.01,
       "betas": [0.9, 0.999],
       "eps": 1e-8,
@@ -42,13 +42,13 @@
     "type": "WarmupDecayLR",
     "params": {
       "warmup_min_lr": 0.0,
-      "warmup_max_lr": 0.0001,
-      "warmup_num_steps": 500,
+      "warmup_max_lr": 0.005,       
+      "warmup_num_steps": 100,
       "total_num_steps": 5000,
       "last_batch_iteration": -1
     }
   },
-  "gradient_clipping": 1.0,
+  "gradient_clipping": 0.5,
   "steps_per_print": 50,
   "activation_checkpointing": {
     "partition_activations": true,
@@ -62,4 +62,5 @@
     "enabled": true,
     "output_path": "/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Performance_logg/TensorBoard/DeepSpeed Logging",
     "job_name": "Two_GPU_Training"
-  }}
+  }
+}

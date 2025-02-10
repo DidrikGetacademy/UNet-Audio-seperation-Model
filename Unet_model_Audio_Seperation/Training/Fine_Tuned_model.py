@@ -11,19 +11,18 @@ sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Loss_Class_Functions import Combinedloss_Fine_tuning 
 from Training.Externals.Logger import setup_logger
-from Training.Externals.Dataloader import create_dataloaders
+from Training.Externals.Dataloader import create_dataloader_Fine_tuning
 from Training.Externals.Loss_Diagram_Values import plot_loss_curves_FineTuning_script_,visualize_and_save_waveforms,evaluate_metrics_from_spectrograms
 from Training.Externals.Functions import load_model_path_func
 from Training.Externals.Functions import freeze_encoder
 from Training.Externals.Value_storage import Append_loss_values_epoches,get_loss_value_list_loss_history_finetuning_epoches
 root_dir = Return_root_dir() 
 fine_tuned_model_path = os.path.join(root_dir, "Model_Weights/Fine_Tuned/Model.pth")
-train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/Fine_tune.txt")
-Fine_tune_logger = setup_logger('Fine-Tuning', train_log_path)
+Fine_tune_path = os.path.join(root_dir, "Model_Performance_logg/log/Fine_tune.txt")
+Fine_tune_logger = setup_logger('Fine-Tuning', Fine_tune_path)
 
-with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config.json"), "r") as f:
+with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config_fine_tuning.json"), "r") as f:
     ds_config = json.load(f)
-
 
 torch.backends.cudnn.benchmark = True 
 torch.set_num_threads(8)
@@ -38,21 +37,17 @@ loss_history_finetuning_epoches = {
 }
 
 
-
-
-train_loader, val_loader_phase = create_dataloaders(
-    batch_size=ds_config["train_micro_batch_size_per_gpu"],
-    num_workers=0,
-    sampling_rate=44100,
-    max_length_seconds=10,
-    max_files_train=50,
-    max_files_val=20,
-)
-Fine_tune_logger.info("Data loaders created successfully.")
+if 'fine_tuned_loader' not in globals():
+        eval_loader,Fine_tuned_training_loader = create_dataloader_Fine_tuning(
+            batch_size=ds_config["train_micro_batch_size_per_gpu"], 
+            num_workers=8,
+    )
 
 
 
-def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader, Finetuned_validation_loader, ds_config, fine_tune_epochs=10, pretrained_model_path=None):
+
+
+def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader,Finetuned_validation_loader, ds_config, fine_tune_epochs=10, pretrained_model_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Training/checkpoint_epoch_1"):
     visualization_dir = os.path.join(os.path.dirname(fine_tuned_model_path), "visualizations")
     from Model_Architecture.model import UNet
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -60,12 +55,6 @@ def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader, Finetuned
     load_model_path = os.path.join(root_dir, "Model_Weights/CheckPoints/checkpoint_epochsss_25")
     Fine_tune_logger.info("Initializing model...")
     
-    if pretrained_model_path is None:
-        load_model_path_func(load_model_path, model_engine, model, device)
-    else:
-        load_model_path_func(pretrained_model_path, model_engine, model, device)
-    
-
     model = UNet(in_channels=1, out_channels=1).to(device)
 
 
@@ -74,12 +63,19 @@ def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader, Finetuned
         config=ds_config,
         model_parameters=model.parameters()
     )
+    
+    if pretrained_model_path is None:
+        load_model_path_func(load_model_path, model_engine, model, device)
+    else:
+        load_model_path_func(pretrained_model_path, model_engine, model, device)
+    
+
     Fine_tune_logger.debug("DeepSpeed model_engine initialized.")
     
     
     freeze_encoder(Fine_tune_logger, model_engine)
 
-    loss_function = Combinedloss_Fine_tuning(Fine_tune_logger, device)
+    loss_function = Combinedloss_Fine_tuning(Fine_tune_logger,device)
     
     
 
@@ -182,7 +178,7 @@ def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader, Finetuned
         # Plot loss curves after training
         plot_loss_curves_FineTuning_script_(loss_history_finetuning_epoches, 'loss_curves_finetuning_epoches.png')
         Fine_tune_logger.info("Loss curves plotted.")
-        # Save the fine-tuned model checkpoint via DeepSpeed
+        
         checkpoint_dir = os.path.dirname(fine_tuned_model_path)
         os.makedirs(checkpoint_dir, exist_ok=True)
         model_engine.save_checkpoint(checkpoint_dir, tag="finetuned")
@@ -196,8 +192,7 @@ def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader, Finetuned
 if __name__ == "__main__":
     fine_tune_model(
         fine_tuned_model_path=fine_tuned_model_path,
-        Fine_tuned_training_loader=train_loader,
-        Finetuned_validation_loader=val_loader_phase,
-        ds_config=ds_config,
-        fine_tune_epochs=8
+        Fine_tuned_training_loader = Fine_tuned_training_loader,
+        Finetuned_validation_loader = eval_loader,
+        ds_config=ds_config
     )
