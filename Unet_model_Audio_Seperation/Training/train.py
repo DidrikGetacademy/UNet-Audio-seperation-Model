@@ -117,11 +117,11 @@ def train(start_training=True):
                         predicted_mask, outputs = model_engine(inputs)
                         predicted_vocals = predicted_mask * inputs
     
-                      # if batch_idx <= 2:
-                      #      try:
-                      #           save_audio_files_from_model_dataset_mask(predicted_vocals, targets ,inputs, outputs)
-                      #       except Exception as e:
-                      #               print(f"error durring reconstruction of audio: {str(e)}")
+                        if batch_idx <= 2:
+                            try:
+                                save_audio_files_from_model_dataset_mask(predicted_vocals, targets ,inputs, outputs)
+                            except Exception as e:
+                                     print(f"error durring reconstruction of audio: {str(e)}")
 
 
                         log_first_2_batches_outputs_inputs_targets_predicted_mask(batch_idx, outputs, inputs, targets, predicted_mask, train_logger,predicted_vocals)

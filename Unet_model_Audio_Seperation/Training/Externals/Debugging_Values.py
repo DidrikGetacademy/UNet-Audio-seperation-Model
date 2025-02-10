@@ -6,7 +6,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
-from Datasets.Scripts.Dataset_Musdb18 import spectrogram_to_waveform
+from Datasets.Scripts.Dataset_utils import spectrogram_to_waveform
 root_dir = Return_root_dir() #Gets the root directory
 Debug_value = setup_logger('debugging_values',os.path.join(root_dir,"Model_Performance_logg/log/Debugging_values.txt"))
 

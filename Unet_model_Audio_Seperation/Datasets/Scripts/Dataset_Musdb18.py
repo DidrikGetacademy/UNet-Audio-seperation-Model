@@ -6,12 +6,11 @@ import stempeg
 import numpy as np
 import sys
 import torchaudio
-
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
-
+from Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 data_logger = setup_logger('dataloader_logger', train_log_path)
@@ -51,62 +50,57 @@ class MUSDB18StemDataset(Dataset):
             mixture = self._to_mono(mixture).astype(np.float32)
             vocals = self._to_mono(vocals).astype(np.float32)
 
-    
-            max_length_samples = int(self.sr * self.max_length_seconds)
-            max_start = len(mixture) - max_length_samples
-            start = np.random.randint(0, max_start) if max_start > 0 else 0
-            end = start + max_length_samples
-            mixture = mixture[start:end]
-            vocals = vocals[start:end]
+
+
+            #Checks if the mixture audio contains valid audio too be proccessed 
+            if not validate_audio(mixture,self.sr,self.max_length_seconds):
+                data_logger.warning(f"Invalid mixture audio in {file_path}")
+                return None
+            
+            #Checks if the vocals audio contains valid audio too be proccessed 
+            if not validate_audio(vocals,self.sr, self.max_length_seconds):
+                data_logger.warning(f"Invalid vocals audio in {file_path}")
+                return None 
+
 
     
             mixture_tensor = torch.from_numpy(mixture)
             vocals_tensor = torch.from_numpy(vocals)
 
+            mixture_tensor = _normalize(_pad_or_trim(mixture_tensor, self.sr, self.max_length_seconds))
+            vocals_tensor = _normalize(_pad_or_trim(vocals_tensor, self.sr, self.max_length_seconds))
+
     
             window = torch.hann_window(self.n_fft)
+
             mix_stft = torch.stft(mixture_tensor, n_fft=self.n_fft, hop_length=self.hop_length, 
                                   window=window, return_complex=True)
+            
             voc_stft = torch.stft(vocals_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
                                   window=window, return_complex=True)
 
           
             mixture_mag = torch.abs(mix_stft).unsqueeze(0)
             vocals_mag = torch.abs(voc_stft).unsqueeze(0)
+
+            if not validate_spectrogram(mixture_mag):
+                data_logger.warning(f"Invalid mixture spectrogram in {file_path}")
+                return None
+            
+            if not validate_spectrogram(vocals_mag):
+                data_logger.warning(f"Invalid vocals spectrogram in {file_path}")
+                return None
+            
+
             return mixture_mag, vocals_mag
 
         except Exception as e:
             data_logger.error(f"Error processing {os.path.basename(file_path)}: {str(e)}")
             return None
 
+
+
     def _to_mono(self, audio):
         return np.mean(audio, axis=1) if audio.ndim == 2 else audio
 
-    def _pad_or_trim(self, audio):
-        max_samples = int(self.sr * self.max_length_seconds)
-        audio_tensor = torch.from_numpy(audio)
-        if len(audio) < max_samples:
-            return F.pad(audio_tensor, (0, max_samples - len(audio)))
-        return audio_tensor[:max_samples]
 
-    def _normalize(self, audio):
-        audio = audio.clone().detach()
-        max_val = torch.max(torch.abs(audio)) + 1e-8
-        return audio / max_val
-
-def spectrogram_to_waveform(magnitude_spectrogram, n_fft=1024, hop_length=512, num_iters=32, win_length=None):
-    magnitude_spectrogram = magnitude_spectrogram.squeeze(0).to(torch.float32)
-    window = torch.hann_window(win_length or n_fft, dtype=torch.float32)  
-    waveform = torchaudio.functional.griffinlim(
-        magnitude_spectrogram, 
-        n_fft=n_fft, 
-        hop_length=hop_length, 
-        win_length=win_length or n_fft, 
-        window=window, 
-        power=1, 
-        n_iter=num_iters,
-        momentum=0.99, 
-        length=None, 
-        rand_init=True
-    )
-    return waveform

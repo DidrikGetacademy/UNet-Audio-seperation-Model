@@ -5,11 +5,11 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 import sys
 import numpy as np
-
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
+from Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
 
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
@@ -48,9 +48,20 @@ class DSD100(Dataset):
             mixture = self._load_audio(mix_path)
             vocals = self._load_audio(voc_path)
 
+           #Checks if the mixture audio contains valid audio too be proccessed 
+            if not validate_audio(mixture, self.sr, self.max_length_seconds):
+                dataset_logger.warning(f"Invalid mixture audio in {mix_path}")
+                return None
+            
+            #Checks if the vocals audio contains valid audio too be proccessed 
+            if not validate_audio(vocals, self.sr, self.max_length_seconds):
+                dataset_logger.warning(f"Invalid vocals audio in {voc_path}")
+                return None 
+            
+
      
-            mix_tensor = self._normalize(self._pad_or_trim(mixture))
-            voc_tensor = self._normalize(self._pad_or_trim(vocals))
+            mix_tensor = _normalize(_pad_or_trim(mixture, self.sr, self.max_length_seconds))
+            voc_tensor = _normalize(_pad_or_trim(vocals, self.sr, self.max_length_seconds))
 
      
             window = torch.hann_window(self.n_fft)
@@ -59,25 +70,28 @@ class DSD100(Dataset):
             voc_stft = torch.stft(voc_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
                                   window=window, return_complex=True)
 
-        
-            return torch.abs(mix_stft).unsqueeze(0), torch.abs(voc_stft).unsqueeze(0)
+            mixture_mag = torch.abs(mix_stft).unsqueeze(0)
+            vocals_mag = torch.abs(voc_stft).unsqueeze(0)
+
+            if validate_spectrogram(mixture_mag):
+                dataset_logger.warning(f"Invalid mixture spectrogram in {mix_path}")
+                return None
+            
+            if not validate_spectrogram(vocals_mag):
+                dataset_logger.warning(f"Invalid vocals spectrogram in {voc_path}")
+                return None
+            
+            return  mixture_mag, vocals_mag
 
         except Exception as e:
             dataset_logger.error(f"Error processing {song}: {str(e)}")
             return None
 
+
     def _load_audio(self, path):
         audio, _ = librosa.load(path, sr=self.sr, mono=True)
         return audio.astype(np.float32)
 
-    def _pad_or_trim(self, audio):
-        max_samples = int(self.sr * self.max_length_seconds)
-        audio_tensor = torch.from_numpy(audio)
-        if len(audio) < max_samples:
-            return F.pad(audio_tensor, (0, max_samples - len(audio)))
-        return audio_tensor[:max_samples]
 
-    def _normalize(self, audio):
-        audio = audio.clone().detach()
-        max_val = torch.max(torch.abs(audio)) + 1e-8
-        return audio / max_val
+
+ 
