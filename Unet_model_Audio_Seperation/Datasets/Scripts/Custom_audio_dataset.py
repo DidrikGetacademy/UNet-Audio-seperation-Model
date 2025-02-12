@@ -11,7 +11,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
-from Dataset_utils import validate_audio, validate_spectrogram
+from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 data_logger = setup_logger('custom_dataset', train_log_path)
@@ -45,7 +45,7 @@ class CustomAudioDataset(Dataset):
             if not validate_audio(input_audio, self.sr, self.max_length_seconds):
                 data_logger.warning(f"Invalid mixture audio in {self.input_files}")
                 return None
-            if not validate_audio(target_audio,self.sr, self.max_length_seconds):
+            if not validate_audio(target_audio, self.sr, self.max_length_seconds):
                 data_logger.warning(f"Invalid vocals audio in {self.target_files}")
                 return None 
             
@@ -59,6 +59,11 @@ class CustomAudioDataset(Dataset):
             vocal_mag = torch.abs(input_stft).unsqueeze(0)
             mixture_mag = torch.abs(target_stft).unsqueeze(0)
 
+
+            if not validate_spectrogram(vocal_mag) or not validate_spectrogram(mixture_mag):
+                print("Invalid spectrogram")
+                return None
+            
             return vocal_mag, mixture_mag
 
         except Exception as e:

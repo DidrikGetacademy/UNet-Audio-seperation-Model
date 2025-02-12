@@ -18,10 +18,10 @@ from Training.Externals.Functions import freeze_encoder
 from Training.Externals.Value_storage import Append_loss_values_epoches,get_loss_value_list_loss_history_finetuning_epoches
 root_dir = Return_root_dir() 
 fine_tuned_model_path = os.path.join(root_dir, "Model_Weights/Fine_Tuned/Model.pth")
-Fine_tune_path = os.path.join(root_dir, "Model_Performance_logg/log/Fine_tune.txt")
+Fine_tune_path = os.path.join(root_dir, "DeepSeed_Configuration/ds_config_Training.json")
 Fine_tune_logger = setup_logger('Fine-Tuning', Fine_tune_path)
 
-with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config_fine_tuning.json"), "r") as f:
+with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config_Training.json"), "r") as f:
     ds_config = json.load(f)
 
 torch.backends.cudnn.benchmark = True 
@@ -40,14 +40,14 @@ loss_history_finetuning_epoches = {
 if 'fine_tuned_loader' not in globals():
         eval_loader,Fine_tuned_training_loader = create_dataloader_Fine_tuning(
             batch_size=ds_config["train_micro_batch_size_per_gpu"], 
-            num_workers=8,
+            num_workers=0,
     )
 
 
 
 
 
-def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader,Finetuned_validation_loader, ds_config, fine_tune_epochs=10, pretrained_model_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Training/checkpoint_epoch_1"):
+def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader,Finetuned_validation_loader, ds_config, fine_tune_epochs=10, pretrained_model_path=None):
     visualization_dir = os.path.join(os.path.dirname(fine_tuned_model_path), "visualizations")
     from Model_Architecture.model import UNet
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

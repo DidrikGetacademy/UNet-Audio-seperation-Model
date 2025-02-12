@@ -71,8 +71,9 @@ def create_dataloader_training(
     musdb18_dir=MUSDB18_dir,
     dsd100_dir=DSD100_dataset_dir,
     batch_size=0,
-    num_workers=8,
+    num_workers=0,
     sampling_rate=44100,
+    max_length_seconds=10,
     max_files_train=100,
     max_files_val=40,
     val_ratio=0.2,
@@ -106,7 +107,7 @@ def create_dataloader_training(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=num_train_files_musdb18,
     )
 
@@ -116,7 +117,7 @@ def create_dataloader_training(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=num_train_files_dsd100,
     )
 
@@ -128,7 +129,7 @@ def create_dataloader_training(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=num_val_files_musdb18,
     )
 
@@ -138,7 +139,7 @@ def create_dataloader_training(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=num_val_files_dsd100,
     )
 
@@ -180,11 +181,12 @@ def create_dataloader_Fine_tuning(
     musdb18_dir=MUSDB18_dir,
     dsd100_dir=DSD100_dataset_dir,
     batch_size=0,
-    num_workers=8,
+    num_workers=0,
     sampling_rate=44100,
     max_files_finetuning_train=100,
     max_files_fine_tuning_validation=40,
     val_ratio=0.2,
+    max_length_seconds = 10
 ):
     if max_files_finetuning_train:
         num_val_files_musdb18 = int(max_files_finetuning_train * val_ratio)
@@ -215,7 +217,7 @@ def create_dataloader_Fine_tuning(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=num_train_files_musdb18,
     )
 
@@ -225,7 +227,7 @@ def create_dataloader_Fine_tuning(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=num_train_files_dsd100,
     )
 
@@ -237,7 +239,7 @@ def create_dataloader_Fine_tuning(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=num_val_files_musdb18,
     )
 
@@ -247,7 +249,7 @@ def create_dataloader_Fine_tuning(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=num_val_files_dsd100,
     )
 
@@ -294,7 +296,8 @@ def create_dataloader_EVALUATION(
     dsd100_dir=DSD100_dataset_dir,
     customDataset_dir=custom_dataset_dir,
     batch_size=0,
-    num_workers=6,
+    num_workers=0,
+    max_length_seconds=10,
     sampling_rate=44100,
     max_files_val=None,
 ):
@@ -305,7 +308,7 @@ def create_dataloader_EVALUATION(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=max_files_val,
     )
 
@@ -315,7 +318,7 @@ def create_dataloader_EVALUATION(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=max_files_val,
     )
 
@@ -324,7 +327,7 @@ def create_dataloader_EVALUATION(
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
-        max_length_seconds=5,
+        max_length_seconds=max_length_seconds,
         max_files=max_files_val,
     )
 

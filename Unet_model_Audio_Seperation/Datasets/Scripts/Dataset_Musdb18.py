@@ -5,12 +5,11 @@ from torch.utils.data import Dataset
 import stempeg
 import numpy as np
 import sys
-import torchaudio
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
-from Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
+from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 data_logger = setup_logger('dataloader_logger', train_log_path)
@@ -19,7 +18,7 @@ data_logger = setup_logger('dataloader_logger', train_log_path)
 device = torch.device("cpu")
 class MUSDB18StemDataset(Dataset):
     def __init__(self, root_dir, subset='train', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=5, max_files=None):
+                 hop_length=512, max_length_seconds=5, max_files=100):
         self.root_dir = os.path.join(root_dir, subset)
         self.sr = sr
         self.n_fft = n_fft
@@ -53,12 +52,12 @@ class MUSDB18StemDataset(Dataset):
 
 
             #Checks if the mixture audio contains valid audio too be proccessed 
-            if not validate_audio(mixture,self.sr,self.max_length_seconds):
+            if not validate_audio(mixture, self.sr, self.max_length_seconds):
                 data_logger.warning(f"Invalid mixture audio in {file_path}")
                 return None
             
             #Checks if the vocals audio contains valid audio too be proccessed 
-            if not validate_audio(vocals,self.sr, self.max_length_seconds):
+            if not validate_audio(vocals, self.sr, self.max_length_seconds):
                 data_logger.warning(f"Invalid vocals audio in {file_path}")
                 return None 
 

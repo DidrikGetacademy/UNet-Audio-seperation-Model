@@ -9,7 +9,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
-from Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
+from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
 
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
@@ -18,7 +18,7 @@ dataset_logger = setup_logger('dataset_DSD100', train_log_path)
 
 class DSD100(Dataset):
     def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=5, max_files=None):
+                 hop_length=512, max_length_seconds=5, max_files=50):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length
@@ -73,7 +73,7 @@ class DSD100(Dataset):
             mixture_mag = torch.abs(mix_stft).unsqueeze(0)
             vocals_mag = torch.abs(voc_stft).unsqueeze(0)
 
-            if validate_spectrogram(mixture_mag):
+            if not validate_spectrogram(mixture_mag):
                 dataset_logger.warning(f"Invalid mixture spectrogram in {mix_path}")
                 return None
             

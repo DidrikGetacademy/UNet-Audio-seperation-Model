@@ -1,0 +1,53 @@
+2025-02-11 23:00:28,059 - INFO - [Train] Using device: cuda
+2025-02-11 23:00:30,845 - INFO - Loaded model checkpoint from /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Training/checkpoint_epoch_9
+2025-02-11 23:00:31,023 - INFO - [Train] Epoch 1/40 started.
+
+2025-02-11 23:00:52,725 - INFO - #####INPUTS & TARGETS VALUE [2 BATCHES]####
+Batch 1: Mixture shape=torch.Size([4, 1, 513, 862]), Target shape=torch.Size([4, 1, 513, 862])
+2025-02-11 23:00:57,000 - INFO - ####OUTPUTS, INPUTS, TARGETS,PREDICTEDMASK [2 BATCHES]####
+Batch 1: Mask range: min=0.0000, max=11.8906Batch 1: Inputs shape=torch.Size([4, 1, 513, 862]), Targets shape=torch.Size([4, 1, 513, 862]), Predicted Mask shape=torch.Size([4, 1, 513, 862]), Outputs shape=torch.Size([4, 64, 513, 862])Mask min=0.0, max=0.5966796875[After Mask Application] Predicted vocals min: 0.0, max: 23.53125
+
+
+
+2025-02-11 23:00:57,104 - INFO - Appending Batch Losses: Mask: 0.35956889390945435, Hybrid: 0.883262038230896, Combined: 0.7980678081512451
+2025-02-11 23:01:34,066 - INFO - Appending Batch Losses: Mask: 0.42605775594711304, Hybrid: 0.76158207654953, Combined: 0.7461363077163696
+2025-02-11 23:01:57,077 - INFO - Appending Batch Losses: Mask: 0.3638964295387268, Hybrid: 0.7643464803695679, Combined: 0.7169907093048096
+2025-02-11 23:02:19,580 - INFO - Appending Batch Losses: Mask: 0.8064860105514526, Hybrid: 1.4131600856781006, Combined: 1.3924551010131836
+2025-02-11 23:02:32,850 - INFO - Appending Batch Losses: Mask: 0.269875705242157, Hybrid: 0.6932026743888855, Combined: 0.6201797127723694
+2025-02-11 23:02:51,049 - INFO - Appending Batch Losses: Mask: 0.2913084924221039, Hybrid: 0.5637150406837463, Combined: 0.5402547717094421
+2025-02-11 23:03:10,386 - INFO - Appending Batch Losses: Mask: 0.5531612038612366, Hybrid: 1.097521185874939, Combined: 1.044845461845398
+2025-02-11 23:03:37,956 - INFO - Appending Batch Losses: Mask: 0.30308955907821655, Hybrid: 0.761444091796875, Combined: 0.6845556497573853
+2025-02-11 23:03:54,055 - INFO - Appending Batch Losses: Mask: 0.3509067893028259, Hybrid: 0.6692193150520325, Combined: 0.6439069509506226
+2025-02-11 23:04:14,397 - INFO - Appending Batch Losses: Mask: 0.7605520486831665, Hybrid: 1.6356728076934814, Combined: 1.5252468585968018
+2025-02-11 23:04:27,792 - INFO - Appending Batch Losses: Mask: 0.388322114944458, Hybrid: 0.8258088827133179, Combined: 0.7722272872924805
+2025-02-11 23:04:54,320 - INFO - Appending Batch Losses: Mask: 0.30365580320358276, Hybrid: 0.7163619995117188, Combined: 0.6532813310623169
+2025-02-11 23:05:10,938 - INFO - Appending Batch Losses: Mask: 0.7349108457565308, Hybrid: 1.5106589794158936, Combined: 1.4249167442321777
+2025-02-11 23:05:35,396 - INFO - Appending Batch Losses: Mask: 0.5174590349197388, Hybrid: 0.9010417461395264, Combined: 0.8894587159156799
+2025-02-11 23:05:56,759 - INFO - Appending Batch Losses: Mask: 0.3561081290245056, Hybrid: 0.7681522369384766, Combined: 0.7157605886459351
+2025-02-11 23:06:25,409 - INFO - Appending Batch Losses: Mask: 0.27164357900619507, Hybrid: 0.6082252860069275, Combined: 0.5615794658660889
+2025-02-11 23:06:44,157 - INFO - Appending Batch Losses: Mask: 0.3499875068664551, Hybrid: 1.0183106660842896, Combined: 0.8878111839294434
+2025-02-11 23:07:11,244 - INFO - Appending Batch Losses: Mask: 0.4573785662651062, Hybrid: 0.8827998638153076, Combined: 0.846649169921875
+2025-02-11 23:07:30,614 - INFO - Appending Batch Losses: Mask: 0.42809903621673584, Hybrid: 0.703560471534729, Combined: 0.7065418362617493
+2025-02-11 23:07:56,747 - INFO - Appending Batch Losses: Mask: 0.43937814235687256, Hybrid: 1.02086341381073, Combined: 0.9342934489250183
+2025-02-11 23:08:18,375 - INFO - Appending Batch Losses: Mask: 0.24777573347091675, Hybrid: 0.8793079257011414, Combined: 0.7394033670425415
+2025-02-11 23:08:45,520 - INFO - Appending Batch Losses: Mask: 0.430061936378479, Hybrid: 0.7939159870147705, Combined: 0.7707721590995789
+2025-02-11 23:09:14,241 - INFO - Appending Batch Losses: Mask: 0.6983409523963928, Hybrid: 1.1762456893920898, Combined: 1.1725424528121948
+2025-02-11 23:09:49,380 - INFO - Appending Batch Losses: Mask: 0.366881787776947, Hybrid: 0.7300549745559692, Combined: 0.6944793462753296
+2025-02-11 23:10:15,279 - INFO - Appending Batch Losses: Mask: 0.8121304512023926, Hybrid: 1.7098512649536133, Combined: 1.6029610633850098
+2025-02-11 23:10:28,795 - INFO - Appending Batch Losses: Mask: 0.33342650532722473, Hybrid: 0.7184461355209351, Combined: 0.6696255207061768
+2025-02-11 23:10:51,697 - INFO - Appending Batch Losses: Mask: 0.39291030168533325, Hybrid: 0.8197265863418579, Combined: 0.7702637910842896
+2025-02-11 23:11:26,026 - INFO - Appending Batch Losses: Mask: 0.3354452848434448, Hybrid: 0.7616022825241089, Combined: 0.7008442282676697
+2025-02-11 23:11:47,239 - INFO - Appending Batch Losses: Mask: 0.2517201900482178, Hybrid: 0.5913493633270264, Combined: 0.5398046374320984
+2025-02-11 23:12:09,034 - INFO - Appending Batch Losses: Mask: 0.2852558195590973, Hybrid: 0.857243001461029, Combined: 0.7426980137825012
+2025-02-11 23:12:28,254 - INFO - Appending Batch Losses: Mask: 0.3540944457054138, Hybrid: 0.7723877429962158, Combined: 0.7177186012268066
+2025-02-11 23:12:39,791 - INFO - Appending Batch Losses: Mask: 0.858283281326294, Hybrid: 1.6025975942611694, Combined: 1.5509599447250366
+2025-02-11 23:12:45,123 - INFO - Current Learning Rate 8.266062568876717e-05
+
+2025-02-11 23:16:00,606 - INFO - Trigger times: 0, patience: 5
+2025-02-11 23:16:00,787 - INFO - New best model (Loss: 27.777232 < inf)
+2025-02-11 23:16:02,234 - INFO - Trigger times: 0, patience: 10
+2025-02-11 23:16:02,235 - INFO - [Epoch Improvement] Epoch 1: Loss improved during training by 0.00% from previous epoch, 
+2025-02-11 23:16:02,238 - INFO - ####LOGGING AVERAGE LOSS EPOCH###
+[Epoch Summary] Epoch: 1/40, Avg Combined Loss: 0.868039, MaskLoss: 0.440568, Hybridloss: 0.925364Previous Epoch loss: None
+2025-02-11 23:19:18,020 - INFO - Trigger times: 0, patience: 5
+2025-02-11 23:19:18,020 - ERROR - [Train] Error during training: not enough values to unpack (expected 4, got 3)

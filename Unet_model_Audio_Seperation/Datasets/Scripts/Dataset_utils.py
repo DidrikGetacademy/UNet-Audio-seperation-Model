@@ -14,6 +14,29 @@ train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt
 data_logger = setup_logger('dataset_DSD100', train_log_path)
 
 
+def _pad_or_trim(audio, sr, max_length_seconds):
+    max_samples = int(sr * max_length_seconds)
+
+    if isinstance(audio,np.ndarray):
+         audio = torch.from_numpy(audio)
+
+    audio_len = audio.shape[0]
+        
+    if audio_len > max_samples:
+            max_start = audio_len - max_samples
+            start = torch.randint(0, max_start + 1,()).item() if max_start > 0 else 0
+            audio = audio[start : start + max_samples]
+    else:
+            pad_amount = max_samples - audio_len
+            audio = F.pad(audio.unsqueeze(0), (0, pad_amount), mode='constant',value=0).squeeze(0)
+    return audio
+
+
+
+def _normalize(audio):
+        max_val = torch.max(torch.abs(audio)) + 1e-8
+        return audio / max_val
+
 
 
 def validate_audio(audio, sr, max_length_seconds):
@@ -46,7 +69,7 @@ def validate_spectrogram(spectrogram):
             data_logger.info(f"Spectrogram is None")
             return False
         
-        if torch.any(torch.isnan(spectrogram)) or torch.any(torch.isnif(spectrogram)):
+        if torch.any(torch.isnan(spectrogram)) or torch.any(torch.isinf(spectrogram)):
             data_logger.info(f"Spectrogram is nan of inf")
             return False
         
@@ -78,21 +101,3 @@ def spectrogram_to_waveform(magnitude_spectrogram, n_fft=1024, hop_length=512, n
 
 
 
-def _pad_or_trim(audio,sr, max_length_seconds):
-        max_samples = int(sr * max_length_seconds)
-        
-        if len(audio) > max_samples:
-            max_start = len(audio) - max_samples
-            start = np.random.randint(0, max_start) if max_start > 0 else 0
-            audio = audio[start:start + max_samples]
-        else:
-            audio = np.pad(audio, (0, max_samples - len(audio)), mode='constant')
-            
-        audio =  torch.from_numpy(audio)
-        return audio
-
-
-
-def _normalize(audio):
-        max_val = torch.max(torch.abs(audio)) + 1e-8
-        return audio / max_val

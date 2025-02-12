@@ -8,32 +8,31 @@ from torch import autocast
 from Training.Externals.Logger import setup_logger
 from mir_eval.separation import bss_eval_sources
 from Model_Architecture.model import UNet
-from Training.Externals.Dataloader import create_dataloaders
+from Training.Externals.Dataloader import create_dataloader_EVALUATION
 from Training.Externals.Functions import Return_root_dir
 import deepspeed
-
+import json 
 root_dir = Return_root_dir()
 eval_log_path = os.path.join(root_dir, "Model_Performance_logg/log/Evaluation_logg.txt")
 Evaluation_logger = setup_logger('Evaluation', eval_log_path)
 checkpoint_path = os.path.join(root_dir, "Model_Weights/Best_model.pth") 
 
 # Load DeepSpeed config
-with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config.json"), "r") as f:
+with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config_Training.json"), "r") as f:
     ds_config = json.load(f)
 
 # Create data loaders (use validation set or test set as needed)
-train_loader, val_loader_phase = create_dataloaders(
+Evaluation_Loader = create_dataloader_EVALUATION(
     batch_size=ds_config["train_micro_batch_size_per_gpu"],
-    num_workers=0,
+    num_workers=6,
     sampling_rate=44100,
     max_length_seconds=10,
-    max_files_train=50,
-    max_files_val=20,
+    max_files_val=None,
 )
 
 # Set up device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-Evaluation_logger.info(f"Using device: {device}")
+
 
 # Initialize the model
 model = UNet(in_channels=1, out_channels=1).to(device)
@@ -55,9 +54,6 @@ load_model_for_evaluation(checkpoint_path, model_engine, device)
 
 # Evaluation Metrics
 def evaluate_metrics_from_spectrograms(ground_truth, predicted, n_fft=1024, hop_length=512):
-    """
-    Compute SDR, SIR, and SAR from spectrograms (using mir_eval).
-    """
     gt_waveforms = model_engine.module.spectrogram_to_waveform(ground_truth, n_fft, hop_length)
     pred_waveforms = model_engine.module.spectrogram_to_waveform(predicted, n_fft, hop_length)
     sdr_list, sir_list, sar_list = [], [], []
@@ -71,13 +67,13 @@ def evaluate_metrics_from_spectrograms(ground_truth, predicted, n_fft=1024, hop_
     return sdr_list, sir_list, sar_list
 
 # Inference & Evaluation
-def run_evaluation(model_engine, val_loader, device, save_visualizations_every_n_batches=5):
+def run_evaluation(model_engine, device, save_visualizations_every_n_batches=5):
     model_engine.eval()
     sdr_list, sir_list, sar_list = [], [], []
     running_loss = 0.0
 
     with torch.no_grad(), autocast(device_type='cuda', enabled=(device.type == 'cuda')):
-        for batch_idx, (inputs, targets) in enumerate(val_loader, start=1):
+        for batch_idx, (inputs, targets) in enumerate(Evaluation_Loader, start=1):
             inputs, targets = inputs.to(device), targets.to(device)
 
             predicted_mask, outputs = model_engine(inputs)
@@ -94,7 +90,7 @@ def run_evaluation(model_engine, val_loader, device, save_visualizations_every_n
             if batch_idx % save_visualizations_every_n_batches == 0:
                 visualize_results(inputs, outputs, targets, batch_idx)
 
-    avg_loss = running_loss / len(val_loader)
+    avg_loss = running_loss / len(Evaluation_Loader)
     avg_sdr = np.mean(sdr_list)
     avg_sir = np.mean(sir_list)
     avg_sar = np.mean(sar_list)
@@ -129,5 +125,5 @@ def visualize_results(inputs, outputs, targets, batch_idx):
     Evaluation_logger.info(f"Saved waveform comparison to {save_path}")
 
 if __name__ == "__main__":
-    avg_loss, avg_sdr, avg_sir, avg_sar = run_evaluation(model_engine, val_loader_phase, device)
+    avg_loss, avg_sdr, avg_sir, avg_sar = run_evaluation(model_engine, device)
     Evaluation_logger.info(f"Final Evaluation - Loss: {avg_loss:.6f}, SDR: {avg_sdr:.4f}, SIR: {avg_sir:.4f}, SAR: {avg_sar:.4f}")
