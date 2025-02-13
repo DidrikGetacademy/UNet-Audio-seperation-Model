@@ -18,11 +18,12 @@ from Training.Externals.Loss_Class_Functions import Combinedloss
 from Training.Externals.Memory_debugging import log_memory_after_index_epoch,clear_memory_before_training
 from Training.Externals.Loss_Diagram_Values import  create_loss_diagrams,create_loss_tabel_epoches,create_loss_table_batches
 from Training.Externals.Functions import ( training_completed, load_model_path_func, save_best_model)
-from Training.Externals.Debugging_Values import check_Nan_Inf_loss, print_inputs_targets_shape,dataset_sample_information,logging_avg_loss_epoch,logging_avg_loss_epoch,log_first_2_batches_inputs_targets,log_first_2_batches_outputs_inputs_targets_predicted_mask,prev_epoch_loss_log,save_audio_files_from_model_dataset_mask
+from Training.Externals.Debugging_Values import check_Nan_Inf_loss, print_inputs_targets_shape,dataset_sample_information,logging_avg_loss_epoch,logging_avg_loss_epoch,log_first_2_batches_inputs_targets,log_first_2_batches_outputs_inputs_targets_predicted_mask,prev_epoch_loss_log
 from Training.Validation import Validate_ModelEngine
 from Training.Externals.utils import Return_root_dir
 from Training.Fine_Tuned_model import fine_tune_model
 from Training.Evaluation import run_evaluation
+from Datasets.Scripts.Dataset_utils import Convert_spectrogram_to_audio
 root_dir = Return_root_dir()
 fine_tuned_model_base_path = os.path.join(root_dir, "Model_weights/Fine_tuned")
 Model_CheckPoint_Training = os.path.join(root_dir, "Model_Weights/CheckPoints/Training")
@@ -37,12 +38,15 @@ Evaluation_logger = setup_logger('Evaluation', eval_log_path)
 checkpoint_path = os.path.join(root_dir, "Model_Weights/Best_model.pth") 
 
 
+os.environ['MASTER_PORT'] = '29501'  
+
 with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config_Training.json"), "r") as f:
     ds_config = json.load(f)
 
 
 
 def train(start_training=True):
+
     clear_memory_before_training()
     model_path_temp="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Training/checkpoint_epoch_9"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -50,8 +54,8 @@ def train(start_training=True):
     maskloss_avg, hybridloss_avg, combined_loss_avg = 0.0, 0.0, 0.0 
     epochs = 40
     current_step = 0
-    patience = 10
-    trigger_times = 10
+    patience = 12
+    trigger_times = 0
     prev_epoch_loss = None
     best_model_path = None 
     tried = float('inf')
@@ -68,6 +72,7 @@ def train(start_training=True):
     Model_Structure_Information(model)
 
     model_engine, optimizer, _, _ = deepspeed.initialize(
+         
         model=model,
         model_parameters=model.parameters(),
         config_params=ds_config
@@ -82,10 +87,10 @@ def train(start_training=True):
     if 'combined_train_loader' not in globals():
          train_loader, val_loader_phase = create_dataloader_training(
             batch_size=ds_config["train_micro_batch_size_per_gpu"], 
-            num_workers=0,
+            num_workers=6,
             max_length_seconds=10,
-            max_files_train=50,
-            max_files_val=10,
+            max_files_train=None,
+            max_files_val=None,
 
     )
          
@@ -120,16 +125,14 @@ def train(start_training=True):
                     with torch.amp.autocast(device_type='cuda',dtype=torch.float16):
                         train_logger.debug(f"inputs into the --> model {inputs.shape}\n")
                         predicted_mask, outputs = model_engine(inputs)
-                        print(f"Model output: {type(outputs)}, length: {len(outputs) if isinstance(outputs, (tuple, list)) else 'N/A'}")
-                        print(f"Model output: {type(predicted_mask)}, length: {len(predicted_mask) if isinstance(predicted_mask, (tuple, list)) else 'N/A'}")
+                     
 
                         predicted_vocals = predicted_mask * inputs
     
                         if batch_idx <= 2:
-                            try:
-                                save_audio_files_from_model_dataset_mask(predicted_vocals, targets ,inputs, outputs)
-                            except Exception as e:
-                                    print(f"error durring reconstruction of audio: {str(e)}")
+                           train_logger.info(f"outputs from the model {outputs.shape}\nfor batch {batch_idx}\npredicted mask shape {predicted_mask.shape}")
+                           Convert_spectrogram_to_audio(audio_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/Trening",predicted_vocals=predicted_vocals[0],targets=targets[0],inputs=inputs[0],outputs=None)
+                           
 
 
                         log_first_2_batches_outputs_inputs_targets_predicted_mask(batch_idx, outputs, inputs, targets, predicted_mask, train_logger,predicted_vocals)
@@ -166,7 +169,8 @@ def train(start_training=True):
                 avg_epoch_loss = running_loss / len(train_loader)
                 
                 
-
+                torch.cuda.empty_cache ()
+                gc.collect()
                 Validate_ModelEngine(epoch,model_engine,val_loader_phase,criterion,Model_CheckPoint_Evaluation, current_step)
                 if running_loss < bestloss:
                     train_logger.info(f"New best model (Loss: {running_loss:.6f} < {bestloss:.6f})")
@@ -254,18 +258,18 @@ def train(start_training=True):
             Evaluation_logger.info(f"[BEFORE FINE TUNING] average_loss: {avg_loss:.6f}, average_sdr: {avg_sdr:.4f}, average_sir: {avg_sir:.4f}, average_sar: {avg_sar:.4f}")
 
             print("Starting fine tuning....")
-            fine_tune_model(fine_tuned_model_path=fine_tuned_model_path,  Fine_tuned_training_loader=train_loader,  Finetuned_validation_loader = val_loader_phase,  ds_config=ds_config,  fine_tune_epochs=10,  pretrained_model_path=final_model_path)
+            fine_tune_model(fine_tuned_model_path=fine_tuned_model_path,  Fine_tuned_training_loader=train_loader,  Finetuned_validation_loader = val_loader_phase,  model_engine=model_engine,  fine_tune_epochs=10,  pretrained_model_path=final_model_path)
 
             print("Starting 2. Evaluatio...")
             avg_loss, avg_sdr, avg_sir, avg_sar =  run_evaluation(model_engine,device)
             Evaluation_logger.info(f"[AFTER FINE TUNING] average_loss: {avg_loss:.6f}, average_sdr: {avg_sdr:.4f}, average_sir: {avg_sir:.4f}, average_sar: {avg_sar:.4f}")
         
 
-
-
-
             if torch.distributed.is_initialized():
-                torch.distributed.destroy_process_group()
+              torch.distributed.destroy_process_group()  
+
+
+     
 
         except Exception as e:
             train_logger.error(f"[Train] Error during training: {str(e)}")
@@ -275,7 +279,9 @@ def train(start_training=True):
         print("Training was not started.")
 
 if __name__ == "__main__":
+        torch.cuda.empty_cache ()
+        gc.collect()
         train()
-    
+  
     
 

@@ -3,9 +3,6 @@ import sys
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, ConcatDataset
-import torch.multiprocessing as mp
-mp.set_start_method('spawn', force=True)
-
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Datasets.Scripts.Dataset_Musdb18 import MUSDB18StemDataset
@@ -13,11 +10,12 @@ from Datasets.Scripts.Dataset_DSD100 import DSD100
 from Datasets.Scripts.Custom_audio_dataset import CustomAudioDataset
 from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
+from Datasets.Scripts.Dataset_utils import Convert_spectrogram_to_audio
 
 root_dir = Return_root_dir() 
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/Dataloader.txt")
 data_loader = setup_logger('dataloader', train_log_path)
-
+BatchCount = 0
 
 def robust_collate_fn(batch):
     check_batch = float('inf')
@@ -58,6 +56,12 @@ def robust_collate_fn(batch):
     if inputs_tensor.device.type == "cpu":
         data_loader.info("Tensors are on CPU, skipping pin_memory.")
     
+    if BatchCount <= 2:
+        print(f"Converting spectrogram to audio now.... BATCH COUNT:{BatchCount}")
+        Convert_spectrogram_to_audio(audio_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/Dataloading", predicted_vocals=None,targets=targets_tensor[0],inputs=inputs_tensor[0],outputs=None,)
+        
+
+    
     return inputs_tensor, targets_tensor
 
 
@@ -71,11 +75,11 @@ def create_dataloader_training(
     musdb18_dir=MUSDB18_dir,
     dsd100_dir=DSD100_dataset_dir,
     batch_size=0,
-    num_workers=0,
+    num_workers=6,
     sampling_rate=44100,
     max_length_seconds=10,
-    max_files_train=100,
-    max_files_val=40,
+    max_files_train=None,
+    max_files_val=None,
     val_ratio=0.2,
 ):
     if max_files_train:
@@ -181,10 +185,10 @@ def create_dataloader_Fine_tuning(
     musdb18_dir=MUSDB18_dir,
     dsd100_dir=DSD100_dataset_dir,
     batch_size=0,
-    num_workers=0,
+    num_workers=4,
     sampling_rate=44100,
-    max_files_finetuning_train=100,
-    max_files_fine_tuning_validation=40,
+    max_files_finetuning_train=None,
+    max_files_fine_tuning_validation=None,
     val_ratio=0.2,
     max_length_seconds = 10
 ):

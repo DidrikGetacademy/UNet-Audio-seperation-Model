@@ -19,7 +19,7 @@ data_logger = setup_logger('custom_dataset', train_log_path)
 
 class CustomAudioDataset(Dataset):
     def __init__(self, root_dir, sr=44100, n_fft=1024,
-                 hop_length=512, max_length_seconds=5, max_files=None):
+                 hop_length=512, max_length_seconds=None, max_files=None):
         self.input_dir = os.path.join(root_dir, "input")
         self.target_dir = os.path.join(root_dir, "target")
         self.sr = sr

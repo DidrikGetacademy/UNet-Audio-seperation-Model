@@ -1,0 +1,8 @@
+2025-02-13 20:15:20,100 - INFO - [Memory Clearing memory before training] Timestamp: 2025-02-13 20:15:20
+2025-02-13 20:15:20,101 - INFO - [Memory Clearing memory before training] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.12 GB, Cached=0.12 GB
+2025-02-13 20:15:20,101 - INFO - [Memory Clearing memory before training] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-13 20:15:20,102 - INFO - [Memory Clearing memory before training] CPU Memory Usage: ~0.98 GB
+2025-02-13 20:15:20,254 - INFO - [Memory Memory after clearing it...] Timestamp: 2025-02-13 20:15:20
+2025-02-13 20:15:20,255 - INFO - [Memory Memory after clearing it...] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.12 GB, Cached=0.12 GB
+2025-02-13 20:15:20,255 - INFO - [Memory Memory after clearing it...] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-13 20:15:20,255 - INFO - [Memory Memory after clearing it...] CPU Memory Usage: ~0.98 GB

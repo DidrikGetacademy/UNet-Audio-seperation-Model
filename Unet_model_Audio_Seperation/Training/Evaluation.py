@@ -36,13 +36,10 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Initialize the model
 model = UNet(in_channels=1, out_channels=1).to(device)
-model_engine, _, _, _ = deepspeed.initialize(
-    model=model,
-    config_params=ds_config
-)
+
 
 # Load the best model checkpoint
-def load_model_for_evaluation(checkpoint_path, model_engine, device):
+def load_model_for_evaluation(checkpoint_path, model_engine, device=device):
     try:
         model_engine.load_checkpoint(checkpoint_path)
         Evaluation_logger.info(f"Model loaded from {checkpoint_path}")
@@ -50,10 +47,9 @@ def load_model_for_evaluation(checkpoint_path, model_engine, device):
         Evaluation_logger.error(f"Error loading model checkpoint: {e}")
         raise
 
-load_model_for_evaluation(checkpoint_path, model_engine, device)
 
 # Evaluation Metrics
-def evaluate_metrics_from_spectrograms(ground_truth, predicted, n_fft=1024, hop_length=512):
+def evaluate_metrics_from_spectrograms(model_engine,ground_truth, predicted, n_fft=1024, hop_length=512):
     gt_waveforms = model_engine.module.spectrogram_to_waveform(ground_truth, n_fft, hop_length)
     pred_waveforms = model_engine.module.spectrogram_to_waveform(predicted, n_fft, hop_length)
     sdr_list, sir_list, sar_list = [], [], []
@@ -68,6 +64,7 @@ def evaluate_metrics_from_spectrograms(ground_truth, predicted, n_fft=1024, hop_
 
 # Inference & Evaluation
 def run_evaluation(model_engine, device, save_visualizations_every_n_batches=5):
+    load_model_for_evaluation(checkpoint_path, model_engine=model_engine, device=device)
     model_engine.eval()
     sdr_list, sir_list, sar_list = [], [], []
     running_loss = 0.0
@@ -81,7 +78,7 @@ def run_evaluation(model_engine, device, save_visualizations_every_n_batches=5):
             running_loss += combined_loss.item()
 
             # Evaluate metrics
-            batch_sdr, batch_sir, batch_sar = evaluate_metrics_from_spectrograms(targets, outputs)
+            batch_sdr, batch_sir, batch_sar = evaluate_metrics_from_spectrograms(model_engine,targets, outputs)
             sdr_list.extend(batch_sdr)
             sir_list.extend(batch_sir)
             sar_list.extend(batch_sar)
@@ -95,16 +92,19 @@ def run_evaluation(model_engine, device, save_visualizations_every_n_batches=5):
     avg_sir = np.mean(sir_list)
     avg_sar = np.mean(sar_list)
 
-    Evaluation_logger.info(f"Evaluation Loss: {avg_loss:.6f}")
-    Evaluation_logger.info(f"Average SDR: {avg_sdr:.4f}, Average SIR: {avg_sir:.4f}, Average SAR: {avg_sar:.4f}")
+    Evaluation_logger.info(f"Evaluation Loss: {avg_loss:.6f}[BØR REDUSERES OVER TID]")
+    Evaluation_logger.info(f"[Average SDR]->[SDR (Signal-to-Distortion Ratio): Måler hvor mye uønsket støy modellen introduserer. Høyere er bedre.]: avg_sdr={avg_sdr:.4f}\n" 
+                           f"[Average SIR]-> [SIR (Signal-to-Interference Ratio): Måler hvor godt modellen separerer vokaler fra instrumenter. Høyere er bedre.]: avg_sir={avg_sir:.4f}\n"
+                           f"[Average SAR]-> [SAR (Signal-to-Artifacts Ratio): Måler hvor mye kunstige feil modellen introduserer. Også høyere er bedre.]: avg:sar={avg_sar:.4f}\n"
+                           )
     
+    Evaluation_logger.info(f"Final Evaluation - Loss: {avg_loss:.6f}, SDR: {avg_sdr:.4f}, SIR: {avg_sir:.4f}, SAR: {avg_sar:.4f}")
     return avg_loss, avg_sdr, avg_sir, avg_sar
 
 # Visualization function to save waveform comparison
 def visualize_results(inputs, outputs, targets, batch_idx):
-    """
-    Visualize and save the waveform comparison between GT and predicted output for the selected batch.
-    """
+    #Visualize and save the waveform comparison between GT and predicted output for the selected batch.
+    
     gt_waveform = targets[0].cpu().numpy().flatten()
     pred_waveform = outputs[0].cpu().numpy().flatten()
 
@@ -123,7 +123,3 @@ def visualize_results(inputs, outputs, targets, batch_idx):
     plt.savefig(save_path)
     plt.close()
     Evaluation_logger.info(f"Saved waveform comparison to {save_path}")
-
-if __name__ == "__main__":
-    avg_loss, avg_sdr, avg_sir, avg_sar = run_evaluation(model_engine, device)
-    Evaluation_logger.info(f"Final Evaluation - Loss: {avg_loss:.6f}, SDR: {avg_sdr:.4f}, SIR: {avg_sir:.4f}, SAR: {avg_sar:.4f}")

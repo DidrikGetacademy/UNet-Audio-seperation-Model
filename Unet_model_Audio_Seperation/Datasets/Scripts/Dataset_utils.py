@@ -35,11 +35,14 @@ def _pad_or_trim(audio, sr, max_length_seconds):
 
 def _normalize(audio):
         max_val = torch.max(torch.abs(audio)) + 1e-8
+
+        if max_val < 0.05:
+           data_logger.info(f"Normalizing: amplitude very low ({max_val:.3f}), consider discarding or amplifying signal.")
         return audio / max_val
 
 
 
-def validate_audio(audio, sr, max_length_seconds):
+def validate_audio(audio, sr, max_length_seconds, min_amplitude=0.05):
         expected_length = int(sr * max_length_seconds)
 
         if len(audio) == 0:
@@ -50,11 +53,24 @@ def validate_audio(audio, sr, max_length_seconds):
            data_logger.info(f"Invalid values in audio file [(NaNs or Infs)]")
            return False
         
+        max_amp = np.max(np.abs(audio))
+
+
+        if max_amp > 1:
+             data_logger.info("Unexpected amplitude range (amplitude > 1)")
+             return False
+        
+        if max_amp < min_amplitude:
+             data_logger.info("Unexpected amplitude range (amplitude < 0.05), Audio amplitude too low.")
+             return False
+
+
+        
         if np.max(np.abs(audio)) > 1:
             data_logger.info(f"unexpected amplitude range...")
             return False
         
-        if len(audio) < expected_length * 0.7:
+        if len(audio) < expected_length * 0.5:
             data_logger.warning(f"Audio is too short: {len(audio)} samples  (expected {expected_length})")
             return False
         
@@ -99,5 +115,22 @@ def spectrogram_to_waveform(magnitude_spectrogram, n_fft=1024, hop_length=512, n
     )
     return waveform
 
+
+def Convert_spectrogram_to_audio(audio_path,predicted_vocals=None,targets=None,inputs=None,outputs=None):
+        if inputs != None:
+          input_waveform = spectrogram_to_waveform(torch.tensor(inputs).to("cpu"))
+          torchaudio.save(os.path.join( audio_path,"inputs/inputs(1).wav"), input_waveform.unsqueeze(0), sample_rate=44100)
+
+        if predicted_vocals != None:
+             predicted_waveform = spectrogram_to_waveform(predicted_vocals.to("cpu"))
+             torchaudio.save(os.path.join(audio_path,"predictions/predictions(1).wav"), predicted_waveform.unsqueeze(0), sample_rate=44100)
+
+        if targets != None:
+          target_waveform = spectrogram_to_waveform(torch.tensor(targets).to("cpu"))
+          torchaudio.save(os.path.join(audio_path,"targets/targets(1).wav"), target_waveform.unsqueeze(0), sample_rate=44100)
+
+        if outputs != None:
+           output_waveform = spectrogram_to_waveform(outputs.to("cpu"))
+           torchaudio.save(os.path.join(audio_path,"outputs/outputs(1).wav"), output_waveform.unsqueeze(0), sample_rate=44100)
 
 

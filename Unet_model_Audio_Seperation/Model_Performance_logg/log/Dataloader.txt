@@ -1,0 +1,140 @@
+2025-02-13 20:15:19,278 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:15:19,279 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:15:26,274 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:15:26,276 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:15:33,935 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:15:33,937 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:15:33,960 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:15:33,961 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:15:34,019 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:15:34,021 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:15:34,023 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:15:34,025 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:15:34,139 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:15:34,140 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:15:34,208 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:15:34,209 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:15:48,614 - INFO - Batch item: (tensor([[[8.8450e+01, 2.3165e+01, 1.2717e+01,  ..., 2.9163e+01,
+          6.2982e+00, 6.1099e+01],
+         [6.7515e+01, 4.0025e+01, 2.6596e+01,  ..., 7.2626e+01,
+          7.6018e+01, 9.1184e+01],
+         [4.9377e+00, 3.1484e+01, 6.5109e+01,  ..., 2.9179e+01,
+          7.2098e+01, 6.3443e+01],
+         ...,
+         [1.4122e-01, 1.2673e-01, 2.4364e-02,  ..., 5.7577e-02,
+          8.5348e-03, 5.6160e-02],
+         [7.8659e-02, 7.5038e-02, 5.1010e-02,  ..., 3.7183e-02,
+          3.2794e-02, 6.3438e-02],
+         [6.0654e-03, 2.1515e-02, 4.7533e-02,  ..., 1.6308e-03,
+          4.4135e-02, 6.1752e-02]]]), tensor([[[8.6170e+00, 2.7059e-01, 2.2825e-01,  ..., 7.7871e-01,
+          1.0050e+00, 2.5945e+00],
+         [8.7391e+00, 1.6719e-01, 1.6800e-01,  ..., 4.9172e-01,
+          5.9380e-01, 1.9033e+00],
+         [8.8139e+00, 5.7257e-02, 4.9776e-02,  ..., 1.5869e-01,
+          2.2523e-01, 1.8378e+00],
+         ...,
+         [5.6748e-02, 8.6192e-03, 4.4689e-03,  ..., 1.3633e-02,
+          1.8157e-02, 1.3192e-02],
+         [4.7676e-02, 6.4920e-03, 1.0916e-02,  ..., 1.4603e-02,
+          1.9699e-02, 7.3903e-03],
+         [4.4210e-02, 8.9629e-04, 6.8372e-03,  ..., 1.3523e-02,
+          7.0647e-03, 1.5138e-03]]]))
+2025-02-13 20:15:48,618 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 1.52587890625e-05, max: 153.8630828857422, mean: 1.3234004974365234
+2025-02-13 20:15:48,619 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 7.620260475960094e-07, max: 133.8269500732422, mean: 0.7811110019683838
+2025-02-13 20:15:48,620 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([2, 1, 513, 862]), Padded targets shape: torch.Size([2, 1, 513, 862])
+2025-02-13 20:15:48,620 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 2, targets - 2
+
+2025-02-13 20:15:48,621 - INFO - Tensors are on CPU, skipping pin_memory.
+2025-02-13 20:16:08,110 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:16:08,128 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:16:08,143 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:16:08,144 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:16:08,169 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:16:08,170 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:16:08,181 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:16:08,182 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:16:08,183 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:16:08,183 - INFO - [None/max_files_train] Number of files in MUSDB18 for training: 2
+[None/max_files_train] Number of files in MUSDB18 for validation: 2
+
+2025-02-13 20:16:08,185 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:16:08,185 - INFO - [None/max_files_val] Number of files in DSD100 for training: 4
+[None/max_files_val] Number of files in DSD100 for validation: 4
+
+2025-02-13 20:16:15,170 - INFO - Batch item: (tensor([[[1.3950e+01, 6.7774e+00, 2.2225e+00,  ..., 2.8861e+01,
+          4.5277e+00, 9.4570e+00],
+         [3.4417e+00, 2.0288e+01, 2.0211e+01,  ..., 6.0797e+01,
+          4.4421e+01, 7.8178e+01],
+         [5.2303e+00, 3.1821e+01, 2.7811e+01,  ..., 6.2365e+01,
+          4.3164e+01, 5.7411e+01],
+         ...,
+         [4.5445e-02, 1.3121e-02, 1.0438e-02,  ..., 1.4098e-01,
+          1.1825e-01, 5.1292e-02],
+         [4.2578e-02, 6.7757e-03, 2.6054e-02,  ..., 5.4525e-02,
+          7.5689e-02, 1.6602e-01],
+         [4.1417e-02, 4.0014e-03, 3.3846e-02,  ..., 1.8945e-02,
+          2.3351e-03, 2.8031e-01]]]), tensor([[[1.5851, 0.0223, 0.7651,  ..., 3.0576, 4.6702, 3.0604],
+         [0.1654, 1.7117, 2.1526,  ..., 2.6472, 3.1100, 2.6611],
+         [0.0934, 2.2243, 2.9054,  ..., 0.8791, 2.4443, 3.0445],
+         ...,
+         [0.1969, 3.9098, 5.6059,  ..., 2.3649, 3.2943, 5.3168],
+         [2.0897, 6.0478, 4.0709,  ..., 3.2358, 3.4766, 6.2484],
+         [1.6842, 6.1383, 2.4390,  ..., 0.0172, 1.2566, 8.8943]]]))
+2025-02-13 20:16:15,179 - INFO - [Dataloader-robust_collate_fn] Inputs tensor min: 3.337860107421875e-06, max: 141.6893768310547, mean: 1.1437252759933472
+2025-02-13 20:16:15,180 - INFO - [Dataloader-robust_collate_fn] Targets tensor min: 0.0, max: 181.5415802001953, mean: 1.217258334159851
+2025-02-13 20:16:15,181 - INFO - [Dataloader-robust_collate_fn] Padded inputs shape: torch.Size([4, 1, 513, 862]), Padded targets shape: torch.Size([4, 1, 513, 862])
+2025-02-13 20:16:15,181 - INFO - [Dataloader-robust_collate_fn] Batch sizes: inputs - 4, targets - 4
+
+2025-02-13 20:16:15,181 - INFO - Tensors are on CPU, skipping pin_memory.

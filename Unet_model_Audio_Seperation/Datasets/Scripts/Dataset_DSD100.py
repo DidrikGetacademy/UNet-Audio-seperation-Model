@@ -18,7 +18,7 @@ dataset_logger = setup_logger('dataset_DSD100', train_log_path)
 
 class DSD100(Dataset):
     def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=5, max_files=50):
+                 hop_length=512, max_length_seconds=None, max_files=None):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length
@@ -59,9 +59,10 @@ class DSD100(Dataset):
                 return None 
             
 
-     
-            mix_tensor = _normalize(_pad_or_trim(mixture, self.sr, self.max_length_seconds))
-            voc_tensor = _normalize(_pad_or_trim(vocals, self.sr, self.max_length_seconds))
+            mix_tensor = _pad_or_trim(mixture,self.sr,self.max_length_seconds)
+            voc_tensor = _pad_or_trim(vocals,self.sr,self.max_length_seconds)
+            mix_tensor = _normalize(mix_tensor)
+            voc_tensor = _normalize(voc_tensor)
 
      
             window = torch.hann_window(self.n_fft)

@@ -43,7 +43,7 @@
       "params": {
         "warmup_min_lr": 0.0,
         "warmup_max_lr": 1e-4,       
-        "warmup_num_steps": 100,
+        "warmup_num_steps": 150,
         "total_num_steps": 5000,
         "last_batch_iteration": -1
       }
@@ -56,12 +56,12 @@
       "cpu_checkpointing": false
     },
     "flops_profiler": {
-      "enabled": false
+      "enabled": true
     },
     "tensorboard": {
       "enabled": true,
       "output_path": "/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Performance_logg/TensorBoard/DeepSpeed Logging",
-      "job_name": "Two_GPU_Training"
+      "job_name": ""
     }
   }
   

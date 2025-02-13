@@ -40,14 +40,13 @@ loss_history_finetuning_epoches = {
 if 'fine_tuned_loader' not in globals():
         eval_loader,Fine_tuned_training_loader = create_dataloader_Fine_tuning(
             batch_size=ds_config["train_micro_batch_size_per_gpu"], 
-            num_workers=0,
     )
 
 
 
 
 
-def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader,Finetuned_validation_loader, ds_config, fine_tune_epochs=10, pretrained_model_path=None):
+def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader,Finetuned_validation_loader, model_engine, fine_tune_epochs=10, pretrained_model_path=None):
     visualization_dir = os.path.join(os.path.dirname(fine_tuned_model_path), "visualizations")
     from Model_Architecture.model import UNet
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -58,11 +57,6 @@ def fine_tune_model(fine_tuned_model_path, Fine_tuned_training_loader,Finetuned_
     model = UNet(in_channels=1, out_channels=1).to(device)
 
 
-    model_engine, optimizer, _, scheduler = deepspeed.initialize(
-        model=model,
-        config=ds_config,
-        model_parameters=model.parameters()
-    )
     
     if pretrained_model_path is None:
         load_model_path_func(load_model_path, model_engine, model, device)
