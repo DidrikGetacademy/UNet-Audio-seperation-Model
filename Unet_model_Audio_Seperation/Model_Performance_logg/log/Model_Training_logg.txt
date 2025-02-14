@@ -1,46 +1,17 @@
-2025-02-13 20:15:20,256 - INFO - [Train] Using device: cuda
-2025-02-13 20:15:26,271 - INFO - Loaded model checkpoint from /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Training/checkpoint_epoch_9
-2025-02-13 20:15:26,487 - INFO - [Train] Epoch 1/40 started.
+2025-02-14 10:23:25,179 - INFO - [Train] Using device: cuda
+2025-02-14 10:23:31,200 - INFO - Loaded model checkpoint from /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Training/checkpoint_epoch_9
+2025-02-14 10:23:31,378 - INFO - [Train] Epoch 1/1 started.
 
-2025-02-13 20:15:50,261 - INFO - #####INPUTS & TARGETS VALUE [2 BATCHES]####
-Batch 1: Mixture shape=torch.Size([2, 1, 513, 862]), Target shape=torch.Size([2, 1, 513, 862])
-2025-02-13 20:15:52,705 - INFO - outputs from the model torch.Size([2, 64, 513, 862])
-for batch 1
-predicted mask shape torch.Size([2, 1, 513, 862])
-2025-02-13 20:15:53,538 - INFO - ####OUTPUTS, INPUTS, TARGETS,PREDICTEDMASK [2 BATCHES]####
-Batch 1: Mask range: min=0.0000, max=7.9922Batch 1: Inputs shape=torch.Size([2, 1, 513, 862]), Targets shape=torch.Size([2, 1, 513, 862]), Predicted Mask shape=torch.Size([2, 1, 513, 862]), Outputs shape=torch.Size([2, 64, 513, 862])Mask min=0.0, max=0.5859375[After Mask Application] Predicted vocals min: 0.0, max: 23.53125
-
-
-
-2025-02-13 20:15:53,539 - INFO - ####LOSS VALUES####
-[Combinedloss]:  Total treningsfeil, [BØR REDUSERES OVER TID]
-[MaskLoss]: Sier hvor godt modellen lærer og predikere masken som isolerer vokaler[BØR REDUSERES OVER TID]
-[l1_loss og stft_loss] gir ekstra indikasjoner på lydkvalitet.[Hybridloss]: Kombinasjon av flere tapsfunksjoner[BØR REDUSERES OVER TID]
-2025-02-13 20:15:53,576 - INFO - Appending Batch Losses: Mask: 0.5436792373657227, Hybrid: 0.9902420043945312, Combined: 0.9650090336799622
-2025-02-13 20:16:00,007 - INFO - Current Learning Rate 0.004031959641799338
-
-2025-02-13 20:16:38,386 - ERROR - [Train] Error during training: Input Tensor has to be 2D.
-Exception raised from validate_audio_input at /__w/audio/audio/pytorch/audio/src/libtorio/ffmpeg/stream_writer/tensor_converter.cpp:31 (most recent call first):
-frame #0: c10::Error::Error(c10::SourceLocation, std::string) + 0x96 (0x7feb1516c1b6 in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torch/lib/libc10.so)
-frame #1: c10::detail::torchCheckFail(char const*, char const*, unsigned int, char const*) + 0x68 (0x7feb15115b3f in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torch/lib/libc10.so)
-frame #2: <unknown function> + 0x57167 (0x7fe9bbe52167 in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torio/lib/libtorio_ffmpeg6.so)
-frame #3: <unknown function> + 0x57c0c (0x7fe9bbe52c0c in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torio/lib/libtorio_ffmpeg6.so)
-frame #4: torio::io::TensorConverter::convert(at::Tensor const&) + 0x33 (0x7fe9bbe54833 in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torio/lib/libtorio_ffmpeg6.so)
-frame #5: torio::io::EncodeProcess::process(at::Tensor const&, std::optional<double> const&) + 0xbe (0x7fe9bbe4362e in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torio/lib/libtorio_ffmpeg6.so)
-frame #6: torio::io::StreamingMediaEncoder::write_audio_chunk(int, at::Tensor const&, std::optional<double> const&) + 0x9d (0x7fe9bbe4edad in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torio/lib/libtorio_ffmpeg6.so)
-frame #7: <unknown function> + 0x3aa36 (0x7fe9ad0cea36 in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torio/lib/_torio_ffmpeg6.so)
-frame #8: <unknown function> + 0x32ba4 (0x7fe9ad0c6ba4 in /home/didrik/.venvs/global_env/lib/python3.12/site-packages/torio/lib/_torio_ffmpeg6.so)
-frame #9: /home/didrik/.venvs/global_env/bin/python() [0x58238f]
-frame #10: _PyObject_MakeTpCall + 0x75 (0x549225 in /home/didrik/.venvs/global_env/bin/python)
-frame #11: _PyEval_EvalFrameDefault + 0xa89 (0x5d7909 in /home/didrik/.venvs/global_env/bin/python)
-frame #12: PyEval_EvalCode + 0x15b (0x5d5e4b in /home/didrik/.venvs/global_env/bin/python)
-frame #13: /home/didrik/.venvs/global_env/bin/python() [0x608fd2]
-frame #14: /home/didrik/.venvs/global_env/bin/python() [0x6b55e3]
-frame #15: _PyRun_SimpleFileObject + 0x1aa (0x6b534a in /home/didrik/.venvs/global_env/bin/python)
-frame #16: _PyRun_AnyFileObject + 0x4f (0x6b517f in /home/didrik/.venvs/global_env/bin/python)
-frame #17: Py_RunMain + 0x3b5 (0x6bd1e5 in /home/didrik/.venvs/global_env/bin/python)
-frame #18: Py_BytesMain + 0x2d (0x6bcccd in /home/didrik/.venvs/global_env/bin/python)
-frame #19: <unknown function> + 0x2a1ca (0x7feb15dd51ca in /lib/x86_64-linux-gnu/libc.so.6)
-frame #20: __libc_start_main + 0x8b (0x7feb15dd528b in /lib/x86_64-linux-gnu/libc.so.6)
-frame #21: _start + 0x25 (0x658425 in /home/didrik/.venvs/global_env/bin/python)
+2025-02-14 10:24:10,290 - ERROR - [Train] Error during training: Caught UnboundLocalError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/home/didrik/.venvs/global_env/lib/python3.12/site-packages/torch/utils/data/_utils/worker.py", line 349, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/didrik/.venvs/global_env/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py", line 55, in fetch
+    return self.collate_fn(data)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Training/Externals/Dataloader.py", line 64, in robust_collate_fn
+    if BatchCount <= 2:
+       ^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'BatchCount' where it is not associated with a value
 

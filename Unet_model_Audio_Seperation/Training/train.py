@@ -5,7 +5,6 @@ import os
 import sys
 import gc
 import deepspeed
-import gc
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 import json
@@ -19,10 +18,10 @@ from Training.Externals.Memory_debugging import log_memory_after_index_epoch,cle
 from Training.Externals.Loss_Diagram_Values import  create_loss_diagrams,create_loss_tabel_epoches,create_loss_table_batches
 from Training.Externals.Functions import ( training_completed, load_model_path_func, save_best_model)
 from Training.Externals.Debugging_Values import check_Nan_Inf_loss, print_inputs_targets_shape,dataset_sample_information,logging_avg_loss_epoch,logging_avg_loss_epoch,log_first_2_batches_inputs_targets,log_first_2_batches_outputs_inputs_targets_predicted_mask,prev_epoch_loss_log
-from Training.Validation import Validate_ModelEngine
+#from Training.Validation import Validate_ModelEngine
 from Training.Externals.utils import Return_root_dir
 from Training.Fine_Tuned_model import fine_tune_model
-from Training.Evaluation import run_evaluation
+#from Training.Evaluation import run_evaluation
 from Datasets.Scripts.Dataset_utils import Convert_spectrogram_to_audio
 root_dir = Return_root_dir()
 fine_tuned_model_base_path = os.path.join(root_dir, "Model_weights/Fine_tuned")
@@ -46,13 +45,12 @@ with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config_Training.json
 
 
 def train(start_training=True):
-
     clear_memory_before_training()
     model_path_temp="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Training/checkpoint_epoch_9"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_logger.info(f"[Train] Using device: {device}")
     maskloss_avg, hybridloss_avg, combined_loss_avg = 0.0, 0.0, 0.0 
-    epochs = 40
+    epochs = 1
     current_step = 0
     patience = 12
     trigger_times = 0
@@ -89,8 +87,8 @@ def train(start_training=True):
             batch_size=ds_config["train_micro_batch_size_per_gpu"], 
             num_workers=6,
             max_length_seconds=10,
-            max_files_train=None,
-            max_files_val=None,
+            max_files_train=150,
+            max_files_val=30,
 
     )
          
@@ -171,23 +169,23 @@ def train(start_training=True):
                 
                 torch.cuda.empty_cache ()
                 gc.collect()
-                Validate_ModelEngine(epoch,model_engine,val_loader_phase,criterion,Model_CheckPoint_Evaluation, current_step)
-                if running_loss < bestloss:
-                    train_logger.info(f"New best model (Loss: {running_loss:.6f} < {bestloss:.6f})")
-                    bestloss = running_loss
-                    checkpoint_dir = os.path.join(Model_CheckPoint_Training, f"checkpoint_epoch_{epoch + 1}")
-                    try:
-                        model_engine.save_checkpoint(checkpoint_dir, {
-                            'step': current_step,
-                            'best_loss': bestloss,
-                            'trigger_times': trigger_times
-                        })
-                        trigger_times = 0
-                    except Exception as e:
-                            train_logger.error(f"Checkpoint save failed: {str(e)}")
-                else:
-                    trigger_times += 1
-                    train_logger.info(f"No improvement (Trigger: {trigger_times}/{patience})")
+             #   Validate_ModelEngine(epoch,model_engine,val_loader_phase,criterion,Model_CheckPoint_Evaluation, current_step)
+             #   if running_loss < bestloss:
+             #       train_logger.info(f"New best model (Loss: {running_loss:.6f} < {bestloss:.6f})")
+             #       bestloss = running_loss
+            #        checkpoint_dir = os.path.join(Model_CheckPoint_Training, f"checkpoint_epoch_{epoch + 1}")
+             #       try:
+             #           model_engine.save_checkpoint(checkpoint_dir, {
+             #               'step': current_step,
+            #                'best_loss': bestloss,
+             #               'trigger_times': trigger_times
+             #           })
+              #          trigger_times = 0
+             #       except Exception as e:
+             #               train_logger.error(f"Checkpoint save failed: {str(e)}")
+             #   else:
+           #         trigger_times += 1
+            #        train_logger.info(f"No improvement (Trigger: {trigger_times}/{patience})")
 
             
                 if Early_break(trigger_times, patience):
@@ -228,8 +226,8 @@ def train(start_training=True):
                 Append_loss_values_for_epoches(maskloss_avg, hybridloss_avg, combined_loss_avg, avg_epoch_loss,loss_logger)
 
 
-                bestloss, trigger_times, avg_validation_loss = Validate_ModelEngine(epoch,model_engine, val_loader_phase,criterion,Model_CheckPoint_Evaluation,current_step)
-                loss_logger.info(f"Validate ----> [bestloss: {bestloss:.6f},], [trigger_times: {trigger_times}], [avg_validation_loss: {avg_validation_loss:.6f}]")
+                #bestloss, trigger_times, avg_validation_loss = Validate_ModelEngine(epoch,model_engine, val_loader_phase,criterion,Model_CheckPoint_Evaluation,current_step)
+                #loss_logger.info(f"Validate ----> [bestloss: {bestloss:.6f},], [trigger_times: {trigger_times}], [avg_validation_loss: {avg_validation_loss:.6f}]")
 
 
             loss_history_Batches, loss_history_Epoches = get_loss_value_list()
@@ -250,19 +248,19 @@ def train(start_training=True):
             save_best_model(model_engine, best_model_path, Final_model_path)
             print("Starting Validation on model performance after training...")
            
-            final_model_path = os.path.join(Final_model_path, "final_model_best_model.pth")
-            fine_tuned_model_path = os.path.join(root_dir,"Model_Weights/Fine_Tuned/Model.pth")
+          #  final_model_path = os.path.join(Final_model_path, "final_model_best_model.pth")
+           # fine_tuned_model_path = os.path.join(root_dir,"Model_Weights/Fine_Tuned/Model.pth")
 
-            print("Starting evaluation...")
-            avg_loss, avg_sdr, avg_sir, avg_sar =  run_evaluation(model_engine,device)
-            Evaluation_logger.info(f"[BEFORE FINE TUNING] average_loss: {avg_loss:.6f}, average_sdr: {avg_sdr:.4f}, average_sir: {avg_sir:.4f}, average_sar: {avg_sar:.4f}")
+          #  print("Starting evaluation...")
+          #  avg_loss, avg_sdr, avg_sir, avg_sar =  run_evaluation(model_engine,device)
+          #  Evaluation_logger.info(f"[BEFORE FINE TUNING] average_loss: {avg_loss:.6f}, average_sdr: {avg_sdr:.4f}, average_sir: {avg_sir:.4f}, average_sar: {avg_sar:.4f}")
 
-            print("Starting fine tuning....")
-            fine_tune_model(fine_tuned_model_path=fine_tuned_model_path,  Fine_tuned_training_loader=train_loader,  Finetuned_validation_loader = val_loader_phase,  model_engine=model_engine,  fine_tune_epochs=10,  pretrained_model_path=final_model_path)
+          #  print("Starting fine tuning....")
+          #  fine_tune_model(fine_tuned_model_path=fine_tuned_model_path,  Fine_tuned_training_loader=train_loader,  Finetuned_validation_loader = val_loader_phase,  model_engine=model_engine,  fine_tune_epochs=10,  pretrained_model_path=final_model_path)
 
             print("Starting 2. Evaluatio...")
-            avg_loss, avg_sdr, avg_sir, avg_sar =  run_evaluation(model_engine,device)
-            Evaluation_logger.info(f"[AFTER FINE TUNING] average_loss: {avg_loss:.6f}, average_sdr: {avg_sdr:.4f}, average_sir: {avg_sir:.4f}, average_sar: {avg_sar:.4f}")
+          #  avg_loss, avg_sdr, avg_sir, avg_sar =  run_evaluation(model_engine,device)
+          #  Evaluation_logger.info(f"[AFTER FINE TUNING] average_loss: {avg_loss:.6f}, average_sdr: {avg_sdr:.4f}, average_sir: {avg_sir:.4f}, average_sar: {avg_sar:.4f}")
         
 
             if torch.distributed.is_initialized():
@@ -279,8 +277,6 @@ def train(start_training=True):
         print("Training was not started.")
 
 if __name__ == "__main__":
-        torch.cuda.empty_cache ()
-        gc.collect()
         train()
   
     

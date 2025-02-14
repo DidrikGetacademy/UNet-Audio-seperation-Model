@@ -1,209 +1,127 @@
-2025-02-13 20:15:19,284 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:19,284 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:19,379 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:19,379 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:19,382 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:19,382 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:19,505 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:19,505 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:19,541 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:15:19,541 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:19,642 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:15:19,643 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:19,647 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:15:19,648 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:15:26,279 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:26,279 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:26,383 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:26,383 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:26,385 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:26,385 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:26,485 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:26,486 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:33,939 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:33,939 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:33,963 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:33,963 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:33,985 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:33,985 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:33,987 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:33,988 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:33,994 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:33,994 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:33,996 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:33,996 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,016 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,017 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,023 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:34,024 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,027 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:34,027 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,028 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,028 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,047 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,047 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,049 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:34,049 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,051 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,051 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,054 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:34,054 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,055 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:15:34,056 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,068 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:15:34,068 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,076 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,077 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,081 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,082 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,088 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:15:34,088 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,091 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:15:34,091 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:15:34,114 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:15:34,114 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,114 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:15:34,114 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,118 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:15:34,118 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:15:34,123 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:15:34,123 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,143 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:34,143 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,151 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:15:34,151 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,155 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:15:34,155 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:15:34,155 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:15:34,155 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,159 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:15:34,159 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:15:34,211 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:34,211 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,215 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,215 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,217 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:34,218 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,243 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,243 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,245 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:15:34,246 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,250 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,250 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,296 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:15:34,296 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,319 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:15:34,319 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,366 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:15:34,367 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:15:34,372 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:15:34,372 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,376 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:15:34,376 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:15:34,460 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:15:34,461 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:15:34,464 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:15:34,465 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:15:39,359 - WARNING - Audio is too long: 7552000
-2025-02-13 20:15:39,374 - WARNING - Audio is too long: 7552000
-2025-02-13 20:15:39,374 - ERROR - Error processing A Classic Education - NightOwl.stem.mp4: 'Tensor' object has no attribute '_pad_or_trim'
-2025-02-13 20:15:45,052 - WARNING - Audio is too long: 8671232
-2025-02-13 20:15:45,071 - WARNING - Audio is too long: 8671232
-2025-02-13 20:15:45,072 - ERROR - Error processing Actions - Devil's Words.stem.mp4: 'Tensor' object has no attribute '_pad_or_trim'
-2025-02-13 20:15:47,340 - WARNING - Audio is too long: 7797007
-2025-02-13 20:15:47,356 - WARNING - Audio is too long: 7797007
-2025-02-13 20:15:48,579 - WARNING - Audio is too long: 9265664
-2025-02-13 20:15:48,599 - WARNING - Audio is too long: 9265664
-2025-02-13 20:16:08,131 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,131 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,146 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,146 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,173 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,173 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,173 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,174 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,175 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,175 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,180 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,181 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,183 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,183 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,184 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,184 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,188 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,188 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,188 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,188 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,208 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,208 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,209 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,209 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,211 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,211 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,213 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,214 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,214 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,214 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,216 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,216 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,216 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,216 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,217 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,217 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,218 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,219 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,219 - INFO - Initialized MUSDB18 Dataset with 2 files
-2025-02-13 20:16:08,219 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,248 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:16:08,249 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,254 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,255 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,259 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,260 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,262 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,262 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,263 - INFO - Initialized DSD100 with 4 tracks
-2025-02-13 20:16:08,263 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,269 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:16:08,269 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,284 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:16:08,284 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,287 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:16:08,288 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:16:08,293 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:16:08,293 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,297 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:16:08,298 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,300 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:16:08,300 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,302 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:16:08,302 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,303 - INFO - Initialized MUSDB18 Dataset with 50 files
-2025-02-13 20:16:08,303 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
-2025-02-13 20:16:08,304 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:16:08,304 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:16:08,321 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:16:08,321 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,325 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:16:08,325 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:16:08,325 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,325 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:16:08,328 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:16:08,328 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,328 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:16:08,328 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:16:08,331 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:16:08,331 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:16:08,331 - INFO - Initialized DSD100 with 50 tracks
-2025-02-13 20:16:08,331 - INFO - STFT params: n_fft=1024, hop=512
-2025-02-13 20:16:08,335 - INFO - Initialized CustomDataset with 0 pairs
-2025-02-13 20:16:08,335 - INFO - STFT Config: n_fft=1024, hop=512
-2025-02-13 20:16:11,169 - WARNING - Audio is too long: 9265664
-2025-02-13 20:16:11,189 - WARNING - Audio is too long: 9265664
-2025-02-13 20:16:11,190 - INFO - Normalizing: amplitude very low (0.000), consider discarding or amplifying signal.
-2025-02-13 20:16:12,329 - WARNING - Audio is too long: 9069513
-2025-02-13 20:16:12,350 - WARNING - Audio is too long: 9069513
-2025-02-13 20:16:14,092 - WARNING - Audio is too long: 8679219
-2025-02-13 20:16:14,114 - WARNING - Audio is too long: 8679219
-2025-02-13 20:16:15,140 - WARNING - Audio is too long: 7797007
-2025-02-13 20:16:15,156 - WARNING - Audio is too long: 7797007
+2025-02-14 10:23:24,822 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:24,822 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:24,934 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:24,934 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:24,937 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:24,937 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:25,043 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:25,044 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:31,204 - INFO - Initialized MUSDB18 Dataset with 100 files
+2025-02-14 10:23:31,204 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:31,287 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:31,287 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:31,289 - INFO - Initialized MUSDB18 Dataset with 30 files
+2025-02-14 10:23:31,290 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:31,377 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 30 tracks
+2025-02-14 10:23:31,377 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,592 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,593 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,594 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,594 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,614 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,615 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,615 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,615 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,617 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,617 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,617 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,618 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,624 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,624 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,642 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,642 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,642 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,642 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,649 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,649 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,652 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,652 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,660 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,660 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,663 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,663 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,681 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,681 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,683 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,683 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,684 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,684 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,686 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,686 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,697 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,697 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,717 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,718 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,723 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,723 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,773 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,773 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:39,905 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:39,905 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:39,908 - INFO - Initialized MUSDB18 Dataset with 50 files
+2025-02-14 10:23:39,908 - INFO - Config: SR=44100, N_FFT=1024, Hop=512, MaxLen=10s
+2025-02-14 10:23:40,025 - INFO - [DATASET_DSD100G]--> Initialized DSD100 with 50 tracks
+2025-02-14 10:23:40,025 - INFO - [DATASET_DSD100G]-->STFT params: n_fft=1024, hop=512
+2025-02-14 10:23:42,326 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:42,326 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:42,329 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:42,330 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Music Delta - Beatles.stem.mp4
+2025-02-14 10:23:47,438 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:47,439 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:47,440 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:47,442 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Actions - South Of The Water.stem.mp4
+2025-02-14 10:23:51,848 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:51,849 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:51,853 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:51,856 - INFO - Unexpected amplitude range (amplitude < 0.05), Audio amplitude too low.
+2025-02-14 10:23:51,856 - WARNING - [MUSDB18]--->Invalid vocals audio in /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Johnny Lokke - Promises & Lies.stem.mp4
+2025-02-14 10:23:52,456 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:52,456 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:52,460 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:52,463 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/The Scarlet Brand - Les Fleurs Du Mal.stem.mp4
+2025-02-14 10:23:52,877 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:52,878 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:52,880 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:52,881 - INFO - Unexpected amplitude range (amplitude < 0.05), Audio amplitude too low.
+2025-02-14 10:23:52,881 - WARNING - [MUSDB18]--->Invalid vocals audio in /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Skelpolu - Human Mistakes.stem.mp4
+2025-02-14 10:23:53,434 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:53,435 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:53,440 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:53,445 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Chris Durban - Celebrate.stem.mp4
+2025-02-14 10:23:53,716 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:53,717 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:53,719 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:53,720 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Matthew Entwistle - Dont You Ever.stem.mp4
+2025-02-14 10:23:54,352 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:54,353 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:54,356 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:54,358 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Traffic Experiment - Once More (With Feeling).stem.mp4
+2025-02-14 10:23:55,069 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:55,069 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:55,070 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:55,071 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Music Delta - Country2.stem.mp4
+2025-02-14 10:23:59,759 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:23:59,760 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:59,761 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:23:59,762 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/The So So Glos - Emergency.stem.mp4
+2025-02-14 10:24:03,185 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:24:03,186 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:03,187 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:03,189 - INFO - Unexpected amplitude range (amplitude < 0.05), Audio amplitude too low.
+2025-02-14 10:24:03,189 - WARNING - [MUSDB18]--->Invalid vocals audio in /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Johnny Lokke - Whisper To A Scream.stem.mp4
+2025-02-14 10:24:03,407 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:24:03,408 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:03,409 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:03,411 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/ANiMAL - Clinic A.stem.mp4
+2025-02-14 10:24:05,013 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:24:05,014 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:05,017 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:05,021 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Steven Clark - Bounty.stem.mp4
+2025-02-14 10:24:06,412 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:24:06,413 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:06,415 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:06,417 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Drumtracks - Ghost Bitch.stem.mp4
+2025-02-14 10:24:10,157 - INFO - [MUSDB18]--->Padding and trimming now...
+2025-02-14 10:24:10,158 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:10,163 - INFO - Expected_length [validate_audio]: 441000
+2025-02-14 10:24:10,167 - INFO - [MUSDB18]--> Normalizing audio now in path: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset/train/Music Delta - 80s Rock.stem.mp4

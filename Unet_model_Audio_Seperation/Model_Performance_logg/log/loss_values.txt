@@ -1,1 +1,0 @@
-2025-02-13 20:15:58,540 - INFO - [Batch] Epoch 1/40, Batch 1/1,Combined Loss: 0.965009,Mask Loss: 0.543679,Hybrid Loss: 0.990242,L1 Loss: 0.844639778137207,STFT Loss: 1.1358442306518555,

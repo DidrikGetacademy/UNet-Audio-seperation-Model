@@ -1,6 +1,6 @@
-2025-02-13 20:15:20,424 - INFO - Total number of parameters: 28905365
-2025-02-13 20:15:20,425 - INFO - Trainable parameters: 28905365
-2025-02-13 20:15:20,426 - INFO - Model architecture:
+2025-02-14 10:23:25,518 - INFO - Total number of parameters: 28905365
+2025-02-14 10:23:25,518 - INFO - Trainable parameters: 28905365
+2025-02-14 10:23:25,519 - INFO - Model architecture:
 UNet(
   (encoder): ModuleList(
     (0): Sequential(

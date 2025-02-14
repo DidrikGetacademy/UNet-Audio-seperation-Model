@@ -15,7 +15,7 @@ from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 data_logger = setup_logger('custom_dataset', train_log_path)
-
+from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
 
 class CustomAudioDataset(Dataset):
     def __init__(self, root_dir, sr=44100, n_fft=1024,
@@ -42,6 +42,13 @@ class CustomAudioDataset(Dataset):
             input_audio = self._process_audio(os.path.join(self.input_dir, self.input_files[idx]))
             target_audio = self._process_audio(os.path.join(self.target_dir, self.target_files[idx]))
 
+
+            target_audio =_pad_or_trim(target_audio, self.max_length_seconds)
+            input_audio =_pad_or_trim(input_audio, self.max_length_seconds)
+
+            input_audio = _normalize(input_audio)
+            target_audio = _normalize(target_audio)
+            
             if not validate_audio(input_audio, self.sr, self.max_length_seconds):
                 data_logger.warning(f"Invalid mixture audio in {self.input_files}")
                 return None

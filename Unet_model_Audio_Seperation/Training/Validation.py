@@ -31,8 +31,8 @@ def Validate_ModelEngine(epoch, Model_Engine, combined_val_loader, criterion, Mo
 
             val_predicted_mask, val_outputs = Model_Engine(val_inputs)
             if val_batch_idx <= 2:  
-                Convert_spectrogram_to_audio(audio_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/Validering",inputs=val_inputs[0],targets = val_targets[0],predicted_vocals=val_predicted_mask[0],outputs=val_outputs[0])
-            val_combined_loss, *_ = criterion(val_predicted_mask, val_inputs, val_targets,val_outputs)
+                Convert_spectrogram_to_audio(audio_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/Validering",inputs=val_inputs[0],targets = val_targets[0],predicted_vocals=val_predicted_mask[0],outputs=None)
+            val_combined_loss, *_ = criterion(val_predicted_mask, val_inputs, val_targets)
 
             val_running_loss += val_combined_loss.item()
 

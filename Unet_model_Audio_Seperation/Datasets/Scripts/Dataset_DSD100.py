@@ -18,7 +18,7 @@ dataset_logger = setup_logger('dataset_DSD100', train_log_path)
 
 class DSD100(Dataset):
     def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=None, max_files=None):
+                 hop_length=512, max_length_seconds=10, max_files=50):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length
@@ -32,8 +32,8 @@ class DSD100(Dataset):
             if os.path.isdir(os.path.join(self.mixtures_dir, song))
         ])[:max_files]
 
-        dataset_logger.info(f"Initialized DSD100 with {len(self.song_folders)} tracks")
-        dataset_logger.info(f"STFT params: n_fft={n_fft}, hop={hop_length}")
+        dataset_logger.info(f"[DATASET_DSD100G]--> Initialized DSD100 with {len(self.song_folders)} tracks")
+        dataset_logger.info(f"[DATASET_DSD100G]-->STFT params: n_fft={n_fft}, hop={hop_length}")
 
     def __len__(self):
         return len(self.song_folders)
@@ -44,48 +44,56 @@ class DSD100(Dataset):
         voc_path = os.path.join(self.sources_dir, song, 'vocals.wav')
 
         try:
-      
+                
+          
             mixture = self._load_audio(mix_path)
             vocals = self._load_audio(voc_path)
 
-           #Checks if the mixture audio contains valid audio too be proccessed 
-            if not validate_audio(mixture, self.sr, self.max_length_seconds):
-                dataset_logger.warning(f"Invalid mixture audio in {mix_path}")
-                return None
-            
-            #Checks if the vocals audio contains valid audio too be proccessed 
-            if not validate_audio(vocals, self.sr, self.max_length_seconds):
-                dataset_logger.warning(f"Invalid vocals audio in {voc_path}")
-                return None 
-            
+       
+            dataset_logger.info(f"[DATASET_DSD100G]-->Padding and trimming now...")
+            mix_tensor = _pad_or_trim(mixture, self.sr, self.max_length_seconds)
+            voc_tensor = _pad_or_trim(vocals, self.sr, self.max_length_seconds)
 
-            mix_tensor = _pad_or_trim(mixture,self.sr,self.max_length_seconds)
-            voc_tensor = _pad_or_trim(vocals,self.sr,self.max_length_seconds)
+     
+            mix_np = mix_tensor.numpy()
+            voc_np = voc_tensor.numpy()
+
+   
+            if not validate_audio(mix_np, self.sr, self.max_length_seconds):
+                dataset_logger.warning(f"[DATASET_DSD100G]-->Invalid mixture audio in {mix_path}")
+                return None
+
+            if not validate_audio(voc_np, self.sr, self.max_length_seconds):
+                dataset_logger.warning(f"[DATASET_DSD100G]-->Invalid vocals audio in {voc_path}")
+                return None
+
+         
+            dataset_logger.info(f"[DATASET_DSD100G]--> Normalizing audio now... in path:  {voc_path}")
             mix_tensor = _normalize(mix_tensor)
             voc_tensor = _normalize(voc_tensor)
 
-     
+
             window = torch.hann_window(self.n_fft)
             mix_stft = torch.stft(mix_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
-                                  window=window, return_complex=True)
+                                  window=window, return_complex=True, center=True)
             voc_stft = torch.stft(voc_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
-                                  window=window, return_complex=True)
+                                  window=window, return_complex=True, center=True)
 
             mixture_mag = torch.abs(mix_stft).unsqueeze(0)
             vocals_mag = torch.abs(voc_stft).unsqueeze(0)
 
             if not validate_spectrogram(mixture_mag):
-                dataset_logger.warning(f"Invalid mixture spectrogram in {mix_path}")
+                dataset_logger.warning(f"[DATASET_DSD100G]-->Invalid mixture spectrogram in {mix_path}")
                 return None
             
             if not validate_spectrogram(vocals_mag):
-                dataset_logger.warning(f"Invalid vocals spectrogram in {voc_path}")
+                dataset_logger.warning(f"[DATASET_DSD100G]--> Invalid vocals spectrogram in {voc_path}")
                 return None
             
             return  mixture_mag, vocals_mag
 
         except Exception as e:
-            dataset_logger.error(f"Error processing {song}: {str(e)}")
+            dataset_logger.error(f"[DATASET_DSD100G]-->Error processing {song}: {str(e)}")
             return None
 
 

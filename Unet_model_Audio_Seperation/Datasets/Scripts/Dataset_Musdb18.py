@@ -18,7 +18,7 @@ data_logger = setup_logger('dataloader_logger', train_log_path)
 device = torch.device("cpu")
 class MUSDB18StemDataset(Dataset):
     def __init__(self, root_dir, subset='train', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=None, max_files=None):
+                 hop_length=512, max_length_seconds=10, max_files=100):
         self.root_dir = os.path.join(root_dir, subset)
         self.sr = sr
         self.n_fft = n_fft
@@ -44,29 +44,47 @@ class MUSDB18StemDataset(Dataset):
         try:
       
             stems, _ = stempeg.read_stems(file_path, sample_rate=self.sr)
+            if stems.shape[0] < 5:
+                data_logger.warning(f"[MUSDB18]--->Not enough stems in [musdb18] {file_path}")
+                return None
+
             mixture, vocals = stems[0], stems[4]
 
             mixture = self._to_mono(mixture).astype(np.float32)
             vocals = self._to_mono(vocals).astype(np.float32)
 
+            data_logger.info(f"[MUSDB18]--->Padding and trimming now...")
+            mixture_tensor = _pad_or_trim(mixture, self.sr, self.max_length_seconds)
+            vocals_tensor =  _pad_or_trim(vocals, self.sr, self.max_length_seconds)
 
-
-            #Checks if the mixture audio contains valid audio too be proccessed 
-            if not validate_audio(mixture, self.sr, self.max_length_seconds):
-                data_logger.warning(f"Invalid mixture audio in {file_path}")
-                return None
+            expected_length = int(self.sr * self.max_length_seconds)
+            if len(mixture_tensor) != expected_length:
+                data_logger.warning(f"[MUSDB18]--->Mixture length does not match expected length! (Expected: {expected_length}, Got: {len(mixture_tensor)}), Trimming now")
+                mixture_tensor = mixture_tensor[:expected_length]
+                
             
-            #Checks if the vocals audio contains valid audio too be proccessed 
-            if not validate_audio(vocals, self.sr, self.max_length_seconds):
-                data_logger.warning(f"Invalid vocals audio in {file_path}")
-                return None 
+            if len(vocals_tensor) != expected_length:
+                data_logger.warning(f"[MUSDB18]--->Vocals length does not match expected length! (Expected: {expected_length}, Got: {len(vocals_tensor)}, Trimming now..")
+                vocals_tensor = vocals_tensor[:expected_length]
 
+            
+        
 
-    
-            mixture_tensor = torch.from_numpy(mixture)
-            vocals_tensor = torch.from_numpy(vocals)
-            mixture_tensor = mixture_tensor._pad_or_trim(self.sr, self.max_length_seconds)
-            vocals_tensor = vocals_tensor._pad_or_trim(self.sr, self.max_length_seconds)
+            mixture_np = mixture_tensor.numpy()
+            vocals_np = vocals_tensor.numpy()
+
+            
+
+            if not validate_audio(mixture_np, self.sr, self.max_length_seconds):
+                data_logger.warning(f"[MUSDB18]--->Invalid mixture audio in {file_path}")
+                return None
+
+            if not validate_audio(vocals_np, self.sr, self.max_length_seconds):
+                data_logger.warning(f"[MUSDB18]--->Invalid vocals audio in {file_path}")
+                return None
+
+                
+            data_logger.info(f"[MUSDB18]--> Normalizing audio now in path: {file_path}")
             mixture_tensor = _normalize(mixture_tensor)
             vocals_tensor = _normalize(vocals_tensor)
 
@@ -74,28 +92,28 @@ class MUSDB18StemDataset(Dataset):
             window = torch.hann_window(self.n_fft)
 
             mix_stft = torch.stft(mixture_tensor, n_fft=self.n_fft, hop_length=self.hop_length, 
-                                  window=window, return_complex=True)
+                                  window=window, return_complex=True,center=True)
             
             voc_stft = torch.stft(vocals_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
-                                  window=window, return_complex=True)
+                                  window=window, return_complex=True,center=True)
 
           
             mixture_mag = torch.abs(mix_stft).unsqueeze(0)
             vocals_mag = torch.abs(voc_stft).unsqueeze(0)
 
             if not validate_spectrogram(mixture_mag):
-                data_logger.warning(f"Invalid mixture spectrogram in {file_path}")
+                data_logger.warning(f"[MUSDB18]--->Invalid mixture spectrogram in {file_path}")
                 return None
             
             if not validate_spectrogram(vocals_mag):
-                data_logger.warning(f"Invalid vocals spectrogram in {file_path}")
+                data_logger.warning(f"[MUSDB18]--->Invalid vocals spectrogram in {file_path}")
                 return None
             
 
             return mixture_mag, vocals_mag
 
         except Exception as e:
-            data_logger.error(f"Error processing {os.path.basename(file_path)}: {str(e)}")
+            data_logger.error(f"[MUSDB18]---> Error processing {os.path.basename(file_path)}: {str(e)}")
             return None
 
 

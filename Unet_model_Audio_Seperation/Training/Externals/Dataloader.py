@@ -15,11 +15,16 @@ from Datasets.Scripts.Dataset_utils import Convert_spectrogram_to_audio
 root_dir = Return_root_dir() 
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/Dataloader.txt")
 data_loader = setup_logger('dataloader', train_log_path)
-BatchCount = 0
+BatchCount = float('inf') 
+check_batch = float('inf')
+total_batches_processed = 0  
 
 def robust_collate_fn(batch):
-    check_batch = float('inf')
+    num_none = sum(1 for item in batch if item is None)
+    data_loader.info(f"Batch contains {num_none} None items out of {len(batch)}")
+
     batch = [item for item in batch if item is not None]
+    data_loader.info(f"valid batch: {batch} out of {len(batch)}")
     
     if not batch:
         raise ValueError("Empty batch")
@@ -59,7 +64,11 @@ def robust_collate_fn(batch):
     if BatchCount <= 2:
         print(f"Converting spectrogram to audio now.... BATCH COUNT:{BatchCount}")
         Convert_spectrogram_to_audio(audio_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/Dataloading", predicted_vocals=None,targets=targets_tensor[0],inputs=inputs_tensor[0],outputs=None,)
-        
+        BatchCount += 1
+    global total_batches_processed
+    total_batches_processed += 1
+    data_loader.info(f"Total batches processed: {total_batches_processed}")
+
 
     
     return inputs_tensor, targets_tensor
@@ -78,31 +87,10 @@ def create_dataloader_training(
     num_workers=6,
     sampling_rate=44100,
     max_length_seconds=10,
-    max_files_train=None,
-    max_files_val=None,
-    val_ratio=0.2,
+    max_files_train=150,
+    max_files_val=25,
 ):
-    if max_files_train:
-        num_val_files_musdb18 = int(max_files_train * val_ratio)
-        num_train_files_musdb18 = max_files_train - num_val_files_musdb18
-        data_loader.info(f"[splitting files/max_files_train] Number of files in MUSDB18 for training: {num_train_files_musdb18}\n"
-                         f"[splitting files/max_files_train] Number of files in MUSDB18 for validation: {num_val_files_musdb18}\n")
-    else:
-        num_val_files_musdb18 = len(os.listdir(musdb18_dir))  # Using total files if None
-        num_train_files_musdb18 = num_val_files_musdb18  # All files for training if None
-        data_loader.info(f"[None/max_files_train] Number of files in MUSDB18 for training: {num_train_files_musdb18}\n"
-                         f"[None/max_files_train] Number of files in MUSDB18 for validation: {num_val_files_musdb18}\n")
-
-    if max_files_val:
-        num_val_files_dsd100 = int(max_files_val * val_ratio)
-        num_train_files_dsd100 = max_files_val - num_val_files_dsd100
-        data_loader.info(f"[splitting files/max_files_val] Number of files in DSD100 for training: {num_train_files_dsd100}\n"
-                         f"[splitting files/max_files_val] Number of files in DSD100 for validation: {num_val_files_dsd100}\n")
-    else:
-        num_val_files_dsd100 = len(os.listdir(dsd100_dir))  # Using total files if None
-        num_train_files_dsd100 = num_val_files_dsd100  # All files for training if None
-        data_loader.info(f"[None/max_files_val] Number of files in DSD100 for training: {num_train_files_dsd100}\n"
-                         f"[None/max_files_val] Number of files in DSD100 for validation: {num_val_files_dsd100}\n")
+  
 
     # --- TRAINING DATASETS ---
     musdb18_train_dataset = MUSDB18StemDataset(
@@ -112,7 +100,7 @@ def create_dataloader_training(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=num_train_files_musdb18,
+        max_files=max_files_train,
     )
 
     dsd100_train_dataset = DSD100(
@@ -122,7 +110,7 @@ def create_dataloader_training(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=num_train_files_dsd100,
+        max_files=max_files_train,
     )
 
 
@@ -134,7 +122,7 @@ def create_dataloader_training(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=num_val_files_musdb18,
+        max_files=max_files_val,
     )
 
     dsd100_val_dataset = DSD100(
@@ -144,14 +132,14 @@ def create_dataloader_training(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=num_val_files_dsd100,
+        max_files=max_files_val,
     )
 
 
 
     #DATALOADERS
     Training_loader = DataLoader(
-        ConcatDataset([musdb18_train_dataset, dsd100_train_dataset]),
+        ConcatDataset([musdb18_train_dataset]),
         batch_size=batch_size,
         shuffle=True,
         num_workers=num_workers,
@@ -161,7 +149,7 @@ def create_dataloader_training(
     )
 
     Validation_loader = DataLoader(
-        ConcatDataset([dsd100_val_dataset, musdb18_val_dataset]),
+        ConcatDataset([musdb18_val_dataset]),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
@@ -187,32 +175,11 @@ def create_dataloader_Fine_tuning(
     batch_size=0,
     num_workers=4,
     sampling_rate=44100,
-    max_files_finetuning_train=None,
-    max_files_fine_tuning_validation=None,
+    max_files_finetuning_train=50,
+    max_files_fine_tuning_validation=20,
     val_ratio=0.2,
     max_length_seconds = 10
 ):
-    if max_files_finetuning_train:
-        num_val_files_musdb18 = int(max_files_finetuning_train * val_ratio)
-        num_train_files_musdb18 = max_files_finetuning_train - num_val_files_musdb18
-        data_loader.info(f"[splitting files/max_files_train] Number of files in MUSDB18 for training: {num_train_files_musdb18}\n"
-                         f"[splitting files/max_files_train] Number of files in MUSDB18 for validation: {num_val_files_musdb18}\n")
-    else:
-        num_val_files_musdb18 = len(os.listdir(musdb18_dir))  # Using total files if None
-        num_train_files_musdb18 = num_val_files_musdb18  # All files for training if None
-        data_loader.info(f"[None/max_files_train] Number of files in MUSDB18 for training: {num_train_files_musdb18}\n"
-                         f"[None/max_files_train] Number of files in MUSDB18 for validation: {num_val_files_musdb18}\n")
-
-    if max_files_fine_tuning_validation:
-        num_val_files_dsd100 = int(max_files_fine_tuning_validation * val_ratio)
-        num_train_files_dsd100 = max_files_fine_tuning_validation - num_val_files_dsd100
-        data_loader.info(f"[splitting files/max_files_val] Number of files in DSD100 for training: {num_train_files_dsd100}\n"
-                         f"[splitting files/max_files_val] Number of files in DSD100 for validation: {num_val_files_dsd100}\n")
-    else:
-        num_val_files_dsd100 = len(os.listdir(dsd100_dir))  # Using total files if None
-        num_train_files_dsd100 = num_val_files_dsd100  # All files for training if None
-        data_loader.info(f"[None/max_files_val] Number of files in DSD100 for training: {num_train_files_dsd100}\n"
-                         f"[None/max_files_val] Number of files in DSD100 for validation: {num_val_files_dsd100}\n")
 
     # --- TRAINING DATASETS ---
     musdb18_train_dataset = MUSDB18StemDataset(
@@ -222,7 +189,7 @@ def create_dataloader_Fine_tuning(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=num_train_files_musdb18,
+        max_files=max_files_finetuning_train,
     )
 
     dsd100_train_dataset = DSD100(
@@ -232,7 +199,7 @@ def create_dataloader_Fine_tuning(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=num_train_files_dsd100,
+        max_files=max_files_finetuning_train,
     )
 
 
@@ -244,7 +211,7 @@ def create_dataloader_Fine_tuning(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=num_val_files_musdb18,
+        max_files=max_files_finetuning_train,
     )
 
     dsd100_val_dataset = DSD100(
@@ -254,7 +221,7 @@ def create_dataloader_Fine_tuning(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=num_val_files_dsd100,
+        max_files=max_files_finetuning_train,
     )
 
     #DATALOADERS
@@ -300,10 +267,10 @@ def create_dataloader_EVALUATION(
     dsd100_dir=DSD100_dataset_dir,
     customDataset_dir=custom_dataset_dir,
     batch_size=0,
-    num_workers=0,
+    num_workers=6,
     max_length_seconds=10,
     sampling_rate=44100,
-    max_files_val=None,
+    max_files_val=30,
 ):
     # --- EVALUATION DATASETS ---
     musdb18_eval_dataset = MUSDB18StemDataset(

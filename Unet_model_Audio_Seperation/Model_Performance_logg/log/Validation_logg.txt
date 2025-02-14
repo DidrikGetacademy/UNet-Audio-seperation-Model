@@ -1,2 +1,0 @@
-2025-02-13 20:16:00,146 - INFO - Validation Size: [1]
-2025-02-13 20:16:16,802 - INFO - val_batch_idx: [0], inputs: [torch.Size([4, 1, 513, 862])], target: [torch.Size([4, 1, 513, 862])]

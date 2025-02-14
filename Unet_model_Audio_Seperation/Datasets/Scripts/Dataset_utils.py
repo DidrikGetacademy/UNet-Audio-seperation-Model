@@ -44,6 +44,7 @@ def _normalize(audio):
 
 def validate_audio(audio, sr, max_length_seconds, min_amplitude=0.05):
         expected_length = int(sr * max_length_seconds)
+        data_logger.info(f"Expected_length [validate_audio]: {expected_length}")
 
         if len(audio) == 0:
             data_logger.info(f"Empty Audio file")
@@ -118,19 +119,19 @@ def spectrogram_to_waveform(magnitude_spectrogram, n_fft=1024, hop_length=512, n
 
 def Convert_spectrogram_to_audio(audio_path,predicted_vocals=None,targets=None,inputs=None,outputs=None):
         if inputs != None:
-          input_waveform = spectrogram_to_waveform(torch.tensor(inputs).to("cpu"))
+          input_waveform = spectrogram_to_waveform(inputs.clone().detach().to("cpu"))
           torchaudio.save(os.path.join( audio_path,"inputs/inputs(1).wav"), input_waveform.unsqueeze(0), sample_rate=44100)
 
         if predicted_vocals != None:
-             predicted_waveform = spectrogram_to_waveform(predicted_vocals.to("cpu"))
+             predicted_waveform = spectrogram_to_waveform(predicted_vocals.clone().detach().to("cpu"))
              torchaudio.save(os.path.join(audio_path,"predictions/predictions(1).wav"), predicted_waveform.unsqueeze(0), sample_rate=44100)
 
         if targets != None:
-          target_waveform = spectrogram_to_waveform(torch.tensor(targets).to("cpu"))
+          target_waveform = spectrogram_to_waveform(targets.clone().detach().to("cpu"))
           torchaudio.save(os.path.join(audio_path,"targets/targets(1).wav"), target_waveform.unsqueeze(0), sample_rate=44100)
 
         if outputs != None:
-           output_waveform = spectrogram_to_waveform(outputs.to("cpu"))
+           output_waveform = spectrogram_to_waveform(outputs.clone().detach().to("cpu"))
            torchaudio.save(os.path.join(audio_path,"outputs/outputs(1).wav"), output_waveform.unsqueeze(0), sample_rate=44100)
 
 
