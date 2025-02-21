@@ -10,9 +10,8 @@ from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
 
 root_dir = Return_root_dir()  # Gets the root directory
-train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
-train_logger = setup_logger('train', train_log_path)
-
+train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/loss_class_function_values.txt")
+train_logger = setup_logger('loss_class_function', train_log_path)
 # MASK-ESTIMATION LOSS CLASS
 class MaskEstimationLoss(nn.Module):
     def __init__(self):
@@ -21,21 +20,24 @@ class MaskEstimationLoss(nn.Module):
         self.mse_loss = nn.MSELoss()
 
     def forward(self, predicted_mask, mixture, target):
-        # Move calculations to FP32 for stability
+   
         predicted_mask = predicted_mask.float()
         mixture = mixture.float()
         target = target.float()
 
-        # Estimated vocal spectrum from mask
+    
         predicted_vocals = predicted_mask * mixture
 
-        # L1 Loss
+   
         l1 = self.l1_loss(predicted_vocals, target)
 
-        # Log-space MSE Loss
+     
         stft = self.mse_loss(torch.log1p(predicted_vocals), torch.log1p(target))
 
-        # Weighted combination of losses
+
+
+        train_logger.debug(f"[MaskEstimationLoss] L1={l1.item():.6f}, STFT={stft.item():.6f}")
+
         return 0.5 * l1 + 0.5 * stft
 
 
@@ -47,44 +49,43 @@ class HybridLoss(nn.Module):
         self.mse_loss = nn.MSELoss()
 
     def forward(self, pred, target):
-        # Move calculations to FP32 for stability
+    
         pred = pred.float()
         target = target.float()
 
-        # L1 Loss
+      
         l1 = self.l1_loss(pred, target)
 
-        # STFT Loss
+
         n_fft = min(1024, pred.size(-1))
         hop_length = 512
         window = torch.hann_window(n_fft, device=pred.device, dtype=torch.float32)
 
         stft_loss = 0.0
-        for i in range(pred.size(0)):  # Iterate over the batch
+        for i in range(pred.size(0)):
             pred_tensor = pred[i].squeeze()
             target_tensor = target[i].squeeze()
 
-            # Ensure tensors have the same length
             min_len = min(pred_tensor.size(-1), target_tensor.size(-1))
             pred_tensor = pred_tensor[..., :min_len]
             target_tensor = target_tensor[..., :min_len]
 
-            # Compute STFT
+         
             pred_stft = torch.stft(pred_tensor, n_fft=n_fft, hop_length=hop_length, return_complex=True, window=window)
             target_stft = torch.stft(target_tensor, n_fft=n_fft, hop_length=hop_length, return_complex=True, window=window)
 
-            # Log-space MSE Loss
+           
             pred_stft_log = torch.log1p(torch.abs(pred_stft))
             target_stft_log = torch.log1p(torch.abs(target_stft))
             stft_loss_batch = self.mse_loss(pred_stft_log, target_stft_log)
             stft_loss += stft_loss_batch
 
-            # Debugging
+           
             train_logger.debug(f"[HybridLoss] Batch {i}: STFT MSE={stft_loss_batch.item():.6f}")
 
-        stft_loss /= pred.size(0)  # Normalize by batch size
+        stft_loss /= pred.size(0)  
 
-        # Combine losses
+      
         combined_loss = 0.5 * l1 + 0.5 * stft_loss
         train_logger.debug(f"[HybridLoss] L1={l1.item():.6f}, STFT={stft_loss.item():.6f}, Combined={combined_loss.item():.6f}")
 
@@ -104,19 +105,31 @@ class Combinedloss(nn.Module):
         mixture = mixture.float()
         target = target.float()
 
-        # Mask Loss
+        
         mask_loss = self.mask_loss(predicted_mask, mixture, target)
 
-        # Hybrid Loss
+      
         predicted_vocals = predicted_mask * mixture
         hybrid_loss_val, l1_loss_val, stft_loss_val  = self.hybrid_loss(predicted_vocals, target)
 
-        # Combine losses
-        combined_loss = 0.5 * mask_loss + 0.7 * hybrid_loss_val
 
-        # Debugging
-        train_logger.debug(f"[CombinedLoss] Mask Loss={mask_loss.item():.6f}, Hybrid Loss={hybrid_loss_val.item():.6f}")
-        return combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val
+        sdr_loss = self.calculate_sdr(predicted_vocals, target)
+
+   
+        combined_loss = 0.5 * mask_loss + 0.7 * hybrid_loss_val + 0.3 * sdr_loss
+
+    
+        train_logger.debug(f"[CombinedLoss] combined_loss={combined_loss.item()} Mask Loss={mask_loss.item():.6f}, Hybrid Loss={hybrid_loss_val.item():.6f}, SDR Loss={sdr_loss.item():.6f}")
+        return combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val, sdr_loss
+    
+
+    def calculate_sdr(self,predicted,target):
+         error_signal = target - predicted
+
+         signal_energy = torch.sum(target ** 2)
+         noise_energy = torch.sum(error_signal ** 2)
+         sdr = 10 * torch.log10(signal_energy / noise_energy)
+         return sdr.mean()
 
 
 

@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 import numpy as np
 import sys
-
+import matplotlib.pyplot as plt
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
@@ -15,7 +15,7 @@ from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 data_logger = setup_logger('custom_dataset', train_log_path)
-from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
+from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize,validate_alignment
 
 class CustomAudioDataset(Dataset):
     def __init__(self, root_dir, sr=44100, n_fft=1024,
@@ -42,26 +42,41 @@ class CustomAudioDataset(Dataset):
             input_audio = self._process_audio(os.path.join(self.input_dir, self.input_files[idx]))
             target_audio = self._process_audio(os.path.join(self.target_dir, self.target_files[idx]))
 
+            max_samples = int(self.sr * self.max_length_seconds)
+            start_index = None
+            if input_audio.shape[0] > max_samples and target_audio.shape[0] > max_samples:
+                        max_start = min(input_audio.shape[0] - max_samples, target_audio.shape[0] - max_samples)
+                        start_index = torch.randint(0, max_start + 1,()).item()
 
-            target_audio =_pad_or_trim(target_audio, self.max_length_seconds)
-            input_audio =_pad_or_trim(input_audio, self.max_length_seconds)
 
-            input_audio = _normalize(input_audio)
-            target_audio = _normalize(target_audio)
+            target_audio =_pad_or_trim(target_audio,self.sr, self.max_length_seconds, start_index)
+            input_audio =_pad_or_trim(input_audio,self.sr, self.max_length_seconds, start_index)
+
+      
+            
             
             if not validate_audio(input_audio, self.sr, self.max_length_seconds):
                 data_logger.warning(f"Invalid mixture audio in {self.input_files}")
                 return None
+            
             if not validate_audio(target_audio, self.sr, self.max_length_seconds):
                 data_logger.warning(f"Invalid vocals audio in {self.target_files}")
                 return None 
             
 
+            input_audio = _normalize(input_audio)
+            target_audio = _normalize(target_audio)
+
+
+            if not validate_alignment(target_audio,input_audio):
+                data_logger.warning(f"[MUSDB18] ---> Alignment invalid for file {self.input_files}")
+                return None
+            
             window = torch.hann_window(self.n_fft)
             input_stft = torch.stft(input_audio, n_fft=self.n_fft, hop_length=self.hop_length,
-                                    window=window, return_complex=True)
+                                    window=window, return_complex=True, center=False)
             target_stft = torch.stft(target_audio, n_fft=self.n_fft, hop_length=self.hop_length,
-                                     window=window, return_complex=True)
+                                     window=window, return_complex=True, center=False)
             
             vocal_mag = torch.abs(input_stft).unsqueeze(0)
             mixture_mag = torch.abs(target_stft).unsqueeze(0)
@@ -72,6 +87,7 @@ class CustomAudioDataset(Dataset):
                 return None
             
             return vocal_mag, mixture_mag
+
 
         except Exception as e:
             data_logger.error(f"Error processing file pair {idx}: {str(e)}")
@@ -93,3 +109,5 @@ class CustomAudioDataset(Dataset):
         # Normaliser
         max_val = torch.max(torch.abs(audio_tensor)) + 1e-8
         return audio_tensor / max_val
+
+

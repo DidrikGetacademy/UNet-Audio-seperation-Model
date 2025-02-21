@@ -11,7 +11,7 @@ from Training.Externals.utils import Return_root_dir
 root_dir = Return_root_dir() #Gets the root directory
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
 root_dir = Return_root_dir() #Gets the root directory
-train_logger = setup_logger('train',train_log_path)
+train_logger = setup_logger('Value_storage',train_log_path)
 
 global loss_history_Epoches
 global loss_history_Batches
@@ -38,6 +38,7 @@ loss_history_finetuning_epoches = {
     "multiscale": [],
     "combined": [],
 }
+
 
 
 

@@ -18,7 +18,7 @@ Function_logger = setup_logger('Functions.py',train_log_path)
 
 
 def Early_break(trigger_times, patience):
-    Function_logger.info(f"Trigger times: {trigger_times}, patience: {patience}")
+    Function_logger.info(f"\nTrigger times: {trigger_times}, patience: {patience}\n")
     if trigger_times >= patience:
         Function_logger.info(f"Early stopping triggered.  The model is not getting any better!!!!")
         return True
@@ -121,3 +121,12 @@ def freeze_encoder(Fine_tune_logger,model):
 
 
 
+def save_checkpoint(model, optimizer, epoch, avg_epoch_loss, checkpoint_dir):
+                            checkpoint_path = os.path.join(checkpoint_dir, f'checkpoint_epoch_{epoch}.pth')
+                            torch.save({
+                                'epoch': epoch,
+                                'model_state_dict': model.state_dict(),
+                                'optimizer_state_dict': optimizer.state_dict(),
+                                'loss': avg_epoch_loss,
+                            }, checkpoint_path)
+                            Function_logger.info(f"Checkpoint saved: {checkpoint_path}")

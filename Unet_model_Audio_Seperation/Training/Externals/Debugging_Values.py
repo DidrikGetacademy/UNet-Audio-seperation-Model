@@ -47,24 +47,24 @@ def log_first_2_batches_inputs_targets(batch_idx,train_logger,inputs,targets):
 
 def log_first_2_batches_outputs_inputs_targets_predicted_mask(batch_idx,outputs,inputs,targets,predicted_mask,train_logger,predicted_vocals):
          if batch_idx < 2:
-            print("Function: [log_first_2_batches_outputs_inputs_targets_predicted_mask]")
+            train_logger.info("Function: [log_first_2_batches_outputs_inputs_targets_predicted_mask]")
             train_logger.info(
             f"####OUTPUTS, INPUTS, TARGETS,PREDICTEDMASK [2 BATCHES]####\n"
-            f"Batch {batch_idx}: Mask range: min={outputs.min().item():.4f}, max={outputs.max().item():.4f}"
-            f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}, Predicted Mask shape={predicted_mask.shape}, Outputs shape={outputs.shape}"
-            f"Mask min={predicted_mask.min().item()}, max={predicted_mask.max().item()}"
-            f"[After Mask Application] Predicted vocals min: {predicted_vocals.min()}, max: {predicted_vocals.max()}\n\n\n"
+            f"Batch {batch_idx}: Mask range: min={outputs.min().item():.4f}, max={outputs.max().item():.4f}\n"
+            f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}, Predicted Mask shape={predicted_mask.shape}, Outputs shape={outputs.shape}\n"
+            f"Mask min={predicted_mask.min().item()}, max={predicted_mask.max().item()}\n"
+            f"[After Mask Application] Predicted vocals min: {predicted_vocals.min()}, max: {predicted_vocals.max()}\n"
             )
             loss_value_information(train_logger)
 
 
 def loss_value_information(train_logger):
       train_logger.info(
-          f"####LOSS VALUES####\n"
+          f"\n####LOSS VALUES####\n"
           f"[Combinedloss]:  Total treningsfeil, [BØR REDUSERES OVER TID]\n"
           f"[MaskLoss]: Sier hvor godt modellen lærer og predikere masken som isolerer vokaler[BØR REDUSERES OVER TID]\n"
-          f"[l1_loss og stft_loss] gir ekstra indikasjoner på lydkvalitet."
-          f"[Hybridloss]: Kombinasjon av flere tapsfunksjoner[BØR REDUSERES OVER TID]"
+          f"[l1_loss og stft_loss] gir ekstra indikasjoner på lydkvalitet.\n"
+          f"[Hybridloss]: Kombinasjon av flere tapsfunksjoner[BØR REDUSERES OVER TID]\n"
       )
       
 
@@ -72,9 +72,9 @@ def loss_value_information(train_logger):
 
 def print_inputs_targets_shape(inputs, targets, batch_idx):
     if batch_idx <= 2:
-       print("Function: [print_inputs_targets_shape]")
-       Debug_value.debug(f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}") 
-       Debug_value.debug(f"Inputs min={inputs.min().item():.4f}, max={inputs.max().item():.4f}, Targets min={targets.min().item():.4f}, max={targets.max().item():.4f}")
+       print("\nFunction: [print_inputs_targets_shape]")
+       Debug_value.debug(f"Batch {batch_idx}: Inputs shape={inputs.shape}, Targets shape={targets.shape}\n") 
+       Debug_value.debug(f"Inputs min={inputs.min().item():.4f}, max={inputs.max().item():.4f}, Targets min={targets.min().item():.4f}, max={targets.max().item():.4f}\n")
 
 
 
@@ -118,10 +118,10 @@ def prev_epoch_loss_log(train_logger,prev_epoch_loss,avg_epoch_loss,epoch):
         if prev_epoch_loss is not None:  
             loss_improvement = (prev_epoch_loss - avg_epoch_loss) / prev_epoch_loss * 100
             train_logger.info( 
-                              f"[Epoch Improvement] Epoch {epoch + 1}: Loss improved during training by {loss_improvement:.2f}% from previous epoch, " )
+                              f"\n[Epoch Improvement] Epoch {epoch + 1}: Loss improved during training by {loss_improvement:.2f}% from previous epoch, \n" )
         else:
 
-            train_logger.info(f"[Epoch Improvement] Epoch {epoch + 1}: No comparison (first epoch).")
+            train_logger.info(f"\n[Epoch Improvement] Epoch {epoch + 1}: No comparison (first epoch).\n")
 
  
 

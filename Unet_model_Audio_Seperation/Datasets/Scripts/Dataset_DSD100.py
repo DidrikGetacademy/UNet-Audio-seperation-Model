@@ -9,7 +9,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
-from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
+from Datasets.Scripts.Dataset_utils import validate_audio,validate_alignment, validate_spectrogram,_pad_or_trim,_normalize
 
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
@@ -18,7 +18,7 @@ dataset_logger = setup_logger('dataset_DSD100', train_log_path)
 
 class DSD100(Dataset):
     def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=10, max_files=50):
+                 hop_length=512, max_length_seconds=11, max_files=50):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length
@@ -49,12 +49,20 @@ class DSD100(Dataset):
             mixture = self._load_audio(mix_path)
             vocals = self._load_audio(voc_path)
 
-       
-            dataset_logger.info(f"[DATASET_DSD100G]-->Padding and trimming now...")
-            mix_tensor = _pad_or_trim(mixture, self.sr, self.max_length_seconds)
-            voc_tensor = _pad_or_trim(vocals, self.sr, self.max_length_seconds)
 
-     
+            max_samples = int(self.sr * self.max_length_seconds)
+            start_index = None
+            if mixture.shape[0] > max_samples and vocals.shape[0] > max_samples:
+                max_start = min(mixture.shape[0] - max_samples, vocals.shape[0] - max_samples)
+                start_index = torch.randint(0, max_start + 1,()).item()
+
+
+            dataset_logger.info(f"[DATASET_DSD100G]-->Padding and trimming now...")
+            mix_tensor = _pad_or_trim(mixture, self.sr, self.max_length_seconds,start_index)
+            voc_tensor = _pad_or_trim(vocals, self.sr, self.max_length_seconds,start_index)
+
+
+
             mix_np = mix_tensor.numpy()
             voc_np = voc_tensor.numpy()
 
@@ -72,12 +80,16 @@ class DSD100(Dataset):
             mix_tensor = _normalize(mix_tensor)
             voc_tensor = _normalize(voc_tensor)
 
+            if not validate_alignment(mix_tensor, voc_tensor, self.sr):
+                dataset_logger.warning(f"[DSD100] ---> Alignment invalid for file {mix_path} and {voc_path}")
+                return None
+
 
             window = torch.hann_window(self.n_fft)
             mix_stft = torch.stft(mix_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
-                                  window=window, return_complex=True, center=True)
+                                  window=window, return_complex=True, center=False)
             voc_stft = torch.stft(voc_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
-                                  window=window, return_complex=True, center=True)
+                                  window=window, return_complex=True, center=False)
 
             mixture_mag = torch.abs(mix_stft).unsqueeze(0)
             vocals_mag = torch.abs(voc_stft).unsqueeze(0)

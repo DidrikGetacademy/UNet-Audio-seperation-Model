@@ -9,7 +9,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.insert(0, project_root)
 from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
-from Datasets.Scripts.Dataset_utils import validate_audio, validate_spectrogram,_pad_or_trim,_normalize
+from Datasets.Scripts.Dataset_utils import validate_audio,validate_alignment, validate_spectrogram,_pad_or_trim,_normalize
 root_dir = Return_root_dir()
 train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/datasets.txt")
 data_logger = setup_logger('dataloader_logger', train_log_path)
@@ -50,14 +50,24 @@ class MUSDB18StemDataset(Dataset):
 
             mixture, vocals = stems[0], stems[4]
 
+
             mixture = self._to_mono(mixture).astype(np.float32)
             vocals = self._to_mono(vocals).astype(np.float32)
+            
 
-            data_logger.info(f"[MUSDB18]--->Padding and trimming now...")
-            mixture_tensor = _pad_or_trim(mixture, self.sr, self.max_length_seconds)
-            vocals_tensor =  _pad_or_trim(vocals, self.sr, self.max_length_seconds)
+            max_samples = int(self.sr * self.max_length_seconds)
+            start_index = None
+            if mixture.shape[0] > max_samples and vocals.shape[0] > max_samples:
+                max_start = min(mixture.shape[0] - max_samples, vocals.shape[0] - max_samples)
+                start_index = torch.randint(0, max_start + 1,()).item()
+
+
+            mixture_tensor = _pad_or_trim(mixture, self.sr, self.max_length_seconds, start_index)
+            vocals_tensor =  _pad_or_trim(vocals, self.sr, self.max_length_seconds, start_index)
+
 
             expected_length = int(self.sr * self.max_length_seconds)
+
             if len(mixture_tensor) != expected_length:
                 data_logger.warning(f"[MUSDB18]--->Mixture length does not match expected length! (Expected: {expected_length}, Got: {len(mixture_tensor)}), Trimming now")
                 mixture_tensor = mixture_tensor[:expected_length]
@@ -67,13 +77,10 @@ class MUSDB18StemDataset(Dataset):
                 data_logger.warning(f"[MUSDB18]--->Vocals length does not match expected length! (Expected: {expected_length}, Got: {len(vocals_tensor)}, Trimming now..")
                 vocals_tensor = vocals_tensor[:expected_length]
 
-            
         
-
             mixture_np = mixture_tensor.numpy()
             vocals_np = vocals_tensor.numpy()
 
-            
 
             if not validate_audio(mixture_np, self.sr, self.max_length_seconds):
                 data_logger.warning(f"[MUSDB18]--->Invalid mixture audio in {file_path}")
@@ -83,19 +90,21 @@ class MUSDB18StemDataset(Dataset):
                 data_logger.warning(f"[MUSDB18]--->Invalid vocals audio in {file_path}")
                 return None
 
-                
-            data_logger.info(f"[MUSDB18]--> Normalizing audio now in path: {file_path}")
+
             mixture_tensor = _normalize(mixture_tensor)
             vocals_tensor = _normalize(vocals_tensor)
 
+            if not validate_alignment(mixture_tensor, vocals_tensor, self.sr):
+                data_logger.warning(f"[MUSDB18] ---> Alignment invalid for file {file_path}")
+                return None
+
     
             window = torch.hann_window(self.n_fft)
-
             mix_stft = torch.stft(mixture_tensor, n_fft=self.n_fft, hop_length=self.hop_length, 
-                                  window=window, return_complex=True,center=True)
+                                  window=window, return_complex=True,center=False)
             
             voc_stft = torch.stft(vocals_tensor, n_fft=self.n_fft, hop_length=self.hop_length,
-                                  window=window, return_complex=True,center=True)
+                                  window=window, return_complex=True,center=False)
 
           
             mixture_mag = torch.abs(mix_stft).unsqueeze(0)

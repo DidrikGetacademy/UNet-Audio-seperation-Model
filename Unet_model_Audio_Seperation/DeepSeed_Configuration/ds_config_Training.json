@@ -60,7 +60,7 @@
     },
     "tensorboard": {
       "enabled": true,
-      "output_path": "/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Performance_logg/TensorBoard/DeepSpeed Logging",
+      "output_path": "/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Performance_logg/TensorBoard",
       "job_name": ""
     }
   }

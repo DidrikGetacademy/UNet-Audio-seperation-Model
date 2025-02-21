@@ -12,18 +12,29 @@ from Training.Externals.utils import Return_root_dir
 from Training.Externals.Logger import setup_logger
 root_dir = Return_root_dir() #Gets the root directory
 train_log_path = os.path.join(root_dir, "Model_performance_logg/log/Model_Training_logg.txt")
-train_logger = setup_logger('train',train_log_path)
+train_logger = setup_logger('loss_diagram_values',train_log_path)
 diagramdirectory = os.path.join(root_dir,"Model_performance_logg/Diagrams")
 os.makedirs(diagramdirectory, exist_ok=True)
+from mir_eval.separation import bss_eval_sources
+from Datasets.Scripts.Dataset_utils import spectrogram_to_waveform
 
 
 
 ####TRAINING####
-def create_loss_tabel_epoches(loss_history_Epoches,loss_logger):
+#### TRAINING ####
+
+def create_loss_table_epoches(loss_history_Epochs, loss_logger):
     table_rows = []
-    for i, epoch_data in enumerate(loss_history_Epoches, start=1):
-        mask_avg, hybrid_avg, combined_avg, epoch_loss = epoch_data
-        table_rows.append((i, mask_avg, hybrid_avg, combined_avg, epoch_loss))
+    for epoch, (mask_avg, hybrid_avg, combined_avg, epoch_loss) in enumerate(
+        zip(
+            loss_history_Epochs["mask_loss"],
+            loss_history_Epochs["hybrid_loss"],
+            loss_history_Epochs["combined"],
+            loss_history_Epochs["Total_loss_per_epoch"]
+        ),
+        start=1
+    ):
+        table_rows.append((epoch, mask_avg, hybrid_avg, combined_avg, epoch_loss))
 
     headers = ["Epoch", "Mask Loss Avg", "Hybrid Loss Avg", "Combined Loss Avg", "Epoch Loss"]
     loss_logger.info("=" * 80)
@@ -32,29 +43,29 @@ def create_loss_tabel_epoches(loss_history_Epoches,loss_logger):
 
     for (epoch, mask_avg, hybrid_avg, combined_avg, epoch_loss) in table_rows:
         row_str = f"{epoch:<5}  {mask_avg:<14.6f}  {hybrid_avg:<16.6f}  {combined_avg:<16.6f}  {epoch_loss:<10.6f}"
-        loss_logger.info(row_str+ "\n")
-
-
-
-
+        loss_logger.info(row_str + "\n")
 
 
 def create_loss_table_batches(loss_history_Batches, loss_logger):
     table_rows = []
-    for (batch_nr, mask_loss, hybrid_loss, combined_loss) in loss_history_Batches:
-        table_rows.append((batch_nr, mask_loss, hybrid_loss, combined_loss))
+    for batch, (mask_loss, hybrid_loss, combined_loss) in enumerate(
+        zip(
+            loss_history_Batches["mask_loss"],
+            loss_history_Batches["hybrid_loss"],
+            loss_history_Batches["combined"]
+        ),
+        start=1
+    ):
+        table_rows.append((batch, mask_loss, hybrid_loss, combined_loss))
 
     headers = ["Batch", "Mask Loss", "Hybrid Loss", "Combined Loss"]
-    
     loss_logger.info("=" * 80)
     loss_logger.info(f"{headers[0]:<6}  {headers[1]:<10}  {headers[2]:<12}  {headers[3]:<14}")
     loss_logger.info("=" * 80)
 
     for (batch, mask_val, hybrid_val, combined_val) in table_rows:
-        row_str = (f"{batch:<6}  {mask_val:<10.6f}  {hybrid_val:<12.6f}  {combined_val:<14.6f}")
+        row_str = f"{batch:<6}  {mask_val:<10.6f}  {hybrid_val:<12.6f}  {combined_val:<14.6f}"
         loss_logger.info(row_str + "\n")
-
-
 
 
 
@@ -160,7 +171,7 @@ def plot_loss_curves_Training_script_epoches(loss_history_Epoches,loss_logger, o
 
     plt.savefig(out_path, bbox_inches="tight")
     plt.close()
-    loss_logger("Generated plot_loss_curves_Training_script_epoches diagram.")
+    loss_logger.info("Generated plot_loss_curves_Training_script_epoches diagram.")
 
 
 
@@ -238,7 +249,7 @@ def plot_loss_curves_Training_script_Batches(loss_history_Batches, loss_logger,o
 
     plt.savefig(out_path, bbox_inches="tight")
     plt.close()
-    loss_logger("Generated plot_loss_curves_Training_script_Batches diagram.")
+    loss_logger.info("Generated plot_loss_curves_Training_script_Batches diagram.")
 
 
 

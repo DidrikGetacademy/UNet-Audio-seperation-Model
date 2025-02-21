@@ -11,31 +11,40 @@ from Datasets.Scripts.Custom_audio_dataset import CustomAudioDataset
 from Training.Externals.Logger import setup_logger
 from Training.Externals.utils import Return_root_dir
 from Datasets.Scripts.Dataset_utils import Convert_spectrogram_to_audio
-
 root_dir = Return_root_dir() 
-train_log_path = os.path.join(root_dir, "Model_Performance_logg/log/Dataloader.txt")
-data_loader = setup_logger('dataloader', train_log_path)
-BatchCount = float('inf') 
-check_batch = float('inf')
-total_batches_processed = 0  
+MUSDB18_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset")
+DSD100_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Training_DSD100_dataset")
+custom_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Evaluation_Test_Dataset")
+data_loader_path = os.path.join(root_dir, "Model_Performance_logg/log/Dataloader.txt")
+data_loader = setup_logger('dataloader', data_loader_path)
+conversion_batch_count  = 0
+check_batch = 0
+
 
 def robust_collate_fn(batch):
+    global conversion_batch_count
+    global check_batch
+
     num_none = sum(1 for item in batch if item is None)
     data_loader.info(f"Batch contains {num_none} None items out of {len(batch)}")
 
-    batch = [item for item in batch if item is not None]
-    data_loader.info(f"valid batch: {batch} out of {len(batch)}")
-    
-    if not batch:
-        raise ValueError("Empty batch")
-    
-    check_batch = 0
-    for item in batch:
-        if check_batch < 1:
-            data_loader.info(f"Batch item: {item}")
-            check_batch += 1
+    Valid_batch = [item for item in batch if item is not None]
+    total_items = len(batch)
+    invalid_items = total_items - len(Valid_batch) 
+     
 
-    inputs, targets = zip(*batch)
+    data_loader.info(
+        f"Valid items in batch: {len(Valid_batch)} out of {total_items}\n"
+        f"Invalid items in batch: {invalid_items}\n\n"
+        )
+    
+
+    if not Valid_batch:
+        data_loader.warning("Skipping empty batch.")
+        return torch.empty(0, 1, 513, 948), torch.empty(0, 1, 513, 948)  
+    
+
+    inputs, targets = zip(*Valid_batch)
     
     max_freq = max(x.size(-2) for x in inputs)
     max_time = max(x.size(-1) for x in inputs)
@@ -53,30 +62,22 @@ def robust_collate_fn(batch):
     targets_tensor = torch.stack(padded_targets, dim=0)
     
     # Logging tensor statistics for debugging
-    data_loader.info(f"[Dataloader-robust_collate_fn] Inputs tensor min: {inputs_tensor.min()}, max: {inputs_tensor.max()}, mean: {inputs_tensor.mean()}")
-    data_loader.info(f"[Dataloader-robust_collate_fn] Targets tensor min: {targets_tensor.min()}, max: {targets_tensor.max()}, mean: {targets_tensor.mean()}")
-    data_loader.info(f"[Dataloader-robust_collate_fn] Padded inputs shape: {inputs_tensor.shape}, Padded targets shape: {targets_tensor.shape}")
+    data_loader.info(f"\n[Dataloader-robust_collate_fn] Inputs tensor min: {inputs_tensor.min()}, max: {inputs_tensor.max()}, mean: {inputs_tensor.mean()}\n")
+    data_loader.info(f"[Dataloader-robust_collate_fn] Targets tensor min: {targets_tensor.min()}, max: {targets_tensor.max()}, mean: {targets_tensor.mean()}\n")
+    data_loader.info(f"[Dataloader-robust_collate_fn] Padded inputs shape: {inputs_tensor.shape}, Padded targets shape: {targets_tensor.shape}\n")
     data_loader.info(f"[Dataloader-robust_collate_fn] Batch sizes: inputs - {len(inputs)}, targets - {len(targets)}\n")
 
     if inputs_tensor.device.type == "cpu":
         data_loader.info("Tensors are on CPU, skipping pin_memory.")
     
-    if BatchCount <= 2:
-        print(f"Converting spectrogram to audio now.... BATCH COUNT:{BatchCount}")
+    if conversion_batch_count  <= 2:
+        print(f"Converting spectrogram to audio now.... BATCH COUNT:{conversion_batch_count}\n")
         Convert_spectrogram_to_audio(audio_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/Dataloading", predicted_vocals=None,targets=targets_tensor[0],inputs=inputs_tensor[0],outputs=None,)
-        BatchCount += 1
-    global total_batches_processed
-    total_batches_processed += 1
-    data_loader.info(f"Total batches processed: {total_batches_processed}")
+        conversion_batch_count  += 1
 
-
-    
     return inputs_tensor, targets_tensor
 
 
-MUSDB18_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Training_MUSDB18_dataset")
-DSD100_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Training_DSD100_dataset")
-custom_dataset_dir = os.path.join(root_dir, "Datasets/Dataset_Audio_Folders/Evaluation_Test_Dataset")
 
 
 ### DATALOADER 1 ###

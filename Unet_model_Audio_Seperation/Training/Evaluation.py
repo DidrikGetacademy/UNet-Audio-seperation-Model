@@ -10,8 +10,9 @@ from mir_eval.separation import bss_eval_sources
 from Model_Architecture.model import UNet
 from Training.Externals.Dataloader import create_dataloader_EVALUATION
 from Training.Externals.Functions import Return_root_dir
-import deepspeed
+from Training.Externals.Loss_Class_Functions import Combinedloss 
 import json 
+from Datasets.Scripts.Dataset_utils import spectrogram_to_waveform
 root_dir = Return_root_dir()
 eval_log_path = os.path.join(root_dir, "Model_Performance_logg/log/Evaluation_logg.txt")
 Evaluation_logger = setup_logger('Evaluation', eval_log_path)
@@ -49,9 +50,9 @@ def load_model_for_evaluation(checkpoint_path, model_engine, device=device):
 
 
 # Evaluation Metrics
-def evaluate_metrics_from_spectrograms(model_engine,ground_truth, predicted, n_fft=1024, hop_length=512):
-    gt_waveforms = model_engine.module.spectrogram_to_waveform(ground_truth, n_fft, hop_length)
-    pred_waveforms = model_engine.module.spectrogram_to_waveform(predicted, n_fft, hop_length)
+def evaluate_metrics_from_spectrograms(ground_truth, predicted, n_fft=1024, hop_length=512):
+    gt_waveforms = spectrogram_to_waveform(ground_truth, n_fft, hop_length)
+    pred_waveforms = spectrogram_to_waveform(predicted, n_fft, hop_length)
     sdr_list, sir_list, sar_list = [], [], []
     
     for gt, pred in zip(gt_waveforms, pred_waveforms):
@@ -61,7 +62,7 @@ def evaluate_metrics_from_spectrograms(model_engine,ground_truth, predicted, n_f
         sar_list.append(sar[0])
 
     return sdr_list, sir_list, sar_list
-
+criterion = Combinedloss()
 # Inference & Evaluation
 def run_evaluation(model_engine, device, save_visualizations_every_n_batches=5):
     load_model_for_evaluation(checkpoint_path, model_engine=model_engine, device=device)
@@ -72,18 +73,21 @@ def run_evaluation(model_engine, device, save_visualizations_every_n_batches=5):
     with torch.no_grad(), autocast(device_type='cuda', enabled=(device.type == 'cuda')):
         for batch_idx, (inputs, targets) in enumerate(Evaluation_Loader, start=1):
             inputs, targets = inputs.to(device), targets.to(device)
-
             predicted_mask, outputs = model_engine(inputs)
-            combined_loss, _, _ = model_engine.module.loss_function(predicted_mask, inputs, targets, outputs)
-            running_loss += combined_loss.item()
+            Evaluation_logger.info(f"Predicted shape: {predicted_mask.shape},\n Target shape: {targets.shape}\n inputs shape: {inputs.shape}\n outputs shape: {outputs.shape}\n")
 
-            # Evaluate metrics
-            batch_sdr, batch_sir, batch_sar = evaluate_metrics_from_spectrograms(model_engine,targets, outputs)
+            combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val, sdr_loss  = criterion(predicted_mask, inputs, targets)
+            Evaluation_logger.info(f"Combined Loss: {combined_loss:.6f},\n Mask Loss: {mask_loss:.6f},\n Hybrid Loss: {hybrid_loss_val:.6f},\n L1 Loss: {l1_loss_val:.6f},\n STFT Loss: {stft_loss_val:.6f},\n SDR Loss: {sdr_loss:.6f}")
+            running_loss += combined_loss.item()
+            Evaluation_logger.info(f"Running Loss: {running_loss:.6f}")
+
+        
+            batch_sdr, batch_sir, batch_sar = evaluate_metrics_from_spectrograms(targets, outputs)
             sdr_list.extend(batch_sdr)
             sir_list.extend(batch_sir)
             sar_list.extend(batch_sar)
 
-            # Visualize results for selected batches (every 'n' batches)
+
             if batch_idx % save_visualizations_every_n_batches == 0:
                 visualize_results(inputs, outputs, targets, batch_idx)
 
@@ -101,10 +105,9 @@ def run_evaluation(model_engine, device, save_visualizations_every_n_batches=5):
     Evaluation_logger.info(f"Final Evaluation - Loss: {avg_loss:.6f}, SDR: {avg_sdr:.4f}, SIR: {avg_sir:.4f}, SAR: {avg_sar:.4f}")
     return avg_loss, avg_sdr, avg_sir, avg_sar
 
-# Visualization function to save waveform comparison
+
 def visualize_results(inputs, outputs, targets, batch_idx):
-    #Visualize and save the waveform comparison between GT and predicted output for the selected batch.
-    
+
     gt_waveform = targets[0].cpu().numpy().flatten()
     pred_waveform = outputs[0].cpu().numpy().flatten()
 
@@ -117,7 +120,7 @@ def visualize_results(inputs, outputs, targets, batch_idx):
     plt.title(f"Predicted Output - Batch {batch_idx}")
     plt.tight_layout()
 
-    # Save the visualizations
+
     save_path = os.path.join(root_dir, "visualizations", f"waveform_comparison_batch_{batch_idx}.png")
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     plt.savefig(save_path)
