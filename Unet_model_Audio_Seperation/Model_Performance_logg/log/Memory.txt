@@ -1,0 +1,32 @@
+2025-02-22 01:01:12,081 - INFO - [Memory Clearing memory before training] Timestamp: 2025-02-22 01:01:12
+2025-02-22 01:01:12,082 - INFO - [Memory Clearing memory before training] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.12 GB, Cached=0.12 GB
+2025-02-22 01:01:12,082 - INFO - [Memory Clearing memory before training] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-22 01:01:12,082 - INFO - [Memory Clearing memory before training] CPU Memory Usage: ~0.98 GB
+2025-02-22 01:01:12,205 - INFO - [Memory Memory after clearing it...] Timestamp: 2025-02-22 01:01:12
+2025-02-22 01:01:12,206 - INFO - [Memory Memory after clearing it...] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=0.12 GB, Cached=0.12 GB
+2025-02-22 01:01:12,207 - INFO - [Memory Memory after clearing it...] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-22 01:01:12,207 - INFO - [Memory Memory after clearing it...] CPU Memory Usage: ~0.98 GB
+2025-02-22 01:07:44,044 - INFO - [Memory After Epoch 1] Timestamp: 2025-02-22 01:07:44
+2025-02-22 01:07:44,045 - INFO - [Memory After Epoch 1] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=1.63 GB, Cached=10.69 GB
+2025-02-22 01:07:44,045 - INFO - [Memory After Epoch 1] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-22 01:07:44,046 - INFO - [Memory After Epoch 1] CPU Memory Usage: ~4.14 GB
+2025-02-22 01:28:40,832 - INFO - [Memory After Epoch 5] Timestamp: 2025-02-22 01:28:40
+2025-02-22 01:28:40,832 - INFO - [Memory After Epoch 5] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=1.69 GB, Cached=11.69 GB
+2025-02-22 01:28:40,833 - INFO - [Memory After Epoch 5] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-22 01:28:40,833 - INFO - [Memory After Epoch 5] CPU Memory Usage: ~4.27 GB
+2025-02-22 01:53:33,500 - INFO - [Memory After Epoch 10] Timestamp: 2025-02-22 01:53:33
+2025-02-22 01:53:33,501 - INFO - [Memory After Epoch 10] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=1.69 GB, Cached=11.69 GB
+2025-02-22 01:53:33,501 - INFO - [Memory After Epoch 10] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-22 01:53:33,502 - INFO - [Memory After Epoch 10] CPU Memory Usage: ~4.50 GB
+2025-02-22 02:18:44,196 - INFO - [Memory After Epoch 15] Timestamp: 2025-02-22 02:18:44
+2025-02-22 02:18:44,196 - INFO - [Memory After Epoch 15] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=1.56 GB, Cached=11.69 GB
+2025-02-22 02:18:44,197 - INFO - [Memory After Epoch 15] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-22 02:18:44,197 - INFO - [Memory After Epoch 15] CPU Memory Usage: ~4.52 GB
+2025-02-22 02:44:20,811 - INFO - [Memory After Epoch 20] Timestamp: 2025-02-22 02:44:20
+2025-02-22 02:44:20,812 - INFO - [Memory After Epoch 20] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=1.69 GB, Cached=11.69 GB
+2025-02-22 02:44:20,812 - INFO - [Memory After Epoch 20] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-22 02:44:20,812 - INFO - [Memory After Epoch 20] CPU Memory Usage: ~4.52 GB
+2025-02-22 03:09:38,758 - INFO - [Memory After Epoch 25] Timestamp: 2025-02-22 03:09:38
+2025-02-22 03:09:38,759 - INFO - [Memory After Epoch 25] GPU 0: NVIDIA GeForce RTX 3060, Total=12.88 GB, Allocated=1.69 GB, Cached=11.69 GB
+2025-02-22 03:09:38,759 - INFO - [Memory After Epoch 25] GPU 1: NVIDIA GeForce GTX 1070, Total=8.59 GB, Allocated=0.00 GB, Cached=0.00 GB
+2025-02-22 03:09:38,760 - INFO - [Memory After Epoch 25] CPU Memory Usage: ~4.52 GB

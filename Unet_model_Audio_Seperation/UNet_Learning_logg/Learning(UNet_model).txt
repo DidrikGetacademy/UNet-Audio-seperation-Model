@@ -1,0 +1,221 @@
+##############################################################MODEL################################################################
+U-NET is a nueral network model with 2 main parts: 
+(Encoder) => "DOWN-sampling => catches global functions by reducing the size of input-data
+(Decoder) => "UP-sampling => Restores details and generates an output => (isolated vocals)
+____________________________________________________________________________________________________________________________________________
+NB:::: => "U-NET model also has skip connections => Combines information from encoder part and decoder part too save global and local details.
+
+
+
+
+
+
+"""""""""""""(the __init__ represent how the model is build.)"""""""""""
+(in channels) => amount of channels in the input => currently 1 because we work with monochannel sound
+(out_channels) => amount of channels in output => currently 1 because output is a spectral representation
+(features) => a list of amount features => functionmap in each layer
+
+
+
+
+
+
+
+
+
+""""""""""""What is bottleneck""""""""""""
+self.bottleneck = self.conv_block(features[-1],features[-1] * 2)
+(INPUT) => it inputs the functionsmap from the encoders last layer.
+Features[-1] => Amount of functionmap from the last encoder block.
+features[-1] * 2 => Amount of functionmap doubles => this makes the neural network bigger capasity too learn complex functionality at a comprimised level.
+____________________________________________________________________________________________________________________________________________
+NB:::: => The bottleneck use the convolution block too learn deep repesentations of the data, think of it like a bridge between the (decoder) & (encoder) information is being handled so decoder part can restore details at upsamling.
+a little visualization   Input ----> Encoder ----> [BottleNeck] ----> Decoder ----> Output
+Encoder: Comprimise data too smaller dimensions 
+Bottleneck: Learns highlevel functions from the Comprimied data 
+Decoder: Upscales and reconstruct data too desired output.
+
+
+
+
+
+
+
+
+""""""""""What is a convolution block""""""""""""""
+A konvolusjonblock is a combination of (multiple operations) in a (nuearl-network) that is used to (proccess data) useally data like images or in this project spectralrepresentations.
+
+[lets understand convolutionblock step by step]
+
+What does a convolution block? => the goal with a convolution block is too teach and extract features from input data SUTCH as (AUDIO => PATTERNS in the spectrum such as frequencies or rhythmic components) OR (IMAGES => edges,textures objects, or higher level features.)
+
+how does a convolution block achieve it's goal? => it achives this by utilizing multiple layers of mathematical operations.
+
+How does the convolution block work =>
+1. INPUT => spectrogram (64x64 matrise) goes in the block
+2. FIRST CONVOLUTION => retrieve basic functions like frequencies patterns
+3. BATCH NORMALIZING => Stablize values from the Convolution 
+4. ReLU => makes the values none linear so the model kan learn complex context
+5. OTHER KONVOLUSJONS => extract deep learning functions
+6. BATCH NORMALIZING => stabilize again
+7. ReLU => makes the values none linear again.
+NB:::: so the output of this block represent a new function map that generates data in a more abstract way.
+
+
+
+
+
+
+
+
+"""""""""""""(Function CONV_BLOCK)"""""""""""""
+A mathematical operation that runs over data => like a pitchure or a spectrum, in this project its a spectrum,  with a filter (kernel) => The Filter/Kernel gets/retrieve specific patterns in the data like => textures, shapes, frequencies
+
+-Convolution layer (nn.conv2d)-
+(in_channels) => "Amount of inputdata"
+(out_channels) =>"Amount of functionmaps that is made (exsample: 64, 128, etc)"
+(kernel_size=3) =>" the size of the filter in this case 3x3"
+(padding) =>"makes sure that the output dimension cannot be reduced => the same padding"
+----------------------------------------------------------------------------------------------
+THE RESULT of this convolution layer is => [Retrieve basic functions from the data]
+
+
+-Convolution layer (nn.BatchNorm2d)-
+(out_channels) => "Amount of functionmaps that is made (exsample: 64, 128, etc)"
+-----------------------------------------------------------------------------------------------
+THE RESULT of this convolution layer is => normalizing output from the convolutionlayer too have a average at 0 and standard devation at 1 => this will stabilize training and make the model teach quicker and more robust.
+
+
+-Convolution layer (nn.ReLU)-
+what is nn.ReLU? => rectified linear Unit (ReLU) activation function that introduce none linear by setting all negative values too 0 and keep the positive values
+(inplace = true) => applies the following transformation to its input f(x)=max(0,x) => if the input value is (NEGATIVE), it gets replaced with 0, if the input value is (POSITIVE) it leaves unchanged.
+-----------------------------------------------------------------------------------------------
+THE RESULT of this convolution layer is =>  this makes sure that the (MODEL) can learn more (COMPLEX) relation in the data
+
+
+
+
+
+
+
+
+"""""""""""""""""""WHY USE CONVOLUTIONBLOCK IN THE U-NET MODEL""""""""""""""""""""""""""""
+in this model the convolution block is used 
+ENCODER => (down-sampling) => extract function while data size reduces
+DEOCDER => (up-sampling) => Reconstruct the data and combines details from the original dimensions using (skip connections)
+THE RESULT of this => The convolution block makes it possible too teach from local and global details of the data. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""""""""""""""""""FUNCTION forward""""""""""""""""""""""""""""
+This is the main function that represent the big part of the UNet-model 
+  input(x) ----> Encoder -----> Bottleneck ----> Decoder
+skip_connections = [] a list that  Stores the meanwhile result output from each encoder-block! This will later be used in the decoder part to make skip connections, connection between (encoder) & (decoder)
+
+
+---Understand the function code by code--
+
+for enc in self.encoder:
+    x = enc(x)  # Passerer input gjennom en encoder-blokk.
+    skip_connections.append(x)  # Lagrer output til skip_connections.
+    x = F.max_pool2d(x, kernel_size=2, stride=2)  # Downsampling.
+-----------------------------------------------------------------------------------------------
+NB::: Input x goes threw each encoder block 1 after 1, the OUTPUT from each block gets added too the skip connection list, Then the data gets down-sampled by halfing the height and the width by help from (F.max_pool12d) THIS makes the model look at det data in lower resolution
+why do we do this? => Encoder part retrieve functions and comprimise data too less dimensions  => RESULTS in easier management for the model too analze the global structur in the data.
+x = self.bottleneck(x) :::: after the encoder part of the function the data gets sent into the bottleneck. 
+skip_connections = skip_connections[::-1]  ::::: By reversing the list in skipconnections we get the correct order too match the up-sampling
+
+
+
+
+
+for idx in range(0, len(self.decoder), 2):
+    x = self.decoder[idx](x)  # Oppsampling.
+    skip_connection = skip_connections[idx // 2]  # Henter skip connection.
+-----------------------------------------------------------------------------------------------
+The data is getting upscaled too a higher resolution by the self.decoder[idx] its the ConvTranspose2d that double the dimensions
+the skipconnections retrieve the correct skipconnection from the encoder part too add details from the original input
+
+
+
+
+if x.shape != skip_connection.shape:
+    x = F.interpolate(x, size=skip_connection.shape[2:])  # Tilpass dimensjoner.
+-----------------------------------------------------------------------------------------------
+It can happend that small details in different dimensions between the (upsampling) and the skip connection because of (rounding error) in the (down-sampling)
+F.interpolate assure that the data adapt dimensions in the skip connection so they can be combined.
+
+
+
+
+
+x = torch.cat((skip_connection, x), dim=1)  # Kombinerer skip connection og oppsamplet data.
+x = self.decoder[idx + 1](x)  # Passerer gjennom en konvolusjonsblokk.
+-----------------------------------------------------------------------------------------------
+skipconnection (detailed information from encoder) & upsampled global data information from (bottlneck) gets added together at  channel (dim=1)
+The data is further processed through a convolution block to refine the features.
+
+
+
+
+return self.final_conv(x)  # Output-lag.
+-----------------------------------------------------------------------------------------------
+After the data has gone threw the entire model structure, it gets sent too the (self.final_conv) a 1x1 konvolution that reduces amount of channels too the desired output, like vocals because we want the model too be able too get vocals out of music, so in this case its  (1 channel is spectrum of the vocal)
+
+
+
+
+#######################MODEL STRUCTURE SUMMARY######################
+1. Encoder (downsampling)
+*Extracts features while reducing the spatial dimensions of the data
+*Utilizes the convolution blocks and max-pooling to progressivly compress the input into lower-resolution, high-feature representations
+
+
+2.Bottlneck
+*acts as a bridge between the encoder and decoder
+*learns high level globa features from the compressed data
+*Doubles the feature maps to increase model capacity for complex patterns
+
+
+3.Decoder (upsampling)
+*Gradually restores spatial dimensions using transposed convolutions
+*Combines global features from bottleneck with local details from encoder via (skip connnections)
+*Refines the data trhough additional convolutional block to produce high resolution output.
+
+
+4. skip connections
+*Link the encoder and decoder layers to preserve local details lost during downsampling
+*Combine fine grained information from the encoder with the broader context captured in the bottleneck
+
+5. final convolution
+* a 1x1 convolution that reduces the feature maps to the desired number of output channels in this case (1 channel vocals)
+
+
+
+
+
+#######################KEY FEATURES OF THE MODEL######################
+CONVOLUTION BLOCKS ---> extract features though multiple layers of convoltuon, normalizations and non linear activations
+
+SKIP CONNECTIONS ---> Preserve details and improve the reconstruction of the output
+
+
+EFFICIENT DOWNSAMPLING AND UPSAMPLING ---> max-pooling and transposed convolutions ensure efficient compression and restoration of data
+
+FLEXIBLE OUTPUT ---> The model can be adapted for different tasks by chaning the input and output configuration
+
+
+NB::: This architecture makes U-Net particuraly well-suited for task requiring precise output reconstruction, such as vocal isolation or image segmentation.
