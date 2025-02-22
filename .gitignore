@@ -63,3 +63,5 @@ Unet_model_Audio_Seperation/Datasets/Dataset_Audio_Folders/
 # Add any other directories or files you want to exclude
 
 Unet_model_Audio_Seperation\Model_Weights\CheckPoints
+
+Unet_model_Audio_Seperation\audio_logs
