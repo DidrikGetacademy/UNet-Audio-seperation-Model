@@ -47,12 +47,12 @@ with open(os.path.join(root_dir, "DeepSeed_Configuration/ds_config_Training.json
 
 def train(start_training=True):
     clear_memory_before_training()
-    model_path_temp="Unet_model_Audio_Seperation/Model_Weights/Pre_trained/deepspeed_checkpoint"
+    model_path_temp="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_3"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_logger.info(f"[Train] Using device: {device}")
     maskloss_avg, hybridloss_avg, combined_loss_avg = 0.0, 0.0, 0.0 
     current_step = 0
-    epochs = 50
+    epochs = 10
     patience = 12
     bestloss = float('inf')
     bestloss_validation = float('inf')
@@ -120,24 +120,23 @@ def train(start_training=True):
               
 
                     model_engine.zero_grad()    
-                    with torch.amp.autocast(device_type='cuda',dtype=torch.float16):
-                        train_logger.debug(f"inputs into the --> model {inputs.shape}\n")
-                        predicted_mask, outputs = model_engine(inputs)
+                    train_logger.debug(f"inputs into the --> model {inputs.shape}\n")
+                    predicted_mask, outputs = model_engine(inputs)
                      
 
-                        predicted_vocals = predicted_mask * inputs
+                    predicted_vocals = predicted_mask * inputs
     
-                        if batch_idx <= 2:
+                    if batch_idx <= 2:
                            train_logger.info(f"[EPOCH {epoch + 1}]outputs from the model {outputs.shape}\nfor batch {batch_idx}\npredicted mask shape {predicted_mask.shape}")
                            Convert_spectrogram_to_audio(audio_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/Trening",predicted_vocals=predicted_vocals[0],targets=targets[0],inputs=inputs[0],outputs=None)
                            
 
 
-                        log_first_2_batches_outputs_inputs_targets_predicted_mask(batch_idx, outputs, inputs, targets, predicted_mask, train_logger,predicted_vocals)
+                    log_first_2_batches_outputs_inputs_targets_predicted_mask(batch_idx, outputs, inputs, targets, predicted_mask, train_logger,predicted_vocals)
 
-                        combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val, sdr_loss = criterion(predicted_mask, inputs, targets)
-                        total_batches_processed += 1
-                        data_loader.info(f"\n[EPOCH {epoch + 1}] Currently Total batches processed during this training is: [{total_batches_processed}] out of [{len(train_loader)}]\n")
+                    combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val, sdr_loss = criterion(predicted_mask, inputs, targets)
+                    total_batches_processed += 1
+                    data_loader.info(f"\n[EPOCH {epoch + 1}] Currently Total batches processed during this training is: [{total_batches_processed}] out of [{len(train_loader)}]\n")
 
         
                     check_Nan_Inf_loss(combined_loss,batch_idx,outputs)
@@ -268,5 +267,4 @@ def train(start_training=True):
 
 if __name__ == "__main__":
     train()
-
 

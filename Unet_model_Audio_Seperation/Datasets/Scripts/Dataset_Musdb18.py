@@ -18,7 +18,7 @@ data_logger = setup_logger('dataloader_logger', train_log_path)
 device = torch.device("cpu")
 class MUSDB18StemDataset(Dataset):
     def __init__(self, root_dir, subset='train', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=10, max_files=100):
+                 hop_length=512, max_length_seconds=None, max_files=None):
         self.root_dir = os.path.join(root_dir, subset)
         self.sr = sr
         self.n_fft = n_fft

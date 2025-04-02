@@ -109,7 +109,7 @@ class MultiScaleDecoderBlock(nn.Module):
             nn.ReLU(inplace=True),
             SEBlock(out_channels), 
             SpectralAttentionBlock(out_channels),
-            nn.Dropout(p=0.5),
+            nn.Dropout(p=0.4),
         )
 
     def forward(self, x, skip):
@@ -167,7 +167,6 @@ class UNet(nn.Module):
         )
 
     def forward(self, x):
-        x = x.to(dtype=torch.float32)
         skip_connections = []
         Model_logger.debug(f"[U-net class(FORWARD)] Input to U-Net: {x.shape}")
 

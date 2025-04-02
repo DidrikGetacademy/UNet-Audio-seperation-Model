@@ -100,10 +100,10 @@ def run_evaluation(model_engine, device, checkpoint_path, save_visualizations_ev
     silent_predictions = 0
 
     with torch.no_grad(), autocast(device_type='cuda', enabled=(device.type == 'cuda')):
-        for batch_idx, (inputs, targets, target_waveforms) in enumerate(Evaluation_Loader, 1):
+        for batch_idx, (inputs, targets) in enumerate(Evaluation_Loader, 1):
             inputs = inputs.to(device)
             targets = targets.to(device)
-            target_waveforms = target_waveforms.to(device)
+            target_waveforms = spectrogram_to_waveform(targets, n_fft, hop_length)
 
             # Forward pass
             predicted_mask, outputs = model_engine(inputs)
@@ -215,3 +215,14 @@ def visualize_results(inputs, outputs, target_waveforms, batch_idx):
         
     except Exception as e:
         Evaluation_logger.error(f"Visualization failed for batch {batch_idx}: {str(e)}")
+
+if __name__ == "__main__":
+    import deepspeed
+    model = UNet(in_channels=1, out_channels=1).to(device)
+    model_engine, optimizer, _, _ = deepspeed.initialize(
+        model=model,
+        model_parameters=model.parameters(),
+        config_params=ds_config
+    )
+    checkpoint_path = os.path.join(root_dir, "Model_Weights/Pre_trained", "deepspeed_checkpoint")
+    run_evaluation(model_engine,device,checkpoint_path)

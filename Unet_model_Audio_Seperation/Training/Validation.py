@@ -12,7 +12,7 @@ from Datasets.Scripts.Dataset_utils import Convert_spectrogram_to_audio
 
 bestloss_validation = float('inf')
 trigger_times = 0 
-patience = 15
+patience = 20
 
 def Validate_ModelEngine(epoch, Model_Engine, combined_val_loader, criterion, Model_CheckPoint, current_step):
     global bestloss_validation, trigger_times 
@@ -34,6 +34,8 @@ def Validate_ModelEngine(epoch, Model_Engine, combined_val_loader, criterion, Mo
 
             val_predicted_mask, val_outputs = Model_Engine(val_inputs)
             predicted_vocals = val_predicted_mask * val_inputs
+            sdr = criterion.calculate_si_sdr(predicted_vocals, val_targets)
+            Validation_logger.info(f"\n [ORIGINAL SDR]SDR: {sdr.item():.6f} dB\n")
             if val_batch_idx <= 2:  
                 Convert_spectrogram_to_audio(audio_path="/mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/audio_logs/Validering",predicted_vocals=predicted_vocals[0],targets = val_targets[0],inputs=val_inputs[0],outputs=None)
             val_combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val, sdr_loss = criterion(val_predicted_mask, val_inputs, val_targets)

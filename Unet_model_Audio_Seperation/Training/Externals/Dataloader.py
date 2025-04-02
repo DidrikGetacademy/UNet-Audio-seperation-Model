@@ -87,9 +87,9 @@ def create_dataloader_training(
     batch_size=0,
     num_workers=6,
     sampling_rate=44100,
-    max_length_seconds=11,
-    max_files_train=150,
-    max_files_val=25,
+    max_length_seconds=10,
+    max_files_train=None,
+    max_files_val=30,
 ):
   
 
@@ -118,7 +118,7 @@ def create_dataloader_training(
     # --- VALIDATION DATASETS ---
     musdb18_val_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
-        subset="train",
+        subset="test",
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
@@ -128,7 +128,7 @@ def create_dataloader_training(
 
     dsd100_val_dataset = DSD100(
         root_dir=dsd100_dir,
-        subset="Dev",
+        subset="test",
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
@@ -139,7 +139,7 @@ def create_dataloader_training(
 
     #DATALOADERS
     Training_loader = DataLoader(
-        ConcatDataset([musdb18_train_dataset,dsd100_train_dataset]),
+        ConcatDataset([musdb18_train_dataset]),
         batch_size=batch_size,
         shuffle=True,
         num_workers=num_workers,
@@ -149,7 +149,7 @@ def create_dataloader_training(
     )
 
     Validation_loader = DataLoader(
-        ConcatDataset([musdb18_val_dataset,dsd100_val_dataset]),
+        ConcatDataset([musdb18_val_dataset]),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
@@ -176,6 +176,7 @@ def create_dataloader_EVALUATION(
     max_files_val=30,
 ):
     # --- EVALUATION DATASETS ---
+    
     musdb18_eval_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
         subset="test",
@@ -208,7 +209,7 @@ def create_dataloader_EVALUATION(
 
     #DATALOADER
     Evaluation_Loader = DataLoader(
-        ConcatDataset([custom_eval_dataset,]),
+        ConcatDataset([dsd100_eval_dataset]),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
@@ -225,22 +226,21 @@ def create_dataloader_EVALUATION(
 
 
 
+from torch.utils.data import DataLoader, ConcatDataset
 
-
-####FINE_TUNING#####
 def create_dataloader_Fine_tuning(
     musdb18_dir=MUSDB18_dir,
     dsd100_dir=DSD100_dataset_dir,
     batch_size=0,
-    num_workers=4,
+    num_workers=6,
     sampling_rate=44100,
-    max_files_finetuning_train=50,
-    max_files_fine_tuning_validation=20,
-    val_ratio=0.2,
-    max_length_seconds = 10
+    max_files_train=50,
+    max_files_finetuning_val=20,
+    max_length_seconds=11
 ):
 
     # --- TRAINING DATASETS ---
+    
     musdb18_train_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
         subset="train",
@@ -248,7 +248,7 @@ def create_dataloader_Fine_tuning(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=max_files_finetuning_train,
+        max_files=max_files_train,
     )
 
     dsd100_train_dataset = DSD100(
@@ -258,32 +258,31 @@ def create_dataloader_Fine_tuning(
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=max_files_finetuning_train,
+        max_files=max_files_train,
     )
-
 
     # --- VALIDATION DATASETS ---
     musdb18_val_dataset = MUSDB18StemDataset(
         root_dir=musdb18_dir,
-        subset="train",
+        subset="test",
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=max_files_finetuning_train,
+        max_files=max_files_finetuning_val, 
     )
 
     dsd100_val_dataset = DSD100(
         root_dir=dsd100_dir,
-        subset="Dev",
+        subset="test",
         sr=sampling_rate,
         n_fft=1024,
         hop_length=512,
         max_length_seconds=max_length_seconds,
-        max_files=max_files_finetuning_train,
+        max_files=max_files_finetuning_val,  
     )
 
-    #DATALOADERS
+    # --- DATA LOADERS ---
     Fine_tuning_training_loader = DataLoader(
         ConcatDataset([musdb18_train_dataset, dsd100_train_dataset]),
         batch_size=batch_size,
@@ -291,11 +290,11 @@ def create_dataloader_Fine_tuning(
         num_workers=num_workers,
         drop_last=True,
         collate_fn=robust_collate_fn,
-        pin_memory=True 
+        pin_memory=True
     )
 
     Fine_tuning_validation_loader = DataLoader(
-        ConcatDataset([dsd100_val_dataset, musdb18_val_dataset]),
+        ConcatDataset([musdb18_val_dataset, dsd100_val_dataset]),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
@@ -305,6 +304,3 @@ def create_dataloader_Fine_tuning(
     )
 
     return Fine_tuning_training_loader, Fine_tuning_validation_loader
-
-
-

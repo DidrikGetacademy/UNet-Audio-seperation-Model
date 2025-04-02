@@ -1,6 +1,6 @@
-2025-02-22 01:01:12,370 - INFO - Total number of parameters: 28905365
-2025-02-22 01:01:12,370 - INFO - Trainable parameters: 28905365
-2025-02-22 01:01:12,371 - INFO - Model architecture:
+2025-03-24 19:20:40,192 - INFO - Total number of parameters: 28905365
+2025-03-24 19:20:40,192 - INFO - Trainable parameters: 28905365
+2025-03-24 19:20:40,193 - INFO - Model architecture:
 UNet(
   (encoder): ModuleList(
     (0): Sequential(
@@ -164,7 +164,7 @@ UNet(
             (3): Sigmoid()
           )
         )
-        (5): Dropout(p=0.5, inplace=False)
+        (5): Dropout(p=0.4, inplace=False)
       )
     )
     (1): AttentionBlock(
@@ -198,7 +198,7 @@ UNet(
             (3): Sigmoid()
           )
         )
-        (5): Dropout(p=0.5, inplace=False)
+        (5): Dropout(p=0.4, inplace=False)
       )
     )
     (3): AttentionBlock(
@@ -232,7 +232,7 @@ UNet(
             (3): Sigmoid()
           )
         )
-        (5): Dropout(p=0.5, inplace=False)
+        (5): Dropout(p=0.4, inplace=False)
       )
     )
     (5): AttentionBlock(
@@ -266,7 +266,7 @@ UNet(
             (3): Sigmoid()
           )
         )
-        (5): Dropout(p=0.5, inplace=False)
+        (5): Dropout(p=0.4, inplace=False)
       )
     )
     (7): AttentionBlock(

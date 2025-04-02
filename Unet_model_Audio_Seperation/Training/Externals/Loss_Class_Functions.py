@@ -86,7 +86,7 @@ class HybridLoss(nn.Module):
         stft_loss /= pred.size(0)  
 
       
-        combined_loss = 0.5 * l1 + 0.5 * stft_loss
+        combined_loss = 0.5 * l1 + 0.7 * stft_loss
         train_logger.debug(f"[HybridLoss] L1={l1.item():.6f}, STFT={stft_loss.item():.6f}, Combined={combined_loss.item():.6f}")
 
         return combined_loss, l1, stft_loss
@@ -113,28 +113,28 @@ class Combinedloss(nn.Module):
         hybrid_loss_val, l1_loss_val, stft_loss_val  = self.hybrid_loss(predicted_vocals, target)
 
 
-        sdr_loss = self.calculate_sdr(predicted_vocals, target)
+        sdr_loss = self.calculate_si_sdr(predicted_vocals, target)
 
    
-        combined_loss = 0.5 * mask_loss + 0.7 * hybrid_loss_val + 0.3 * sdr_loss
+        combined_loss = 0.5 * mask_loss + 0.7 * hybrid_loss_val + 0.1 * sdr_loss 
 
     
         train_logger.debug(f"[CombinedLoss] combined_loss={combined_loss.item()} Mask Loss={mask_loss.item():.6f}, Hybrid Loss={hybrid_loss_val.item():.6f}, SDR Loss={sdr_loss.item():.6f}")
-        return combined_loss, mask_loss, hybrid_loss_val, l1_loss_val, stft_loss_val, sdr_loss
+        return combined_loss, mask_loss, hybrid_loss_val,  l1_loss_val, stft_loss_val, sdr_loss
     
-
-    def calculate_sdr(self,predicted,target):
-         error_signal = target - predicted
-         signal_energy = torch.sum(target ** 2)
-         noise_energy = torch.sum(error_signal ** 2)
-         epsilon = 1e-8  
-
-         sdr = 10 * torch.log10((signal_energy + epsilon) / (noise_energy + epsilon))
-         return sdr.mean()
-
-
-
-
+    def calculate_si_sdr(self, predicted, target):  
+        target = target - torch.mean(target, dim=-1, keepdim=True)  
+        predicted = predicted - torch.mean(predicted, dim=-1, keepdim=True)  
+        alpha = (torch.sum(predicted * target, dim=-1) /   
+                (torch.sum(target ** 2, dim=-1) + 1e-8))  
+        target_scaled = alpha.unsqueeze(-1) * target  
+        e_noise = predicted - target_scaled  
+        si_sdr = 10 * torch.log10(  
+            (torch.sum(target_scaled ** 2, dim=-1) + 1e-8) /  
+            (torch.sum(e_noise ** 2, dim=-1) + 1e-8)  
+        )  
+        return -torch.mean(si_sdr)  
+    
 
 
 

@@ -15,6 +15,9 @@ data_logger = setup_logger('dataset_DSD100', train_log_path)
 count = 0
 previous_lag = 0 
 
+
+
+
 def _pad_or_trim(audio, sr, max_length_seconds,start_index=None):
     max_samples = int(sr * max_length_seconds)
 
@@ -50,6 +53,8 @@ def _normalize(audio, min_amplitude=0.05, amplification_factor=10):
         audio = audio / max_val
 
         return audio
+
+
 
 
 

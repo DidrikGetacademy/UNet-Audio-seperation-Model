@@ -18,7 +18,7 @@ dataset_logger = setup_logger('dataset_DSD100', train_log_path)
 
 class DSD100(Dataset):
     def __init__(self, root_dir, subset='Dev', sr=44100, n_fft=1024, 
-                 hop_length=512, max_length_seconds=11, max_files=50):
+                 hop_length=512, max_length_seconds=None, max_files=None):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length

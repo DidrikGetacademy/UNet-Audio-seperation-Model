@@ -1,1049 +1,574 @@
-2025-02-22 01:05:58,640 - INFO - Validation Size: [15]
-2025-02-22 01:06:39,584 - INFO - val_batch_idx: [0]
+2025-03-24 19:25:01,333 - INFO - Validation Size: [7]
+2025-03-24 19:25:45,233 - INFO - val_batch_idx: [0]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 01:06:58,151 - INFO - val_batch_idx: [1]
+2025-03-24 19:25:47,755 - INFO - 
+ [ORIGINAL SDR]SDR: 10.609480 dB
+
+2025-03-24 19:25:52,854 - INFO - val_batch_idx: [1]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 01:06:59,888 - INFO - val_batch_idx: [2]
+2025-03-24 19:25:53,407 - INFO - 
+ [ORIGINAL SDR]SDR: 9.190978 dB
+
+2025-03-24 19:25:54,437 - INFO - val_batch_idx: [2]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 01:07:01,804 - INFO - val_batch_idx: [3]
+2025-03-24 19:25:55,437 - INFO - 
+ [ORIGINAL SDR]SDR: 5.641092 dB
+
+2025-03-24 19:25:58,581 - INFO - val_batch_idx: [3]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 01:07:42,451 - INFO - [VALIDATION] Epoch 1, 
- Validation Loss: [0.584803] 
-Running Loss: [8.772047], 
-Combined Validation Loss: [0.515683],
+2025-03-24 19:25:59,224 - INFO - 
+ [ORIGINAL SDR]SDR: 9.286387 dB
+
+2025-03-24 19:25:59,852 - INFO - 
+ [ORIGINAL SDR]SDR: 2.976303 dB
+
+2025-03-24 19:26:00,430 - INFO - 
+ [ORIGINAL SDR]SDR: 2.628133 dB
+
+2025-03-24 19:26:23,458 - INFO - 
+ [ORIGINAL SDR]SDR: 8.972341 dB
+
+2025-03-24 19:26:24,628 - INFO - [VALIDATION] Epoch 1, 
+ Validation Loss: [1.457896] 
+Running Loss: [10.205270], 
+Combined Validation Loss: [1.498880],
  Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.472168], 
+ Predicted Mask Mean: [0.507812], 
 Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.649158]
-mask_loss [0.393848]
-stft_loss_val[0.707643]
-l1_loss_val[0.590673]
-SDR Loss: [-0.452173]
+hybrid_loss_val [0.664435]
+mask_loss [0.356224]
+stft_loss_val[0.546133]
+l1_loss_val[0.564284]
+SDR Loss: [8.556637]
 
-2025-02-22 01:07:42,451 - INFO - New best model (Loss: 0.584803 < inf)
-2025-02-22 01:07:44,043 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_1
-2025-02-22 01:07:44,044 - INFO - 
-[EPOCH 1]Validate ----> [bestloss_validation]: 0.584803,]
+2025-03-24 19:26:24,628 - INFO - New best model (Loss: 1.457896 < inf)
+2025-03-24 19:26:26,206 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_1
+2025-03-24 19:26:26,206 - INFO - 
+[EPOCH 1]Validate ----> [bestloss_validation]: 1.457896,]
  [trigger_times: 0],
- [avg_validation_loss: 0.584803]
+ [avg_validation_loss: 1.457896]
 
-2025-02-22 01:11:32,279 - INFO - Validation Size: [15]
-2025-02-22 01:12:08,133 - INFO - val_batch_idx: [0]
+2025-03-24 19:30:35,394 - INFO - Validation Size: [7]
+2025-03-24 19:31:26,766 - INFO - val_batch_idx: [0]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 01:12:29,660 - INFO - val_batch_idx: [1]
+2025-03-24 19:31:29,144 - INFO - 
+ [ORIGINAL SDR]SDR: 9.568510 dB
+
+2025-03-24 19:31:33,735 - INFO - val_batch_idx: [1]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 01:12:31,039 - INFO - val_batch_idx: [2]
+2025-03-24 19:31:34,427 - INFO - 
+ [ORIGINAL SDR]SDR: 7.907051 dB
+
+2025-03-24 19:31:35,297 - INFO - val_batch_idx: [2]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 01:12:32,434 - INFO - val_batch_idx: [3]
+2025-03-24 19:31:36,045 - INFO - 
+ [ORIGINAL SDR]SDR: 8.264178 dB
+
+2025-03-24 19:31:39,970 - INFO - val_batch_idx: [3]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 01:13:03,096 - INFO - [VALIDATION] Epoch 2, 
- Validation Loss: [0.621777] 
-Running Loss: [9.326652], 
-Combined Validation Loss: [0.513387],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.467529], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.669882]
-mask_loss [0.391282]
-stft_loss_val[0.759171]
-l1_loss_val[0.580593]
-SDR Loss: [-0.503905]
+2025-03-24 19:31:40,549 - INFO - 
+ [ORIGINAL SDR]SDR: 10.856195 dB
 
-2025-02-22 01:13:03,096 - INFO - No improvement (Trigger: 1/15)
-2025-02-22 01:13:03,097 - INFO - 
-[EPOCH 2]Validate ----> [bestloss_validation]: 0.584803,]
- [trigger_times: 1],
- [avg_validation_loss: 0.621777]
+2025-03-24 19:31:41,115 - INFO - 
+ [ORIGINAL SDR]SDR: 7.936199 dB
 
-2025-02-22 01:16:44,232 - INFO - Validation Size: [15]
-2025-02-22 01:17:21,022 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
+2025-03-24 19:31:41,667 - INFO - 
+ [ORIGINAL SDR]SDR: 6.223844 dB
 
-2025-02-22 01:17:36,057 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
+2025-03-24 19:32:02,431 - INFO - 
+ [ORIGINAL SDR]SDR: 3.619703 dB
 
-2025-02-22 01:17:37,690 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:17:39,244 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:18:08,746 - INFO - [VALIDATION] Epoch 3, 
- Validation Loss: [0.524087] 
-Running Loss: [7.861312], 
-Combined Validation Loss: [0.320798],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.468994], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.602743]
-mask_loss [0.350891]
-stft_loss_val[0.679590]
-l1_loss_val[0.525896]
-SDR Loss: [-0.921893]
-
-2025-02-22 01:18:08,746 - INFO - New best model (Loss: 0.524087 < 0.584803)
-2025-02-22 01:18:10,254 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_3
-2025-02-22 01:18:10,255 - INFO - 
-[EPOCH 3]Validate ----> [bestloss_validation]: 0.524087,]
- [trigger_times: 0],
- [avg_validation_loss: 0.524087]
-
-2025-02-22 01:21:59,323 - INFO - Validation Size: [15]
-2025-02-22 01:22:37,011 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:22:53,670 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:22:55,142 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:22:56,595 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:23:31,205 - INFO - [VALIDATION] Epoch 4, 
- Validation Loss: [0.463629] 
-Running Loss: [6.954436], 
-Combined Validation Loss: [0.242282],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.467529], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.564031]
-mask_loss [0.365785]
-stft_loss_val[0.584624]
-l1_loss_val[0.543438]
-SDR Loss: [-1.118108]
-
-2025-02-22 01:23:31,205 - INFO - New best model (Loss: 0.463629 < 0.524087)
-2025-02-22 01:23:32,635 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_4
-2025-02-22 01:23:32,636 - INFO - 
-[EPOCH 4]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 0],
- [avg_validation_loss: 0.463629]
-
-2025-02-22 01:27:14,314 - INFO - Validation Size: [15]
-2025-02-22 01:27:50,086 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:28:06,761 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:28:08,331 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:28:10,024 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:28:40,830 - INFO - [VALIDATION] Epoch 5, 
- Validation Loss: [0.504699] 
-Running Loss: [7.570480], 
-Combined Validation Loss: [0.232715],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.468750], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.577912]
-mask_loss [0.339984]
-stft_loss_val[0.650381]
-l1_loss_val[0.505444]
-SDR Loss: [-1.139385]
-
-2025-02-22 01:28:40,830 - INFO - No improvement (Trigger: 1/15)
-2025-02-22 01:28:40,831 - INFO - 
-[EPOCH 5]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 1],
- [avg_validation_loss: 0.504699]
-
-2025-02-22 01:32:19,253 - INFO - Validation Size: [15]
-2025-02-22 01:32:55,490 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:33:12,088 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:33:13,584 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:33:15,165 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:33:47,582 - INFO - [VALIDATION] Epoch 6, 
- Validation Loss: [0.566941] 
-Running Loss: [8.504121], 
-Combined Validation Loss: [0.605160],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.470459], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.671711]
-mask_loss [0.430555]
-stft_loss_val[0.707083]
-l1_loss_val[0.636338]
-SDR Loss: [-0.267716]
-
-2025-02-22 01:33:47,583 - INFO - No improvement (Trigger: 2/15)
-2025-02-22 01:33:47,583 - INFO - 
-[EPOCH 6]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 2],
- [avg_validation_loss: 0.566941]
-
-2025-02-22 01:37:24,594 - INFO - Validation Size: [15]
-2025-02-22 01:38:01,536 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:38:18,869 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:38:20,357 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:38:21,831 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:38:49,388 - INFO - [VALIDATION] Epoch 7, 
- Validation Loss: [0.553791] 
-Running Loss: [8.306860], 
-Combined Validation Loss: [0.364730],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.472656], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.604080]
-mask_loss [0.353101]
-stft_loss_val[0.680789]
-l1_loss_val[0.527371]
-SDR Loss: [-0.782255]
-
-2025-02-22 01:38:49,388 - INFO - No improvement (Trigger: 3/15)
-2025-02-22 01:38:49,389 - INFO - 
-[EPOCH 7]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 3],
- [avg_validation_loss: 0.553791]
-
-2025-02-22 01:42:13,397 - INFO - Validation Size: [15]
-2025-02-22 01:42:48,788 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:43:07,115 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:43:08,526 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:43:09,996 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:43:42,013 - INFO - [VALIDATION] Epoch 8, 
- Validation Loss: [0.541700] 
-Running Loss: [8.125498], 
-Combined Validation Loss: [0.353287],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.475830], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.665202]
-mask_loss [0.392028]
-stft_loss_val[0.744834]
-l1_loss_val[0.585570]
-SDR Loss: [-1.027897]
-
-2025-02-22 01:43:42,014 - INFO - No improvement (Trigger: 4/15)
-2025-02-22 01:43:42,014 - INFO - 
-[EPOCH 8]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 4],
- [avg_validation_loss: 0.541700]
-
-2025-02-22 01:47:11,278 - INFO - Validation Size: [15]
-2025-02-22 01:47:48,887 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:48:07,064 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:48:08,431 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:48:09,816 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:48:40,689 - INFO - [VALIDATION] Epoch 9, 
- Validation Loss: [0.530721] 
-Running Loss: [7.960812], 
-Combined Validation Loss: [0.559273],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.477295], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.703280]
-mask_loss [0.479782]
-stft_loss_val[0.693428]
-l1_loss_val[0.713132]
-SDR Loss: [-0.576381]
-
-2025-02-22 01:48:40,690 - INFO - No improvement (Trigger: 5/15)
-2025-02-22 01:48:40,690 - INFO - 
-[EPOCH 9]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 5],
- [avg_validation_loss: 0.530721]
-
-2025-02-22 01:52:08,446 - INFO - Validation Size: [15]
-2025-02-22 01:52:43,555 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:52:59,128 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:53:00,597 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:53:02,039 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([3, 1, 513, 946])]
- target: [torch.Size([3, 1, 513, 946])]
-
-2025-02-22 01:53:33,499 - INFO - [VALIDATION] Epoch 10, 
- Validation Loss: [0.499143] 
-Running Loss: [7.487139], 
-Combined Validation Loss: [0.424431],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.479492], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.858567]
-mask_loss [0.420170]
-stft_loss_val[1.095256]
-l1_loss_val[0.621878]
-SDR Loss: [-1.288835]
-
-2025-02-22 01:53:33,499 - INFO - No improvement (Trigger: 6/15)
-2025-02-22 01:53:33,500 - INFO - 
-[EPOCH 10]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 6],
- [avg_validation_loss: 0.499143]
-
-2025-02-22 01:57:04,904 - INFO - Validation Size: [15]
-2025-02-22 01:57:40,734 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:57:58,912 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:58:00,345 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:58:01,940 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 01:58:31,689 - INFO - [VALIDATION] Epoch 11, 
- Validation Loss: [0.549130] 
-Running Loss: [8.236957], 
-Combined Validation Loss: [0.305595],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.481445], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.600324]
-mask_loss [0.353263]
-stft_loss_val[0.684122]
-l1_loss_val[0.516526]
-SDR Loss: [-0.970876]
-
-2025-02-22 01:58:31,690 - INFO - No improvement (Trigger: 7/15)
-2025-02-22 01:58:31,690 - INFO - 
-[EPOCH 11]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 7],
- [avg_validation_loss: 0.549130]
-
-2025-02-22 02:01:59,900 - INFO - Validation Size: [15]
-2025-02-22 02:02:35,345 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:02:53,824 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:02:55,242 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:02:56,756 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:03:27,007 - INFO - [VALIDATION] Epoch 12, 
- Validation Loss: [0.467212] 
-Running Loss: [7.008177], 
-Combined Validation Loss: [0.272686],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.487549], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.637133]
-mask_loss [0.377538]
-stft_loss_val[0.717359]
-l1_loss_val[0.556907]
-SDR Loss: [-1.206921]
-
-2025-02-22 02:03:27,007 - INFO - No improvement (Trigger: 8/15)
-2025-02-22 02:03:27,008 - INFO - 
-[EPOCH 12]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 8],
- [avg_validation_loss: 0.467212]
-
-2025-02-22 02:06:57,752 - INFO - Validation Size: [15]
-2025-02-22 02:07:34,269 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:07:49,629 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:07:51,193 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:07:52,642 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:08:24,724 - INFO - [VALIDATION] Epoch 13, 
- Validation Loss: [0.498799] 
-Running Loss: [7.481991], 
-Combined Validation Loss: [0.482376],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.492432], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.684259]
-mask_loss [0.465199]
-stft_loss_val[0.670594]
-l1_loss_val[0.697924]
-SDR Loss: [-0.764017]
-
-2025-02-22 02:08:24,725 - INFO - No improvement (Trigger: 9/15)
-2025-02-22 02:08:24,725 - INFO - 
-[EPOCH 13]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 9],
- [avg_validation_loss: 0.498799]
-
-2025-02-22 02:12:03,613 - INFO - Validation Size: [15]
-2025-02-22 02:12:40,506 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:12:58,148 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:12:59,875 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:13:01,421 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:13:33,166 - INFO - [VALIDATION] Epoch 14, 
- Validation Loss: [0.536138] 
-Running Loss: [8.042077], 
-Combined Validation Loss: [0.444208],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.499756], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.681503]
-mask_loss [0.445968]
-stft_loss_val[0.702259]
-l1_loss_val[0.660748]
-SDR Loss: [-0.852760]
-
-2025-02-22 02:13:33,166 - INFO - No improvement (Trigger: 10/15)
-2025-02-22 02:13:33,167 - INFO - 
-[EPOCH 14]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 10],
- [avg_validation_loss: 0.536138]
-
-2025-02-22 02:17:13,779 - INFO - Validation Size: [15]
-2025-02-22 02:17:50,192 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:18:08,490 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:18:10,036 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:18:11,529 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:18:44,194 - INFO - [VALIDATION] Epoch 15, 
- Validation Loss: [0.478030] 
-Running Loss: [7.170443], 
-Combined Validation Loss: [0.368863],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.492676], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.767093]
-mask_loss [0.406252]
-stft_loss_val[0.933375]
-l1_loss_val[0.600811]
-SDR Loss: [-1.237429]
-
-2025-02-22 02:18:44,194 - INFO - No improvement (Trigger: 11/15)
-2025-02-22 02:18:44,195 - INFO - 
-[EPOCH 15]Validate ----> [bestloss_validation]: 0.463629,]
- [trigger_times: 11],
- [avg_validation_loss: 0.478030]
-
-2025-02-22 02:22:19,849 - INFO - Validation Size: [15]
-2025-02-22 02:22:56,461 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:23:11,864 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:23:13,362 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:23:14,862 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:23:48,172 - INFO - [VALIDATION] Epoch 16, 
- Validation Loss: [0.457881] 
-Running Loss: [6.868209], 
-Combined Validation Loss: [0.419643],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.499023], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.696306]
-mask_loss [0.382614]
-stft_loss_val[0.823125]
-l1_loss_val[0.569487]
-SDR Loss: [-0.863595]
-
-2025-02-22 02:23:48,172 - INFO - New best model (Loss: 0.457881 < 0.463629)
-2025-02-22 02:23:49,668 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_16
-2025-02-22 02:23:49,669 - INFO - 
-[EPOCH 16]Validate ----> [bestloss_validation]: 0.457881,]
- [trigger_times: 0],
- [avg_validation_loss: 0.457881]
-
-2025-02-22 02:27:37,001 - INFO - Validation Size: [15]
-2025-02-22 02:28:14,265 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:28:28,762 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:28:30,191 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:28:31,579 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:29:01,661 - INFO - [VALIDATION] Epoch 17, 
- Validation Loss: [0.479040] 
-Running Loss: [7.185594], 
-Combined Validation Loss: [0.445790],
+2025-03-24 19:32:03,610 - INFO - [VALIDATION] Epoch 2, 
+ Validation Loss: [1.477585] 
+Running Loss: [10.343094], 
+Combined Validation Loss: [0.818601],
  Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
  Predicted Mask Mean: [0.504883], 
 Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.733379]
-mask_loss [0.400807]
-stft_loss_val[0.875870]
-l1_loss_val[0.590889]
-SDR Loss: [-0.893264]
+hybrid_loss_val [0.562576]
+mask_loss [0.274467]
+stft_loss_val[0.491444]
+l1_loss_val[0.437130]
+SDR Loss: [2.875647]
 
-2025-02-22 02:29:01,662 - INFO - No improvement (Trigger: 1/15)
-2025-02-22 02:29:01,662 - INFO - 
-[EPOCH 17]Validate ----> [bestloss_validation]: 0.457881,]
+2025-03-24 19:32:03,610 - INFO - No improvement (Trigger: 1/20)
+2025-03-24 19:32:03,610 - INFO - 
+[EPOCH 2]Validate ----> [bestloss_validation]: 1.457896,]
  [trigger_times: 1],
- [avg_validation_loss: 0.479040]
+ [avg_validation_loss: 1.477585]
 
-2025-02-22 02:32:42,128 - INFO - Validation Size: [15]
-2025-02-22 02:33:17,506 - INFO - val_batch_idx: [0]
+2025-03-24 19:35:28,607 - INFO - Validation Size: [7]
+2025-03-24 19:36:11,120 - INFO - val_batch_idx: [0]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:33:33,318 - INFO - val_batch_idx: [1]
+2025-03-24 19:36:13,345 - INFO - 
+ [ORIGINAL SDR]SDR: 11.278270 dB
+
+2025-03-24 19:36:18,175 - INFO - val_batch_idx: [1]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:33:34,783 - INFO - val_batch_idx: [2]
+2025-03-24 19:36:19,241 - INFO - 
+ [ORIGINAL SDR]SDR: 9.422100 dB
+
+2025-03-24 19:36:20,194 - INFO - val_batch_idx: [2]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:33:36,255 - INFO - val_batch_idx: [3]
+2025-03-24 19:36:21,303 - INFO - 
+ [ORIGINAL SDR]SDR: 2.609927 dB
+
+2025-03-24 19:36:23,746 - INFO - val_batch_idx: [3]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:34:08,303 - INFO - [VALIDATION] Epoch 18, 
- Validation Loss: [0.511187] 
-Running Loss: [7.667809], 
-Combined Validation Loss: [0.409241],
+2025-03-24 19:36:24,695 - INFO - 
+ [ORIGINAL SDR]SDR: 11.936498 dB
+
+2025-03-24 19:36:25,753 - INFO - 
+ [ORIGINAL SDR]SDR: 7.926956 dB
+
+2025-03-24 19:36:26,858 - INFO - 
+ [ORIGINAL SDR]SDR: -0.314832 dB
+
+2025-03-24 19:36:45,723 - INFO - 
+ [ORIGINAL SDR]SDR: 5.706300 dB
+
+2025-03-24 19:36:46,945 - INFO - [VALIDATION] Epoch 3, 
+ Validation Loss: [1.342105] 
+Running Loss: [9.394736], 
+Combined Validation Loss: [1.114114],
  Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.512207], 
+ Predicted Mask Mean: [0.504395], 
 Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.533890]
-mask_loss [0.365691]
-stft_loss_val[0.529303]
-l1_loss_val[0.538476]
-SDR Loss: [-0.491092]
+hybrid_loss_val [0.636726]
+mask_loss [0.262507]
+stft_loss_val[0.630478]
+l1_loss_val[0.390782]
+SDR Loss: [5.371525]
 
-2025-02-22 02:34:08,304 - INFO - No improvement (Trigger: 2/15)
-2025-02-22 02:34:08,304 - INFO - 
-[EPOCH 18]Validate ----> [bestloss_validation]: 0.457881,]
- [trigger_times: 2],
- [avg_validation_loss: 0.511187]
-
-2025-02-22 02:37:47,321 - INFO - Validation Size: [15]
-2025-02-22 02:38:23,673 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:38:39,072 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:38:40,523 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:38:41,844 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 02:39:12,735 - INFO - [VALIDATION] Epoch 19, 
- Validation Loss: [0.440090] 
-Running Loss: [6.601354], 
-Combined Validation Loss: [0.464403],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.511719], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.713775]
-mask_loss [0.450578]
-stft_loss_val[0.750378]
-l1_loss_val[0.677173]
-SDR Loss: [-0.868429]
-
-2025-02-22 02:39:12,735 - INFO - New best model (Loss: 0.440090 < 0.457881)
-2025-02-22 02:39:14,221 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_19
-2025-02-22 02:39:14,222 - INFO - 
-[EPOCH 19]Validate ----> [bestloss_validation]: 0.440090,]
+2025-03-24 19:36:46,945 - INFO - New best model (Loss: 1.342105 < 1.457896)
+2025-03-24 19:36:48,491 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_3
+2025-03-24 19:36:48,492 - INFO - 
+[EPOCH 3]Validate ----> [bestloss_validation]: 1.342105,]
  [trigger_times: 0],
- [avg_validation_loss: 0.440090]
+ [avg_validation_loss: 1.342105]
 
-2025-02-22 02:42:54,085 - INFO - Validation Size: [15]
-2025-02-22 02:43:30,076 - INFO - val_batch_idx: [0]
+2025-03-24 19:40:04,992 - INFO - Validation Size: [7]
+2025-03-24 19:40:48,383 - INFO - val_batch_idx: [0]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:43:47,552 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([3, 1, 513, 946])]
- target: [torch.Size([3, 1, 513, 946])]
+2025-03-24 19:40:50,528 - INFO - 
+ [ORIGINAL SDR]SDR: 10.473431 dB
 
-2025-02-22 02:43:48,920 - INFO - val_batch_idx: [2]
+2025-03-24 19:40:55,497 - INFO - val_batch_idx: [1]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:43:50,425 - INFO - val_batch_idx: [3]
+2025-03-24 19:40:58,179 - INFO - 
+ [ORIGINAL SDR]SDR: 7.551465 dB
+
+2025-03-24 19:40:59,178 - INFO - val_batch_idx: [2]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:44:20,810 - INFO - [VALIDATION] Epoch 20, 
- Validation Loss: [0.492538] 
-Running Loss: [7.388068], 
-Combined Validation Loss: [0.162436],
+2025-03-24 19:41:01,239 - INFO - 
+ [ORIGINAL SDR]SDR: 3.918386 dB
+
+2025-03-24 19:41:02,151 - INFO - val_batch_idx: [3]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:41:04,329 - INFO - 
+ [ORIGINAL SDR]SDR: 10.994338 dB
+
+2025-03-24 19:41:06,441 - INFO - 
+ [ORIGINAL SDR]SDR: 6.622160 dB
+
+2025-03-24 19:41:07,429 - INFO - 
+ [ORIGINAL SDR]SDR: 3.567032 dB
+
+2025-03-24 19:41:24,881 - INFO - 
+ [ORIGINAL SDR]SDR: 8.432867 dB
+
+2025-03-24 19:41:26,157 - INFO - [VALIDATION] Epoch 4, 
+ Validation Loss: [1.455075] 
+Running Loss: [10.185523], 
+Combined Validation Loss: [1.460207],
  Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.518555], 
+ Predicted Mask Mean: [0.502441], 
 Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.553692]
-mask_loss [0.310819]
-stft_loss_val[0.645707]
-l1_loss_val[0.461676]
-SDR Loss: [-1.268525]
+hybrid_loss_val [0.679102]
+mask_loss [0.296032]
+stft_loss_val[0.646384]
+l1_loss_val[0.453266]
+SDR Loss: [8.368198]
 
-2025-02-22 02:44:20,810 - INFO - No improvement (Trigger: 1/15)
-2025-02-22 02:44:20,811 - INFO - 
-[EPOCH 20]Validate ----> [bestloss_validation]: 0.440090,]
+2025-03-24 19:41:26,157 - INFO - No improvement (Trigger: 1/20)
+2025-03-24 19:41:26,157 - INFO - 
+[EPOCH 4]Validate ----> [bestloss_validation]: 1.342105,]
  [trigger_times: 1],
- [avg_validation_loss: 0.492538]
+ [avg_validation_loss: 1.455075]
 
-2025-02-22 02:48:00,002 - INFO - Validation Size: [15]
-2025-02-22 02:48:35,900 - INFO - val_batch_idx: [0]
+2025-03-24 19:45:11,783 - INFO - Validation Size: [7]
+2025-03-24 19:45:54,003 - INFO - val_batch_idx: [0]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:48:53,431 - INFO - val_batch_idx: [1]
+2025-03-24 19:45:55,147 - INFO - 
+ [ORIGINAL SDR]SDR: 9.160950 dB
+
+2025-03-24 19:46:01,562 - INFO - val_batch_idx: [1]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:48:54,897 - INFO - val_batch_idx: [2]
+2025-03-24 19:46:02,113 - INFO - 
+ [ORIGINAL SDR]SDR: -1.951236 dB
+
+2025-03-24 19:46:03,004 - INFO - val_batch_idx: [2]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:48:56,327 - INFO - val_batch_idx: [3]
+2025-03-24 19:46:03,558 - INFO - 
+ [ORIGINAL SDR]SDR: 5.693622 dB
+
+2025-03-24 19:46:06,577 - INFO - val_batch_idx: [3]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:49:25,790 - INFO - [VALIDATION] Epoch 21, 
- Validation Loss: [0.512343] 
-Running Loss: [7.685143], 
-Combined Validation Loss: [0.188638],
+2025-03-24 19:46:07,147 - INFO - 
+ [ORIGINAL SDR]SDR: 11.478187 dB
+
+2025-03-24 19:46:07,683 - INFO - 
+ [ORIGINAL SDR]SDR: 2.871115 dB
+
+2025-03-24 19:46:08,225 - INFO - 
+ [ORIGINAL SDR]SDR: 4.919304 dB
+
+2025-03-24 19:46:27,491 - INFO - 
+ [ORIGINAL SDR]SDR: 5.016946 dB
+
+2025-03-24 19:46:28,682 - INFO - [VALIDATION] Epoch 5, 
+ Validation Loss: [1.275982] 
+Running Loss: [8.931871], 
+Combined Validation Loss: [1.122317],
  Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.507324], 
+ Predicted Mask Mean: [0.499756], 
 Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.528778]
-mask_loss [0.314183]
-stft_loss_val[0.588326]
-l1_loss_val[0.469231]
-SDR Loss: [-1.128661]
+hybrid_loss_val [0.722359]
+mask_loss [0.328274]
+stft_loss_val[0.666822]
+l1_loss_val[0.511168]
+SDR Loss: [4.525284]
 
-2025-02-22 02:49:25,790 - INFO - No improvement (Trigger: 2/15)
-2025-02-22 02:49:25,790 - INFO - 
-[EPOCH 21]Validate ----> [bestloss_validation]: 0.440090,]
+2025-03-24 19:46:28,682 - INFO - New best model (Loss: 1.275982 < 1.342105)
+2025-03-24 19:46:30,198 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_5
+2025-03-24 19:46:30,198 - INFO - 
+[EPOCH 5]Validate ----> [bestloss_validation]: 1.275982,]
+ [trigger_times: 0],
+ [avg_validation_loss: 1.275982]
+
+2025-03-24 19:49:25,257 - INFO - Validation Size: [7]
+2025-03-24 19:50:05,508 - INFO - val_batch_idx: [0]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:50:06,459 - INFO - 
+ [ORIGINAL SDR]SDR: 10.297065 dB
+
+2025-03-24 19:50:11,147 - INFO - val_batch_idx: [1]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:50:11,699 - INFO - 
+ [ORIGINAL SDR]SDR: 9.049883 dB
+
+2025-03-24 19:50:12,594 - INFO - val_batch_idx: [2]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:50:13,164 - INFO - 
+ [ORIGINAL SDR]SDR: 3.518118 dB
+
+2025-03-24 19:50:15,864 - INFO - val_batch_idx: [3]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:50:16,424 - INFO - 
+ [ORIGINAL SDR]SDR: 10.437700 dB
+
+2025-03-24 19:50:16,970 - INFO - 
+ [ORIGINAL SDR]SDR: 5.800323 dB
+
+2025-03-24 19:50:17,527 - INFO - 
+ [ORIGINAL SDR]SDR: 0.059172 dB
+
+2025-03-24 19:50:35,378 - INFO - 
+ [ORIGINAL SDR]SDR: 11.544021 dB
+
+2025-03-24 19:50:36,501 - INFO - [VALIDATION] Epoch 6, 
+ Validation Loss: [1.481408] 
+Running Loss: [10.369858], 
+Combined Validation Loss: [1.826152],
+ Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
+ Predicted Mask Mean: [0.499268], 
+Outputs Shape: [torch.Size([4, 64, 513, 946])], 
+hybrid_loss_val [0.788878]
+mask_loss [0.358920]
+stft_loss_val[0.709923]
+l1_loss_val[0.583863]
+SDR Loss: [10.944779]
+
+2025-03-24 19:50:36,501 - INFO - No improvement (Trigger: 1/20)
+2025-03-24 19:50:36,502 - INFO - 
+[EPOCH 6]Validate ----> [bestloss_validation]: 1.275982,]
+ [trigger_times: 1],
+ [avg_validation_loss: 1.481408]
+
+2025-03-24 19:53:37,017 - INFO - Validation Size: [7]
+2025-03-24 19:54:24,030 - INFO - val_batch_idx: [0]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:54:29,530 - INFO - 
+ [ORIGINAL SDR]SDR: 14.800837 dB
+
+2025-03-24 19:54:32,084 - INFO - val_batch_idx: [1]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:54:37,041 - INFO - 
+ [ORIGINAL SDR]SDR: 8.048398 dB
+
+2025-03-24 19:54:38,074 - INFO - val_batch_idx: [2]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:54:40,026 - INFO - 
+ [ORIGINAL SDR]SDR: 2.603194 dB
+
+2025-03-24 19:54:41,481 - INFO - val_batch_idx: [3]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 19:54:43,958 - INFO - 
+ [ORIGINAL SDR]SDR: 13.395749 dB
+
+2025-03-24 19:54:47,516 - INFO - 
+ [ORIGINAL SDR]SDR: 3.574783 dB
+
+2025-03-24 19:54:52,160 - INFO - 
+ [ORIGINAL SDR]SDR: 7.549160 dB
+
+2025-03-24 19:55:12,718 - INFO - 
+ [ORIGINAL SDR]SDR: 19.373505 dB
+
+2025-03-24 19:55:13,916 - INFO - [VALIDATION] Epoch 7, 
+ Validation Loss: [1.676698] 
+Running Loss: [11.736888], 
+Combined Validation Loss: [2.806314],
+ Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
+ Predicted Mask Mean: [0.498047], 
+Outputs Shape: [torch.Size([4, 64, 513, 946])], 
+hybrid_loss_val [1.018028]
+mask_loss [0.440641]
+stft_loss_val[0.968922]
+l1_loss_val[0.679566]
+SDR Loss: [18.733740]
+
+2025-03-24 19:55:13,916 - INFO - No improvement (Trigger: 2/20)
+2025-03-24 19:55:13,916 - INFO - 
+[EPOCH 7]Validate ----> [bestloss_validation]: 1.275982,]
  [trigger_times: 2],
- [avg_validation_loss: 0.512343]
+ [avg_validation_loss: 1.676698]
 
-2025-02-22 02:53:02,745 - INFO - Validation Size: [15]
-2025-02-22 02:53:38,503 - INFO - val_batch_idx: [0]
+2025-03-24 19:58:54,565 - INFO - Validation Size: [7]
+2025-03-24 19:59:38,492 - INFO - val_batch_idx: [0]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:53:54,165 - INFO - val_batch_idx: [1]
+2025-03-24 19:59:39,551 - INFO - 
+ [ORIGINAL SDR]SDR: 11.584510 dB
+
+2025-03-24 19:59:46,449 - INFO - val_batch_idx: [1]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:53:55,639 - INFO - val_batch_idx: [2]
+2025-03-24 19:59:47,074 - INFO - 
+ [ORIGINAL SDR]SDR: 8.733646 dB
+
+2025-03-24 19:59:48,030 - INFO - val_batch_idx: [2]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:53:57,099 - INFO - val_batch_idx: [3]
+2025-03-24 19:59:48,917 - INFO - 
+ [ORIGINAL SDR]SDR: 1.953291 dB
+
+2025-03-24 19:59:51,575 - INFO - val_batch_idx: [3]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:54:29,941 - INFO - [VALIDATION] Epoch 22, 
- Validation Loss: [0.479806] 
-Running Loss: [7.197087], 
-Combined Validation Loss: [0.449104],
+2025-03-24 19:59:52,192 - INFO - 
+ [ORIGINAL SDR]SDR: 8.769802 dB
+
+2025-03-24 19:59:53,999 - INFO - 
+ [ORIGINAL SDR]SDR: 3.351738 dB
+
+2025-03-24 19:59:55,975 - INFO - 
+ [ORIGINAL SDR]SDR: 12.168327 dB
+
+2025-03-24 20:00:17,205 - INFO - 
+ [ORIGINAL SDR]SDR: 8.538392 dB
+
+2025-03-24 20:00:18,504 - INFO - [VALIDATION] Epoch 8, 
+ Validation Loss: [1.506691] 
+Running Loss: [10.546834], 
+Combined Validation Loss: [1.519872],
  Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.511230], 
+ Predicted Mask Mean: [0.496094], 
 Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.669938]
-mask_loss [0.441140]
-stft_loss_val[0.685334]
-l1_loss_val[0.654543]
-SDR Loss: [-0.801410]
+hybrid_loss_val [0.745311]
+mask_loss [0.369990]
+stft_loss_val[0.647119]
+l1_loss_val[0.584656]
+SDR Loss: [8.131587]
 
-2025-02-22 02:54:29,941 - INFO - No improvement (Trigger: 3/15)
-2025-02-22 02:54:29,941 - INFO - 
-[EPOCH 22]Validate ----> [bestloss_validation]: 0.440090,]
+2025-03-24 20:00:18,504 - INFO - No improvement (Trigger: 3/20)
+2025-03-24 20:00:18,505 - INFO - 
+[EPOCH 8]Validate ----> [bestloss_validation]: 1.275982,]
  [trigger_times: 3],
- [avg_validation_loss: 0.479806]
+ [avg_validation_loss: 1.506691]
 
-2025-02-22 02:58:12,579 - INFO - Validation Size: [15]
-2025-02-22 02:58:49,343 - INFO - val_batch_idx: [0]
+2025-03-24 20:04:04,050 - INFO - Validation Size: [7]
+2025-03-24 20:04:53,576 - INFO - val_batch_idx: [0]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:59:04,905 - INFO - val_batch_idx: [1]
+2025-03-24 20:05:09,663 - INFO - 
+ [ORIGINAL SDR]SDR: 9.639654 dB
+
+2025-03-24 20:05:10,565 - INFO - val_batch_idx: [1]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:59:06,338 - INFO - val_batch_idx: [2]
+2025-03-24 20:05:31,232 - INFO - 
+ [ORIGINAL SDR]SDR: 11.753149 dB
+
+2025-03-24 20:05:32,819 - INFO - val_batch_idx: [2]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:59:07,750 - INFO - val_batch_idx: [3]
+2025-03-24 20:05:46,965 - INFO - 
+ [ORIGINAL SDR]SDR: 6.742806 dB
+
+2025-03-24 20:05:47,849 - INFO - val_batch_idx: [3]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 02:59:42,464 - INFO - [VALIDATION] Epoch 23, 
- Validation Loss: [0.480489] 
-Running Loss: [7.207332], 
-Combined Validation Loss: [0.504068],
+2025-03-24 20:05:48,462 - INFO - 
+ [ORIGINAL SDR]SDR: 9.744949 dB
+
+2025-03-24 20:05:49,156 - INFO - 
+ [ORIGINAL SDR]SDR: 2.273842 dB
+
+2025-03-24 20:05:49,761 - INFO - 
+ [ORIGINAL SDR]SDR: 8.964685 dB
+
+2025-03-24 20:05:50,362 - INFO - 
+ [ORIGINAL SDR]SDR: 9.927455 dB
+
+2025-03-24 20:05:51,628 - INFO - [VALIDATION] Epoch 9, 
+ Validation Loss: [1.560058] 
+Running Loss: [10.920404], 
+Combined Validation Loss: [1.630432],
  Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.518555], 
+ Predicted Mask Mean: [0.493652], 
 Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.702822]
-mask_loss [0.485782]
-stft_loss_val[0.687950]
-l1_loss_val[0.717693]
-SDR Loss: [-0.769327]
+hybrid_loss_val [0.762777]
+mask_loss [0.292059]
+stft_loss_val[0.774038]
+l1_loss_val[0.441900]
+SDR Loss: [9.504584]
 
-2025-02-22 02:59:42,465 - INFO - No improvement (Trigger: 4/15)
-2025-02-22 02:59:42,465 - INFO - 
-[EPOCH 23]Validate ----> [bestloss_validation]: 0.440090,]
+2025-03-24 20:05:51,629 - INFO - No improvement (Trigger: 4/20)
+2025-03-24 20:05:51,629 - INFO - 
+[EPOCH 9]Validate ----> [bestloss_validation]: 1.275982,]
  [trigger_times: 4],
- [avg_validation_loss: 0.480489]
+ [avg_validation_loss: 1.560058]
 
-2025-02-22 03:03:13,405 - INFO - Validation Size: [15]
-2025-02-22 03:03:48,398 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([3, 1, 513, 946])]
- target: [torch.Size([3, 1, 513, 946])]
-
-2025-02-22 03:04:06,839 - INFO - val_batch_idx: [1]
+2025-03-24 20:13:27,907 - INFO - Validation Size: [7]
+2025-03-24 20:14:11,652 - INFO - val_batch_idx: [0]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 03:04:08,393 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([3, 1, 513, 946])]
- target: [torch.Size([3, 1, 513, 946])]
+2025-03-24 20:14:12,910 - INFO - 
+ [ORIGINAL SDR]SDR: 7.148224 dB
 
-2025-02-22 03:04:09,759 - INFO - val_batch_idx: [3]
+2025-03-24 20:14:18,812 - INFO - val_batch_idx: [1]
  inputs: [torch.Size([4, 1, 513, 946])]
  target: [torch.Size([4, 1, 513, 946])]
 
-2025-02-22 03:04:37,538 - INFO - [VALIDATION] Epoch 24, 
- Validation Loss: [0.481698] 
-Running Loss: [7.225474], 
-Combined Validation Loss: [0.423786],
+2025-03-24 20:14:19,431 - INFO - 
+ [ORIGINAL SDR]SDR: 6.002954 dB
+
+2025-03-24 20:14:20,315 - INFO - val_batch_idx: [2]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 20:14:20,879 - INFO - 
+ [ORIGINAL SDR]SDR: 1.178627 dB
+
+2025-03-24 20:14:25,501 - INFO - val_batch_idx: [3]
+ inputs: [torch.Size([4, 1, 513, 946])]
+ target: [torch.Size([4, 1, 513, 946])]
+
+2025-03-24 20:14:26,080 - INFO - 
+ [ORIGINAL SDR]SDR: 5.929973 dB
+
+2025-03-24 20:14:26,671 - INFO - 
+ [ORIGINAL SDR]SDR: 3.500623 dB
+
+2025-03-24 20:14:28,099 - INFO - 
+ [ORIGINAL SDR]SDR: 8.996659 dB
+
+2025-03-24 20:14:47,254 - INFO - 
+ [ORIGINAL SDR]SDR: 6.650121 dB
+
+2025-03-24 20:14:48,491 - INFO - [VALIDATION] Epoch 10, 
+ Validation Loss: [1.271147] 
+Running Loss: [8.898031], 
+Combined Validation Loss: [1.262683],
  Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.515137], 
+ Predicted Mask Mean: [0.490967], 
 Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.659299]
-mask_loss [0.436364]
-stft_loss_val[0.671015]
-l1_loss_val[0.647583]
-SDR Loss: [-0.853019]
+hybrid_loss_val [0.701152]
+mask_loss [0.333879]
+stft_loss_val[0.627588]
+l1_loss_val[0.523680]
+SDR Loss: [6.049371]
 
-2025-02-22 03:04:37,538 - INFO - No improvement (Trigger: 5/15)
-2025-02-22 03:04:37,539 - INFO - 
-[EPOCH 24]Validate ----> [bestloss_validation]: 0.440090,]
- [trigger_times: 5],
- [avg_validation_loss: 0.481698]
-
-2025-02-22 03:08:10,114 - INFO - Validation Size: [15]
-2025-02-22 03:08:46,565 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:09:07,103 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:09:08,518 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:09:09,974 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:09:38,757 - INFO - [VALIDATION] Epoch 25, 
- Validation Loss: [0.495714] 
-Running Loss: [7.435717], 
-Combined Validation Loss: [0.472646],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.524414], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.699737]
-mask_loss [0.468731]
-stft_loss_val[0.704568]
-l1_loss_val[0.694906]
-SDR Loss: [-0.838453]
-
-2025-02-22 03:09:38,757 - INFO - No improvement (Trigger: 6/15)
-2025-02-22 03:09:38,758 - INFO - 
-[EPOCH 25]Validate ----> [bestloss_validation]: 0.440090,]
- [trigger_times: 6],
- [avg_validation_loss: 0.495714]
-
-2025-02-22 03:13:02,233 - INFO - Validation Size: [15]
-2025-02-22 03:13:37,466 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:13:57,430 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:13:58,851 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:14:00,218 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:14:31,508 - INFO - [VALIDATION] Epoch 26, 
- Validation Loss: [0.504234] 
-Running Loss: [7.563506], 
-Combined Validation Loss: [0.151188],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.536133], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.632641]
-mask_loss [0.357427]
-stft_loss_val[0.733290]
-l1_loss_val[0.531992]
-SDR Loss: [-1.567913]
-
-2025-02-22 03:14:31,509 - INFO - No improvement (Trigger: 7/15)
-2025-02-22 03:14:31,509 - INFO - 
-[EPOCH 26]Validate ----> [bestloss_validation]: 0.440090,]
- [trigger_times: 7],
- [avg_validation_loss: 0.504234]
-
-2025-02-22 03:18:09,491 - INFO - Validation Size: [15]
-2025-02-22 03:18:45,412 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:19:03,380 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:19:05,050 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:19:06,628 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:19:34,466 - INFO - [VALIDATION] Epoch 27, 
- Validation Loss: [0.469951] 
-Running Loss: [7.049268], 
-Combined Validation Loss: [0.131240],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.521973], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.460197]
-mask_loss [0.292865]
-stft_loss_val[0.489174]
-l1_loss_val[0.431220]
-SDR Loss: [-1.124435]
-
-2025-02-22 03:19:34,466 - INFO - No improvement (Trigger: 8/15)
-2025-02-22 03:19:34,467 - INFO - 
-[EPOCH 27]Validate ----> [bestloss_validation]: 0.440090,]
- [trigger_times: 8],
- [avg_validation_loss: 0.469951]
-
-2025-02-22 03:23:02,356 - INFO - Validation Size: [15]
-2025-02-22 03:23:37,553 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:23:53,450 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:23:55,217 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:23:56,888 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:24:26,409 - INFO - [VALIDATION] Epoch 28, 
- Validation Loss: [0.474925] 
-Running Loss: [7.123881], 
-Combined Validation Loss: [0.284765],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.529785], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.639917]
-mask_loss [0.338301]
-stft_loss_val[0.783917]
-l1_loss_val[0.495918]
-SDR Loss: [-1.107760]
-
-2025-02-22 03:24:26,410 - INFO - No improvement (Trigger: 9/15)
-2025-02-22 03:24:26,410 - INFO - 
-[EPOCH 28]Validate ----> [bestloss_validation]: 0.440090,]
- [trigger_times: 9],
- [avg_validation_loss: 0.474925]
-
-2025-02-22 03:27:52,177 - INFO - Validation Size: [15]
-2025-02-22 03:28:27,847 - INFO - val_batch_idx: [0]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:28:43,176 - INFO - val_batch_idx: [1]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:28:44,676 - INFO - val_batch_idx: [2]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:28:46,222 - INFO - val_batch_idx: [3]
- inputs: [torch.Size([4, 1, 513, 946])]
- target: [torch.Size([4, 1, 513, 946])]
-
-2025-02-22 03:29:15,389 - INFO - [VALIDATION] Epoch 29, 
- Validation Loss: [0.484649] 
-Running Loss: [7.269729], 
-Combined Validation Loss: [0.418350],
- Predicted Mask Shape: [torch.Size([4, 1, 513, 946])],
- Predicted Mask Mean: [0.529297], 
-Outputs Shape: [torch.Size([4, 64, 513, 946])], 
-hybrid_loss_val [0.528853]
-mask_loss [0.324672]
-stft_loss_val[0.573867]
-l1_loss_val[0.483840]
-SDR Loss: [-0.380610]
-
-2025-02-22 03:29:15,389 - INFO - No improvement (Trigger: 10/15)
-2025-02-22 03:29:15,390 - INFO - 
-[EPOCH 29]Validate ----> [bestloss_validation]: 0.440090,]
- [trigger_times: 10],
- [avg_validation_loss: 0.484649]
+2025-03-24 20:14:48,491 - INFO - New best model (Loss: 1.271147 < 1.275982)
+2025-03-24 20:14:50,087 - INFO - Checkpoint saved at: /mnt/c/Users/didri/Desktop/Programmering/ArtificalintelligenceModels/UNet-Model_Vocal_Isolation/Unet_model_Audio_Seperation/Model_Weights/CheckPoints/Evaluation/checkpoint_epoch_10
+2025-03-24 20:14:50,088 - INFO - 
+[EPOCH 10]Validate ----> [bestloss_validation]: 1.271147,]
+ [trigger_times: 0],
+ [avg_validation_loss: 1.271147]
 
